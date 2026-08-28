@@ -12,11 +12,9 @@ function setDiff(level) {
   difficultyLevel = level;
   document.querySelectorAll("#d1, #d2, #d3").forEach((el, i) => {
     if (i + 1 === level) {
-      el.classList.add("bg-emerald-600", "text-white");
-      el.classList.remove("bg-gray-700");
+      el.className = "diff-btn py-4 rounded-2xl bg-cyan-600 text-white font-medium shadow-[0_0_16px_rgba(34,211,238,0.4)]";
     } else {
-      el.classList.remove("bg-emerald-600", "text-white");
-      el.classList.add("bg-gray-700");
+      el.className = "diff-btn py-4 rounded-2xl bg-slate-900 border border-slate-600 text-slate-200 font-medium";
     }
   });
 }
@@ -26,14 +24,11 @@ function setStudyLevel(level) {
   studyLevel = level;
   document.querySelectorAll("[data-study]").forEach((el) => {
     if (el.dataset.study === level) {
-      el.classList.add("bg-emerald-600", "text-white", "border-emerald-500");
-      el.classList.remove("bg-gray-800", "border-gray-700");
+      el.className = "py-3 px-3 rounded-xl bg-cyan-600 border border-cyan-400 text-white text-sm font-medium transition text-left shadow-[0_0_16px_rgba(34,211,238,0.45)]";
     } else {
-      el.classList.remove("bg-emerald-600", "text-white", "border-emerald-500");
-      el.classList.add("bg-gray-800", "border-gray-700");
+      el.className = "py-3 px-3 rounded-xl bg-slate-900 border border-slate-600 text-sm font-medium text-slate-200 transition text-left hover:border-cyan-400";
     }
   });
-  // Actualizar lista de cursos según el nivel
   populateCourseSelect();
 }
 
@@ -56,7 +51,23 @@ async function startNewExam() {
   }
 
   try {
-    const questions = await generateExamQuestions(topic, num, difficultyLevel, studyLevel);
+    let questions = await generateExamQuestions(topic, num, difficultyLevel, studyLevel);
+
+    // Garantía final: sin preguntas repetidas en el examen
+    const seen = new Set();
+    questions = questions.filter((q) => {
+      const key = String(q.q || "").trim().toLowerCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    if (questions.length === 0) {
+      throw new Error("No se pudieron generar preguntas. Prueba otro curso o activa la IA.");
+    }
+    if (questions.length < num) {
+      console.warn(`Solo hay ${questions.length} preguntas únicas (pediste ${num}).`);
+    }
 
     currentExam = {
       id: Date.now(),

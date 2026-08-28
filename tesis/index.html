@@ -8,30 +8,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen">
-  <div class="max-w-4xl mx-auto">
-    <header class="bg-gray-900/80 backdrop-blur border-b border-gray-800 p-5 sticky top-0 z-40">
+<body class="bg-[#050510] text-slate-100 min-h-screen neon-grid">
+  <div class="max-w-4xl mx-auto relative z-10">
+    <!-- Header -->
+    <header class="neon-header sticky top-0 z-40 px-5 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-11 h-11 bg-emerald-500/20 rounded-2xl flex items-center justify-center">
-            <i class="fas fa-brain text-2xl text-emerald-400"></i>
+          <div class="w-11 h-11 neon-logo rounded-2xl flex items-center justify-center">
+            <i class="fas fa-brain text-2xl text-cyan-400"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold font-display">Examen<span class="text-emerald-400">IA</span></h1>
-            <p class="text-xs text-gray-500">Simulador con IA</p>
+            <h1 class="text-2xl font-bold font-display text-white">
+              Examen<span class="text-cyan-400 neon-text">IA</span>
+            </h1>
+            <p class="text-xs text-cyan-400/70">Simulador con IA</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="openAISettings()" title="Configurar IA"
-                  class="w-10 h-10 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition">
-            <i class="fas fa-robot text-emerald-400"></i>
+                  class="w-10 h-10 rounded-xl neon-icon-btn flex items-center justify-center text-cyan-400">
+            <i class="fas fa-robot"></i>
           </button>
           <button onclick="openAddCourse()" title="Añadir curso"
-                  class="w-10 h-10 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition">
-            <i class="fas fa-plus text-emerald-400"></i>
+                  class="w-10 h-10 rounded-xl neon-icon-btn flex items-center justify-center text-cyan-400">
+            <i class="fas fa-plus"></i>
           </button>
           <button onclick="showHistory()" title="Historial"
-                  class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 text-sm transition">
+                  class="px-4 py-2 rounded-xl neon-icon-btn flex items-center gap-2 text-sm text-cyan-300">
             <i class="fas fa-history"></i>
             <span class="hidden sm:inline">Historial</span>
           </button>
@@ -41,38 +44,41 @@
 
     <main class="p-6 md:p-10">
       <div class="text-center mb-10">
-        <h2 class="text-4xl md:text-5xl font-bold font-display mb-3">Simulador de Exámenes</h2>
-        <p class="text-gray-400 text-lg max-w-lg mx-auto">
+        <h2 class="text-4xl md:text-5xl font-bold font-display mb-3 text-white">
+          Simulador de <span class="text-cyan-400 neon-text">Exámenes</span>
+        </h2>
+        <p class="text-slate-400 text-lg max-w-lg mx-auto">
           Elige nivel de estudio, dificultad y practica. La IA adapta las preguntas automáticamente.
         </p>
       </div>
 
       <div class="grid lg:grid-cols-5 gap-8">
-        <div class="lg:col-span-3 bg-gray-900 rounded-3xl p-8 border border-gray-800">
-          <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
-            <i class="fas fa-sliders-h text-emerald-400"></i>
+        <!-- Panel config -->
+        <div class="lg:col-span-3 neon-card bg-[#0f0f23]/90 p-8 border border-cyan-500/30 rounded-3xl">
+          <h3 class="text-lg font-semibold mb-6 flex items-center gap-2 font-display text-white">
+            <i class="fas fa-sliders-h text-cyan-400"></i>
             Configura tu examen
           </h3>
 
           <div class="space-y-6">
-            <!-- Nivel de estudio -->
+            <!-- Nivel -->
             <div>
-              <label class="block text-sm text-gray-400 mb-2">Nivel de estudio</label>
+              <label class="block text-sm text-cyan-300 mb-2">Nivel de estudio</label>
               <div class="grid grid-cols-2 gap-2">
                 <button type="button" data-study="escuela" onclick="setStudyLevel('escuela')"
-                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                        class="py-3 px-3 rounded-xl bg-slate-900 border border-slate-600 text-sm font-medium text-slate-200 transition text-left hover:border-cyan-400">
                   🎒 Escuela
                 </button>
                 <button type="button" data-study="secundaria" onclick="setStudyLevel('secundaria')"
-                        class="py-3 px-3 rounded-xl bg-emerald-600 border border-emerald-500 text-white text-sm font-medium transition text-left">
+                        class="py-3 px-3 rounded-xl bg-cyan-600 border border-cyan-400 text-white text-sm font-medium transition text-left shadow-[0_0_16px_rgba(34,211,238,0.45)]">
                   📖 Secundaria
                 </button>
                 <button type="button" data-study="tecnica" onclick="setStudyLevel('tecnica')"
-                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                        class="py-3 px-3 rounded-xl bg-slate-900 border border-slate-600 text-sm font-medium text-slate-200 transition text-left hover:border-cyan-400">
                   🔧 Carrera técnica
                 </button>
                 <button type="button" data-study="universidad" onclick="setStudyLevel('universidad')"
-                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                        class="py-3 px-3 rounded-xl bg-slate-900 border border-slate-600 text-sm font-medium text-slate-200 transition text-left hover:border-cyan-400">
                   🎓 Universidad
                 </button>
               </div>
@@ -80,42 +86,42 @@
 
             <!-- Curso -->
             <div>
-              <label class="block text-sm text-gray-400 mb-2">Curso / Materia</label>
+              <label class="block text-sm text-cyan-300 mb-2">Curso / Materia</label>
               <select id="topic-input"
-                      class="w-full bg-gray-800 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-emerald-500 appearance-none cursor-pointer">
+                      class="w-full bg-slate-950 text-white border border-cyan-500/40 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 appearance-none cursor-pointer">
               </select>
             </div>
 
             <!-- Dificultad -->
             <div>
-              <label class="block text-sm text-gray-400 mb-2">Dificultad</label>
+              <label class="block text-sm text-cyan-300 mb-2">Dificultad</label>
               <div class="grid grid-cols-3 gap-3">
                 <button onclick="setDiff(1)" id="d1"
-                        class="diff-btn py-4 rounded-2xl bg-emerald-600 text-white font-medium">Fácil</button>
+                        class="diff-btn py-4 rounded-2xl bg-cyan-600 text-white font-medium shadow-[0_0_16px_rgba(34,211,238,0.4)]">Fácil</button>
                 <button onclick="setDiff(2)" id="d2"
-                        class="diff-btn py-4 rounded-2xl bg-gray-700 font-medium">Medio</button>
+                        class="diff-btn py-4 rounded-2xl bg-slate-900 border border-slate-600 text-slate-200 font-medium">Medio</button>
                 <button onclick="setDiff(3)" id="d3"
-                        class="diff-btn py-4 rounded-2xl bg-gray-700 font-medium">Difícil</button>
+                        class="diff-btn py-4 rounded-2xl bg-slate-900 border border-slate-600 text-slate-200 font-medium">Difícil</button>
               </div>
             </div>
 
-            <!-- Número de preguntas -->
+            <!-- Preguntas -->
             <div>
-              <label class="block text-sm text-gray-400 mb-2">
-                Preguntas: <span id="q-count" class="font-mono text-emerald-400">10</span>
+              <label class="block text-sm text-cyan-300 mb-2">
+                Preguntas: <span id="q-count" class="font-mono text-cyan-400 font-bold">10</span>
               </label>
               <input type="range" id="num-q" min="5" max="25" value="10"
-                     class="w-full accent-emerald-500" oninput="updateCount(this)">
-              <div class="flex justify-between text-xs text-gray-500 mt-1">
+                     class="w-full accent-cyan-400" oninput="updateCount(this)">
+              <div class="flex justify-between text-xs text-slate-500 mt-1">
                 <span>5</span><span>25</span>
               </div>
             </div>
 
-            <!-- Temporizador -->
+            <!-- Tiempo -->
             <div>
-              <label class="block text-sm text-gray-400 mb-2">Tiempo por pregunta</label>
+              <label class="block text-sm text-cyan-300 mb-2">Tiempo por pregunta</label>
               <select id="time-per-q"
-                      class="w-full bg-gray-800 border border-gray-700 rounded-2xl px-5 py-4 outline-none focus:border-emerald-500 cursor-pointer">
+                      class="w-full bg-slate-950 text-white border border-cyan-500/40 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400 cursor-pointer">
                 <option value="30">30 segundos (Rápido)</option>
                 <option value="45">45 segundos</option>
                 <option value="60" selected>60 segundos (Estándar)</option>
@@ -126,38 +132,44 @@
           </div>
 
           <button onclick="startNewExam()"
-                  class="mt-10 w-full py-5 text-lg font-semibold bg-emerald-500 hover:bg-emerald-600 rounded-2xl transition active:scale-[0.98] flex items-center justify-center gap-3">
+                  class="mt-10 w-full py-5 text-lg font-semibold rounded-2xl text-white
+                         bg-gradient-to-r from-cyan-500 to-violet-600
+                         shadow-[0_0_24px_rgba(34,211,238,0.45)]
+                         hover:shadow-[0_0_36px_rgba(34,211,238,0.65)]
+                         hover:scale-[1.01] active:scale-[0.98] transition
+                         flex items-center justify-center gap-3">
             <i class="fas fa-play"></i>
             COMENZAR EXAMEN
           </button>
         </div>
 
+        <!-- Lateral -->
         <div class="lg:col-span-2 space-y-5">
-          <div class="bg-gradient-to-br from-emerald-900/40 to-gray-900 rounded-3xl p-7 border border-emerald-800/40">
+          <div class="neon-card bg-[#0f0f23]/90 p-7 border border-violet-500/30 rounded-3xl">
             <div class="text-4xl mb-4">🤖</div>
-            <h4 class="font-semibold mb-2">IA automática</h4>
-            <p class="text-sm text-gray-400 leading-relaxed">
+            <h4 class="font-semibold mb-2 font-display text-violet-300">IA automática</h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
               Configura tu API key una sola vez. A partir de ahí se usa sola y adapta las preguntas al nivel de estudio.
             </p>
             <button onclick="openAISettings()"
-                    class="mt-4 text-sm text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                    class="mt-4 text-sm text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
               Configurar IA <i class="fas fa-arrow-right text-xs"></i>
             </button>
           </div>
 
-          <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
+          <div class="neon-card bg-[#0f0f23]/90 p-7 border border-cyan-500/25 rounded-3xl">
             <div class="text-4xl mb-4">🎯</div>
-            <h4 class="font-semibold mb-2">Dos ejes de nivel</h4>
-            <p class="text-sm text-gray-400 leading-relaxed">
-              <strong>Nivel de estudio</strong> (escuela → universidad) define el vocabulario y profundidad.<br><br>
-              <strong>Dificultad</strong> (fácil / medio / difícil) define el reto dentro de ese nivel.
+            <h4 class="font-semibold mb-2 font-display text-white">Dos ejes de nivel</h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              <strong class="text-cyan-300">Nivel de estudio</strong> define el vocabulario.<br><br>
+              <strong class="text-pink-300">Dificultad</strong> define el reto dentro de ese nivel.
             </p>
           </div>
 
-          <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
+          <div class="neon-card bg-[#0f0f23]/90 p-7 border border-pink-500/30 rounded-3xl">
             <div class="text-4xl mb-4">🔒</div>
-            <h4 class="font-semibold mb-2">Privacidad</h4>
-            <p class="text-sm text-gray-400 leading-relaxed">
+            <h4 class="font-semibold mb-2 font-display text-pink-300">Privacidad</h4>
+            <p class="text-sm text-slate-400 leading-relaxed">
               Tu API key solo se guarda en este navegador. No se envía a ningún servidor nuestro.
             </p>
           </div>
@@ -173,6 +185,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       populateCourseSelect();
       setStudyLevel("secundaria");
+      setDiff(1);
     });
   </script>
 </body>

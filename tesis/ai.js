@@ -107,11 +107,12 @@ DIFICULTAD: ${difficultyText}
 
 REGLAS OBLIGATORIAS:
 1. Genera exactamente ${count} preguntas de opción múltiple sobre: "${topic}"
-2. Adapta el vocabulario, profundidad y ejemplos al nivel de estudio indicado.
-3. Si el nivel es "Escuela", usa lenguaje simple y ejemplos de la vida diaria.
-4. Si es "Universidad", puedes usar terminología técnica y conceptos avanzados.
-5. Las opciones incorrectas deben ser plausibles (distractores realistas).
-6. Responde SOLO con un JSON válido, sin markdown, sin texto extra:
+2. TODAS las preguntas deben ser DIFERENTES entre sí. Nunca repitas la misma pregunta ni una muy similar.
+3. Adapta el vocabulario, profundidad y ejemplos al nivel de estudio indicado.
+4. Si el nivel es "Escuela", usa lenguaje simple y ejemplos de la vida diaria.
+5. Si es "Universidad", puedes usar terminología técnica y conceptos avanzados.
+6. Las opciones incorrectas deben ser plausibles (distractores realistas).
+7. Responde SOLO con un JSON válido, sin markdown, sin texto extra:
 
 [
   {
@@ -169,12 +170,22 @@ El campo "correct" es el índice (0-3) de la respuesta correcta.`;
     if (!Array.isArray(questions) || questions.length === 0) {
       throw new Error("La IA no devolvió un array de preguntas");
     }
-    return questions.map((q) => ({
+    const mapped = questions.map((q) => ({
       q: String(q.q || ""),
       options: Array.isArray(q.options) ? q.options.map(String) : ["A", "B", "C", "D"],
       correct: Math.min(3, Math.max(0, Number(q.correct) || 0)),
       exp: String(q.exp || "")
     }));
+    // Eliminar preguntas repetidas (mismo texto)
+    const seen = new Set();
+    const unique = [];
+    for (const q of mapped) {
+      const key = q.q.trim().toLowerCase();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      unique.push(q);
+    }
+    return unique;
   } catch (e) {
     console.error("Error parseando respuesta de IA (contenido omitido por seguridad)");
     throw new Error("La IA no devolvió un JSON válido. Intenta de nuevo.");
@@ -198,8 +209,20 @@ async function generateExamQuestions(topic, count, difficulty = 2, studyLevel = 
 
   try {
     console.log("🤖 Generando preguntas con IA (nivel:", studyLevel, ")");
-    const aiQuestions = await generateQuestionsWithAI(topic, count, difficulty, studyLevel);
-    console.log("✅ Preguntas generadas con IA");
+    let aiQuestions = await generateQuestionsWithAI(topic, count, difficulty, studyLevel);
+    // Si la IA devolvió menos (por deduplicación), completar con banco local sin repetir
+    if (aiQuestions.length < count && localQuestions.length > 0) {
+      const used = new Set(aiQuestions.map((q) => q.q.trim().toLowerCase()));
+      for (const q of localQuestions) {
+        if (aiQuestions.length >= count) break;
+        const key = String(q.q || "").trim().toLowerCase();
+        if (key && !used.has(key)) {
+          used.add(key);
+          aiQuestions.push(q);
+        }
+      }
+    }
+    console.log("✅ Preguntas generadas:", aiQuestions.length);
     return aiQuestions;
   } catch (error) {
     console.warn("⚠️ Falló la IA, usando banco local:", error.message);

@@ -8,39 +8,39 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen">
-  <div class="max-w-3xl mx-auto p-5 md:p-8">
+<body class="bg-[#050510] text-slate-100 min-h-screen neon-grid">
+  <div class="max-w-3xl mx-auto p-5 md:p-8 relative z-10">
     <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
       <div class="flex items-center gap-4">
-        <span id="progress" class="text-2xl font-bold text-emerald-400 font-mono">1/10</span>
-        <div class="w-40 sm:w-56 h-2.5 bg-gray-800 rounded-full overflow-hidden">
-          <div id="progress-bar" class="h-full bg-emerald-500 rounded-full progress-bar" style="width:10%"></div>
+        <span id="progress" class="text-2xl font-bold neon-text font-mono font-display">1/10</span>
+        <div class="w-40 sm:w-56 h-2.5 bg-slate-900/80 rounded-full overflow-hidden border border-cyan-500/20">
+          <div id="progress-bar" class="h-full progress-bar rounded-full" style="width:10%"></div>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
-        <div id="timer-box" class="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-2xl border border-gray-700">
-          <i class="fas fa-clock text-emerald-400"></i>
-          <span id="timer" class="font-mono text-xl font-bold text-emerald-400">05:00</span>
+        <div id="timer-box" class="flex items-center gap-2 px-4 py-2 neon-card rounded-2xl">
+          <i class="fas fa-clock neon-text"></i>
+          <span id="timer" class="font-mono text-xl font-bold neon-text">05:00</span>
         </div>
-        <button onclick="finishExam()" class="text-red-400 hover:text-red-500 text-sm flex items-center gap-1">
+        <button onclick="finishExam()" class="text-pink-400 hover:text-pink-300 text-sm flex items-center gap-1 transition">
           <i class="fas fa-times"></i> Finalizar
         </button>
       </div>
     </div>
 
-    <div class="bg-gray-900 rounded-3xl p-8 md:p-10 border border-gray-800 min-h-[380px]">
+    <div class="neon-card p-8 md:p-10 min-h-[380px]">
       <div id="question" class="text-xl md:text-2xl leading-relaxed mb-10 font-medium"></div>
       <div id="options" class="space-y-3"></div>
     </div>
 
     <div class="flex justify-between mt-8">
       <button id="btn-prev" onclick="prevQ()"
-              class="px-6 py-3.5 bg-gray-800 hover:bg-gray-700 rounded-2xl flex items-center gap-2 transition">
+              class="px-6 py-3.5 neon-icon-btn rounded-2xl flex items-center gap-2">
         <i class="fas fa-arrow-left"></i> Anterior
       </button>
       <button id="btn-next" onclick="nextQ()"
-              class="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl flex items-center gap-2 transition">
+              class="px-6 py-3.5 neon-btn rounded-2xl flex items-center gap-2">
         Siguiente <i class="fas fa-arrow-right"></i>
       </button>
     </div>
@@ -58,7 +58,6 @@
     function startTimer() {
       timeLeft = examData.totalTime || (examData.timePerQuestion || 60) * examData.questions.length;
       updateTimerDisplay();
-
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
@@ -76,10 +75,10 @@
       const display = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
       const timerEl = document.getElementById("timer");
       timerEl.textContent = display;
-      timerEl.classList.remove("timer-warning", "timer-danger", "text-emerald-400");
+      timerEl.classList.remove("timer-warning", "timer-danger", "neon-text");
       if (timeLeft <= 30) timerEl.classList.add("timer-danger");
       else if (timeLeft <= 60) timerEl.classList.add("timer-warning");
-      else timerEl.classList.add("text-emerald-400");
+      else timerEl.classList.add("neon-text");
     }
 
     function stopTimer() {
@@ -90,7 +89,7 @@
       if (!examData) return;
       const q = examData.questions[currentIndex];
       document.getElementById("question").innerHTML =
-        `<span class="text-emerald-400 text-sm font-mono block mb-2">Pregunta ${currentIndex + 1}</span>${q.q}`;
+        `<span class="neon-text text-sm font-mono block mb-2 font-display">Pregunta ${currentIndex + 1}</span>${q.q}`;
 
       const container = document.getElementById("options");
       container.innerHTML = "";
@@ -99,7 +98,7 @@
         const selected = examData.userAnswers[currentIndex] === i;
         const div = document.createElement("div");
         div.className = `option p-5 rounded-2xl cursor-pointer text-base border transition
-          ${selected ? "border-emerald-500 bg-emerald-900/30" : "border-gray-700 hover:border-gray-500 bg-gray-800/50"}`;
+          ${selected ? "border-cyan-400 bg-cyan-500/15 shadow-[0_0_20px_rgba(34,211,238,0.3)]" : ""}`;
         div.textContent = opt;
         div.onclick = () => {
           examData.userAnswers[currentIndex] = i;

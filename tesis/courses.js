@@ -260,12 +260,51 @@ function getQuestionsFromCourse(courseName, count, difficulty = 2, studyLevel = 
   return pickQuestions(course.questions, count);
 }
 
-function pickQuestions(list, count) {
-  let questions = [...list].sort(() => Math.random() - 0.5);
-  while (questions.length < count) {
-    questions = questions.concat([...list].sort(() => Math.random() - 0.5));
+/**
+ * Mezcla Fisher-Yates (mejor que sort aleatorio)
+ */
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  return questions.slice(0, count).map((q) => ({ ...q }));
+  return a;
+}
+
+/**
+ * Elige preguntas SIN repetir.
+ * Si se piden más de las disponibles, devuelve solo las únicas disponibles.
+ */
+function pickQuestions(list, count) {
+  if (!list || list.length === 0) return [];
+
+  // Deduplicar por texto de pregunta por si el banco tiene duplicados
+  const seen = new Set();
+  const unique = [];
+  for (const q of list) {
+    const key = String(q.q || "").trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    unique.push(q);
+  }
+
+  const shuffled = shuffleArray(unique);
+  const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+
+  // Mezclar también el orden de las opciones en cada pregunta
+  return selected.map((q) => {
+    const opts = Array.isArray(q.options) ? [...q.options] : [];
+    const correctText = opts[q.correct];
+    const shuffledOpts = shuffleArray(opts);
+    const newCorrect = Math.max(0, shuffledOpts.indexOf(correctText));
+    return {
+      q: q.q,
+      options: shuffledOpts,
+      correct: newCorrect,
+      exp: q.exp || ""
+    };
+  });
 }
 
 /**
