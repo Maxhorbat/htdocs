@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados – ExamenIA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen">
+  <div class="max-w-3xl mx-auto p-5 md:p-10">
+    <div class="bg-gray-900 rounded-3xl p-8 md:p-12 border border-gray-800">
+      <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold font-display mb-8">Resultados</h1>
+        <div id="score-circle"
+             class="mx-auto w-44 h-44 rounded-full border-8 border-emerald-500 flex flex-col items-center justify-center mb-6">
+          <div id="final-score" class="text-6xl font-bold">0</div>
+          <div class="text-emerald-400 text-xs tracking-widest">PUNTOS</div>
+        </div>
+        <div class="flex justify-center gap-10 text-sm">
+          <div>
+            <div id="correct-count" class="text-2xl font-bold text-emerald-400">0</div>
+            <div class="text-gray-500">Correctas</div>
+          </div>
+          <div>
+            <div id="incorrect-count" class="text-2xl font-bold text-red-400">0</div>
+            <div class="text-gray-500">Incorrectas</div>
+          </div>
+          <div>
+            <div id="time-used" class="text-2xl font-bold text-gray-300">--:--</div>
+            <div class="text-gray-500">Tiempo</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="review" class="space-y-5 max-h-[420px] overflow-y-auto pr-2"></div>
+
+      <div class="flex flex-col sm:flex-row gap-4 mt-10">
+        <button onclick="window.location.href='index.html'"
+                class="flex-1 py-5 bg-gray-800 hover:bg-gray-700 rounded-2xl font-medium transition">
+          Volver al inicio
+        </button>
+        <button onclick="restartSame()"
+                class="flex-1 py-5 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-medium transition">
+          Repetir examen
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="courses.js"></script>
+  <script src="ai.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const exam = JSON.parse(localStorage.getItem("currentExam") || "null");
+    if (!exam) window.location.href = "index.html";
+
+    let correctCount = 0;
+    const reviewHTML = exam.questions.map((q, i) => {
+      const user = exam.userAnswers[i];
+      const isRight = user === q.correct;
+      if (isRight) correctCount++;
+      return `
+        <div class="bg-gray-800/80 rounded-2xl p-5">
+          <div class="flex justify-between gap-3 mb-2">
+            <p class="font-medium">${q.q}</p>
+            <span class="${isRight ? "text-emerald-400" : "text-red-400"} whitespace-nowrap text-sm">
+              ${isRight ? "✓ Correcto" : "✗ Incorrecto"}
+            </span>
+          </div>
+          <p class="text-sm text-gray-400">
+            Tu respuesta: <span class="${isRight ? "text-emerald-400" : "text-red-400"}">
+              ${user !== undefined ? q.options[user] : "Sin responder"}
+            </span>
+          </p>
+          ${!isRight ? `<p class="text-sm text-emerald-400 mt-1">Correcta: ${q.options[q.correct]}</p>` : ""}
+          ${q.exp ? `<div class="mt-3 text-xs bg-gray-900/80 p-3 rounded-xl text-gray-400">${q.exp}</div>` : ""}
+        </div>`;
+    }).join("");
+
+    const percentage = Math.round((correctCount / exam.questions.length) * 100);
+    document.getElementById("final-score").textContent = percentage;
+    document.getElementById("correct-count").textContent = correctCount;
+    document.getElementById("incorrect-count").textContent = exam.questions.length - correctCount;
+    document.getElementById("review").innerHTML = reviewHTML;
+
+    const elapsed = Math.floor((Date.now() - exam.startTime) / 1000);
+    const em = Math.floor(elapsed / 60);
+    const es = elapsed % 60;
+    document.getElementById("time-used").textContent = `${String(em).padStart(2,"0")}:${String(es).padStart(2,"0")}`;
+
+    const circle = document.getElementById("score-circle");
+    if (percentage < 50) {
+      circle.classList.remove("border-emerald-500");
+      circle.classList.add("border-red-500");
+    } else if (percentage < 70) {
+      circle.classList.remove("border-emerald-500");
+      circle.classList.add("border-yellow-500");
+    }
+
+    let history = JSON.parse(localStorage.getItem("examHistory") || "[]");
+    history.unshift({
+      topic: exam.topic,
+      score: percentage,
+      date: exam.date || new Date().toLocaleDateString("es-ES"),
+      difficulty: exam.difficulty
+    });
+    localStorage.setItem("examHistory", JSON.stringify(history.slice(0, 30)));
+  </script>
+</body>
+</html>
