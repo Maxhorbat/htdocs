@@ -1,10 +1,11 @@
 /**
- * script.js - Lógica principal de ExamenIA
- * Incluye temporizador configurable
+ * script.js — Lógica principal de ExamenIA
+ * Niveles de estudio + dificultad + temporizador + IA automática
  */
 
 let currentExam = null;
 let difficultyLevel = 2;
+let studyLevel = "secundaria";
 
 /* ========== DIFICULTAD ========== */
 function setDiff(level) {
@@ -20,6 +21,20 @@ function setDiff(level) {
   });
 }
 
+/* ========== NIVEL DE ESTUDIO ========== */
+function setStudyLevel(level) {
+  studyLevel = level;
+  document.querySelectorAll("[data-study]").forEach((el) => {
+    if (el.dataset.study === level) {
+      el.classList.add("bg-emerald-600", "text-white", "border-emerald-500");
+      el.classList.remove("bg-gray-800", "border-gray-700");
+    } else {
+      el.classList.remove("bg-emerald-600", "text-white", "border-emerald-500");
+      el.classList.add("bg-gray-800", "border-gray-700");
+    }
+  });
+}
+
 function updateCount(slider) {
   const el = document.getElementById("q-count");
   if (el) el.textContent = slider.value;
@@ -29,8 +44,8 @@ function updateCount(slider) {
 async function startNewExam() {
   const topicInput = document.getElementById("topic-input");
   const topic = (topicInput?.value || "General").trim();
-  const num = parseInt(document.getElementById("num-q")?.value || "10");
-  const timePerQ = parseInt(document.getElementById("time-per-q")?.value || "60");
+  const num = parseInt(document.getElementById("num-q")?.value || "10", 10);
+  const timePerQ = parseInt(document.getElementById("time-per-q")?.value || "60", 10);
 
   const btn = document.querySelector("button[onclick='startNewExam()']");
   if (btn) {
@@ -39,12 +54,13 @@ async function startNewExam() {
   }
 
   try {
-    const questions = await generateExamQuestions(topic, num, difficultyLevel);
+    const questions = await generateExamQuestions(topic, num, difficultyLevel, studyLevel);
 
     currentExam = {
       id: Date.now(),
       topic,
       difficulty: difficultyLevel,
+      studyLevel,
       questions,
       userAnswers: {},
       startTime: Date.now(),
@@ -71,6 +87,12 @@ async function startNewExam() {
 /* ========== HISTORIAL ========== */
 function showHistory() {
   const history = JSON.parse(localStorage.getItem("examHistory") || "[]");
+  const levelLabels = {
+    escuela: "Escuela",
+    secundaria: "Secundaria",
+    tecnica: "Técnica",
+    universidad: "Universidad"
+  };
 
   let html =
     history.length === 0
@@ -81,7 +103,10 @@ function showHistory() {
         <div class="bg-gray-800/80 hover:bg-gray-800 p-5 rounded-2xl mb-3 flex justify-between items-center transition">
           <div>
             <div class="font-semibold">${exam.topic}</div>
-            <div class="text-xs text-gray-400">${exam.date || ""}</div>
+            <div class="text-xs text-gray-400">
+              ${exam.date || ""} · ${levelLabels[exam.studyLevel] || ""} · 
+              ${exam.difficulty === 1 ? "Fácil" : exam.difficulty === 3 ? "Difícil" : "Medio"}
+            </div>
           </div>
           <div class="text-right">
             <span class="text-3xl font-bold text-emerald-400">${exam.score}</span>
@@ -122,8 +147,13 @@ function clearAllHistory() {
   }
 }
 
-/* ========== CONFIGURACIÓN DE IA ========== */
+/* ========== CONFIGURACIÓN DE IA (segura) ========== */
 function openAISettings() {
+  const hasKey = typeof hasAPIKey === "function" && hasAPIKey();
+  const masked = hasKey
+    ? "••••••••" + (AI_CONFIG.apiKey || "").slice(-4)
+    : "";
+
   const modal = document.createElement("div");
   modal.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4";
   modal.innerHTML = `
@@ -135,50 +165,79 @@ function openAISettings() {
         <button onclick="this.closest('.fixed').remove()" class="text-3xl text-gray-400 hover:text-white">×</button>
       </div>
       <div class="p-6 space-y-5">
-        <div>
-          <label class="block text-sm text-gray-400 mb-1">API Key</label>
-          <input id="ai-key" type="password" value="${AI_CONFIG.apiKey || ""}"
-                 placeholder="sk-... o tu clave"
-                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
+        <div class="bg-emerald-900/20 border border-emerald-800/50 rounded-xl p-4 text-sm text-gray-300">
+          <i class="fas fa-shield-alt text-emerald-400 mr-2"></i>
+          Tu API key se guarda <strong>solo en este navegador</strong>. Nunca se envía a nuestros servidores.
+          ${hasKey ? '<br><span class="text-emerald-400 mt-1 inline-block">✓ Key guardada — se usará automáticamente</span>' : ""}
         </div>
+
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">API Key ${hasKey ? "(ya configurada)" : ""}</label>
+          <input id="ai-key" type="password" 
+                 value=""
+                 placeholder="${hasKey ? masked + ' — escribe una nueva para cambiarla' : 'sk-... o tu clave'}"
+                 autocomplete="off"
+                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
+          <p class="text-xs text-gray-500 mt-1">Déjalo vacío para mantener la key actual. Borra y guarda para eliminar.</p>
+        </div>
+
         <div>
           <label class="block text-sm text-gray-400 mb-1">Base URL</label>
-          <input id="ai-url" type="text" value="${AI_CONFIG.baseURL}"
+          <input id="ai-url" type="text" value="${AI_CONFIG.baseURL || ""}"
                  class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
-          <p class="text-xs text-gray-500 mt-1">OpenAI: https://api.openai.com/v1<br>
-             xAI/Grok: https://api.x.ai/v1<br>
-             OpenRouter: https://openrouter.ai/api/v1</p>
+          <p class="text-xs text-gray-500 mt-1">
+            OpenAI: https://api.openai.com/v1<br>
+            xAI/Grok: https://api.x.ai/v1<br>
+            OpenRouter: https://openrouter.ai/api/v1
+          </p>
         </div>
+
         <div>
           <label class="block text-sm text-gray-400 mb-1">Modelo</label>
-          <input id="ai-model" type="text" value="${AI_CONFIG.model}"
+          <input id="ai-model" type="text" value="${AI_CONFIG.model || ""}"
                  class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
         </div>
+
         <div class="flex items-center gap-3">
           <input type="checkbox" id="ai-use" ${AI_CONFIG.useAI ? "checked" : ""} class="w-5 h-5 accent-emerald-500">
-          <label for="ai-use" class="text-sm">Usar IA para generar preguntas</label>
+          <label for="ai-use" class="text-sm">Usar IA automáticamente cuando haya key</label>
         </div>
-        <button onclick="saveAISettings()"
-                class="w-full py-4 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-semibold transition">
-          Guardar configuración
-        </button>
+
+        <div class="flex gap-3">
+          <button onclick="saveAISettings()"
+                  class="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-semibold transition">
+            Guardar
+          </button>
+          ${hasKey ? `
+          <button onclick="if(confirm('¿Borrar la API key de este navegador?')){ clearAPIKey(); this.closest('.fixed').remove(); alert('Key eliminada'); }"
+                  class="px-4 py-4 bg-red-900/50 hover:bg-red-800/50 text-red-300 rounded-2xl text-sm transition">
+            Borrar key
+          </button>` : ""}
+        </div>
       </div>
     </div>`;
   document.body.appendChild(modal);
 }
 
 function saveAISettings() {
-  setAIConfig({
-    apiKey: document.getElementById("ai-key").value.trim(),
+  const keyInput = document.getElementById("ai-key").value.trim();
+  const config = {
     baseURL: document.getElementById("ai-url").value.trim(),
     model: document.getElementById("ai-model").value.trim(),
     useAI: document.getElementById("ai-use").checked
-  });
+  };
+  // Solo actualizar key si el usuario escribió algo nuevo
+  if (keyInput) {
+    config.apiKey = keyInput;
+  }
+  setAIConfig(config);
   document.querySelector(".fixed")?.remove();
-  alert("✅ Configuración de IA guardada");
+  alert(hasAPIKey()
+    ? "✅ Configuración guardada. La IA se usará automáticamente."
+    : "✅ Guardado. Añade una API key para activar la IA.");
 }
 
-/* ========== AÑADIR CURSO MANUAL ========== */
+/* ========== AÑADIR CURSO ========== */
 function openAddCourse() {
   const modal = document.createElement("div");
   modal.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4";
@@ -247,11 +306,9 @@ function saveNewCourse() {
   populateCourseSelect();
 }
 
-/* ========== SELECTOR DE CURSOS ========== */
 function populateCourseSelect() {
   const select = document.getElementById("topic-input");
   if (!select || select.tagName !== "SELECT") return;
-
   const names = typeof getCourseNames === "function" ? getCourseNames() : [];
   select.innerHTML = names
     .map((n) => {
@@ -261,7 +318,6 @@ function populateCourseSelect() {
     .join("");
 }
 
-/* ========== REINICIAR ========== */
 function restartSame() {
   const current = JSON.parse(localStorage.getItem("currentExam") || "null");
   if (current) {
@@ -277,11 +333,11 @@ function restartSame() {
   }
 }
 
-/* ========== INIT ========== */
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("num-q")) {
     document.getElementById("num-q").addEventListener("input", (e) => updateCount(e.target));
     setDiff(2);
+    setStudyLevel("secundaria");
   }
   if (document.getElementById("topic-input")?.tagName === "SELECT") {
     populateCourseSelect();

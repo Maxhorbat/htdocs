@@ -42,8 +42,8 @@
     <main class="p-6 md:p-10">
       <div class="text-center mb-10">
         <h2 class="text-4xl md:text-5xl font-bold font-display mb-3">Simulador de Exámenes</h2>
-        <p class="text-gray-400 text-lg max-w-md mx-auto">
-          Elige un curso, ajusta la dificultad y practica. La IA puede generar preguntas nuevas.
+        <p class="text-gray-400 text-lg max-w-lg mx-auto">
+          Elige nivel de estudio, dificultad y practica. La IA adapta las preguntas automáticamente.
         </p>
       </div>
 
@@ -55,6 +55,30 @@
           </h3>
 
           <div class="space-y-6">
+            <!-- Nivel de estudio -->
+            <div>
+              <label class="block text-sm text-gray-400 mb-2">Nivel de estudio</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" data-study="escuela" onclick="setStudyLevel('escuela')"
+                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                  🎒 Escuela
+                </button>
+                <button type="button" data-study="secundaria" onclick="setStudyLevel('secundaria')"
+                        class="py-3 px-3 rounded-xl bg-emerald-600 border border-emerald-500 text-white text-sm font-medium transition text-left">
+                  📖 Secundaria
+                </button>
+                <button type="button" data-study="tecnica" onclick="setStudyLevel('tecnica')"
+                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                  🔧 Carrera técnica
+                </button>
+                <button type="button" data-study="universidad" onclick="setStudyLevel('universidad')"
+                        class="py-3 px-3 rounded-xl bg-gray-800 border border-gray-700 text-sm font-medium transition text-left">
+                  🎓 Universidad
+                </button>
+              </div>
+            </div>
+
+            <!-- Curso -->
             <div>
               <label class="block text-sm text-gray-400 mb-2">Curso / Materia</label>
               <select id="topic-input"
@@ -62,6 +86,7 @@
               </select>
             </div>
 
+            <!-- Dificultad -->
             <div>
               <label class="block text-sm text-gray-400 mb-2">Dificultad</label>
               <div class="grid grid-cols-3 gap-3">
@@ -74,6 +99,7 @@
               </div>
             </div>
 
+            <!-- Número de preguntas -->
             <div>
               <label class="block text-sm text-gray-400 mb-2">
                 Preguntas: <span id="q-count" class="font-mono text-emerald-400">10</span>
@@ -85,6 +111,7 @@
               </div>
             </div>
 
+            <!-- Temporizador -->
             <div>
               <label class="block text-sm text-gray-400 mb-2">Tiempo por pregunta</label>
               <select id="time-per-q"
@@ -108,9 +135,9 @@
         <div class="lg:col-span-2 space-y-5">
           <div class="bg-gradient-to-br from-emerald-900/40 to-gray-900 rounded-3xl p-7 border border-emerald-800/40">
             <div class="text-4xl mb-4">🤖</div>
-            <h4 class="font-semibold mb-2">IA opcional</h4>
+            <h4 class="font-semibold mb-2">IA automática</h4>
             <p class="text-sm text-gray-400 leading-relaxed">
-              Configura tu API key (OpenAI, Grok, OpenRouter…) y las preguntas se generarán automáticamente.
+              Configura tu API key una sola vez. A partir de ahí se usa sola y adapta las preguntas al nivel de estudio.
             </p>
             <button onclick="openAISettings()"
                     class="mt-4 text-sm text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
@@ -119,23 +146,20 @@
           </div>
 
           <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
-            <div class="text-4xl mb-4">⏱️</div>
-            <h4 class="font-semibold mb-2">Temporizador</h4>
+            <div class="text-4xl mb-4">🎯</div>
+            <h4 class="font-semibold mb-2">Dos ejes de nivel</h4>
             <p class="text-sm text-gray-400 leading-relaxed">
-              Elige el tiempo por pregunta. Cuando se acabe el tiempo total, el examen se envía automáticamente.
+              <strong>Nivel de estudio</strong> (escuela → universidad) define el vocabulario y profundidad.<br><br>
+              <strong>Dificultad</strong> (fácil / medio / difícil) define el reto dentro de ese nivel.
             </p>
           </div>
 
           <div class="bg-gray-900 rounded-3xl p-7 border border-gray-800">
-            <div class="text-4xl mb-4">📚</div>
-            <h4 class="font-semibold mb-2">Cursos personalizados</h4>
+            <div class="text-4xl mb-4">🔒</div>
+            <h4 class="font-semibold mb-2">Privacidad</h4>
             <p class="text-sm text-gray-400 leading-relaxed">
-              Añade tus propios cursos con preguntas en JSON. Se guardan en tu navegador.
+              Tu API key solo se guarda en este navegador. No se envía a ningún servidor nuestro.
             </p>
-            <button onclick="openAddCourse()"
-                    class="mt-4 text-sm text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-              Añadir curso <i class="fas fa-arrow-right text-xs"></i>
-            </button>
           </div>
         </div>
       </div>
@@ -148,6 +172,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       populateCourseSelect();
+      setStudyLevel("secundaria");
     });
   </script>
 </body>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Mi Proyecto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            dark: '#1D2129',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+  <!-- Barra lateral -->
+  <aside class="w-64 bg-white shadow-lg hidden md:flex flex-col">
+    <div class="p-4 border-b">
+      <a href="index.html" class="text-primary font-bold text-2xl block text-center">MiProyecto</a>
+    </div>
+    <nav class="flex-1 p-4">
+      <ul class="space-y-1">
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+            <i class="fa fa-tachometer w-5 text-center"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition">
+            <i class="fa fa-users w-5 text-center text-gray-500"></i>
+            <span>Usuarios</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition">
+            <i class="fa fa-file-text w-5 text-center text-gray-500"></i>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition">
+            <i class="fa fa-cog w-5 text-center text-gray-500"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="p-4 border-t">
+      <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
+        <i class="fa fa-sign-out w-5 text-center"></i>
+        <span>Cerrar sesión</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 flex flex-col overflow-y-auto">
+    <!-- Cabecera -->
+    <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <button class="md:hidden text-gray-500 text-xl">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h1 class="text-xl font-bold">Panel de Control</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="text-gray-500 relative">
+          <i class="fa fa-bell-o text-lg"></i>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <img src="https://picsum.photos/id/64/200/200" alt="Usuario" class="w-9 h-9 rounded-full object-cover">
+          <span class="hidden sm:inline font-medium">Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido del dashboard -->
+    <div class="p-6">
+      <!-- Tarjetas de resumen -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-primary">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Usuarios totales</p>
+              <h3 class="text-3xl font-bold">1,248</h3>
+            </div>
+            <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center text-lg">
+              <i class="fa fa-users"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-3 flex items-center gap-1">
+            <i class="fa fa-arrow-up"></i> 12.5% este mes
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Ingresos</p>
+              <h3 class="text-3xl font-bold">S/ 45,600</h3>
+            </div>
+            <div class="w-10 h-10 bg-green-500/10 text-green-500 rounded-lg flex items-center justify-center text-lg">
+              <i class="fa fa-money"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-3 flex items-center gap-1">
+            <i class="fa fa-arrow-up"></i> 8.2% este mes
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-orange-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Proyectos</p>
+              <h3 class="text-3xl font-bold">36</h3>
+            </div>
+            <div class="w-10 h-10 bg-orange-500/10 text-orange-500 rounded-lg flex items-center justify-center text-lg">
+              <i class="fa fa-folder-open"></i>
+            </div>
+          </div>
+          <p class="text-sm text-green-600 mt-3 flex items-center gap-1">
+            <i class="fa fa-arrow-up"></i> 4.1% este mes
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-red-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Soporte</p>
+              <h3 class="text-3xl font-bold">18</h3>
+            </div>
+            <div class="w-10 h-10 bg-red-500/10 text-red-500 rounded-lg flex items-center justify-center text-lg">
+              <i class="fa fa-headphones"></i>
+            </div>
+          </div>
+          <p class="text-sm text-red-600 mt-3 flex items-center gap-1">
+            <i class="fa fa-arrow-down"></i> 2.3% este mes
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabla de contenido -->
+      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-lg">Actividad reciente</h3>
+          <a href="#" class="text-sm text-primary hover:underline">Ver todo</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-200 text-left">
+                <th class="pb-3 font-medium">ID</th>
+                <th class="pb-3 font-medium">Usuario</th>
+                <th class="pb-3 font-medium">Acción</th>
+                <th class="pb-3 font-medium">Fecha</th>
+                <th class="pb-3 font-medium text-right">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3">#001</td>
+                <td>María López</td>
+                <td>Registro completado</td>
+                <td>05/06/2026</td>
+                <td class="text-right"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">Completado</span></td>
+              </tr>
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="py-3">#002</td>
+                <td>Juan Pérez</td>
+                <td>Actualización de perfil</td>
+                <td>04/06/2026</td>
+                <td class="text-right"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">Procesando</span></td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="py-3">#003</td>
+                <td>Ana Torres</td>
+                <td>Nuevo proyecto</td>
+                <td>03/06/2026</td>
+                <td class="text-right"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">Completado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

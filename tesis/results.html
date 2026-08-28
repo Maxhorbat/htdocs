@@ -12,7 +12,9 @@
   <div class="max-w-3xl mx-auto p-5 md:p-10">
     <div class="bg-gray-900 rounded-3xl p-8 md:p-12 border border-gray-800">
       <div class="text-center mb-10">
-        <h1 class="text-3xl font-bold font-display mb-8">Resultados</h1>
+        <h1 class="text-3xl font-bold font-display mb-2">Resultados</h1>
+        <p id="exam-meta" class="text-sm text-gray-400 mb-8"></p>
+
         <div id="score-circle"
              class="mx-auto w-44 h-44 rounded-full border-8 border-emerald-500 flex flex-col items-center justify-center mb-6">
           <div id="final-score" class="text-6xl font-bold">0</div>
@@ -56,6 +58,17 @@
     const exam = JSON.parse(localStorage.getItem("currentExam") || "null");
     if (!exam) window.location.href = "index.html";
 
+    const levelLabels = {
+      escuela: "Escuela",
+      secundaria: "Secundaria",
+      tecnica: "Carrera técnica",
+      universidad: "Universidad"
+    };
+    const diffLabels = { 1: "Fácil", 2: "Medio", 3: "Difícil" };
+
+    document.getElementById("exam-meta").textContent =
+      `${exam.topic} · ${levelLabels[exam.studyLevel] || ""} · ${diffLabels[exam.difficulty] || "Medio"}`;
+
     let correctCount = 0;
     const reviewHTML = exam.questions.map((q, i) => {
       const user = exam.userAnswers[i];
@@ -88,7 +101,8 @@
     const elapsed = Math.floor((Date.now() - exam.startTime) / 1000);
     const em = Math.floor(elapsed / 60);
     const es = elapsed % 60;
-    document.getElementById("time-used").textContent = `${String(em).padStart(2,"0")}:${String(es).padStart(2,"0")}`;
+    document.getElementById("time-used").textContent =
+      `${String(em).padStart(2, "0")}:${String(es).padStart(2, "0")}`;
 
     const circle = document.getElementById("score-circle");
     if (percentage < 50) {
@@ -104,7 +118,8 @@
       topic: exam.topic,
       score: percentage,
       date: exam.date || new Date().toLocaleDateString("es-ES"),
-      difficulty: exam.difficulty
+      difficulty: exam.difficulty,
+      studyLevel: exam.studyLevel
     });
     localStorage.setItem("examHistory", JSON.stringify(history.slice(0, 30)));
   </script>
