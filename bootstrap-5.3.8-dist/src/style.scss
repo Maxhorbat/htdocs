@@ -1,0 +1,26 @@
+$gold: #f8d31f;
+$bg: radial-gradient(#333, #222);
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  background: $bg;
+}
+
+svg {
+  display: block;
+  width: 22vw;
+  min-width: 200px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.st0, .st1{fill:$gold;stroke:$gold;stroke-width:3;stroke-miterlimit:10;transform:translate3d(0,0,0);transition:all 0.25s;}
+#outline-path{fill:none;stroke:$gold;stroke-width:10;stroke-miterlimit:10;}
