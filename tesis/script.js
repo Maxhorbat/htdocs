@@ -1,6 +1,6 @@
 /**
  * script.js — Lógica principal de ExamenIA
- * Niveles de estudio + dificultad + temporizador + IA automática
+ * Cursos por nivel de estudio + dificultad + temporizador + IA automática
  */
 
 let currentExam = null;
@@ -33,6 +33,8 @@ function setStudyLevel(level) {
       el.classList.add("bg-gray-800", "border-gray-700");
     }
   });
+  // Actualizar lista de cursos según el nivel
+  populateCourseSelect();
 }
 
 function updateCount(slider) {
@@ -147,12 +149,10 @@ function clearAllHistory() {
   }
 }
 
-/* ========== CONFIGURACIÓN DE IA (segura) ========== */
+/* ========== CONFIGURACIÓN DE IA ========== */
 function openAISettings() {
   const hasKey = typeof hasAPIKey === "function" && hasAPIKey();
-  const masked = hasKey
-    ? "••••••••" + (AI_CONFIG.apiKey || "").slice(-4)
-    : "";
+  const masked = hasKey ? "••••••••" + (AI_CONFIG.apiKey || "").slice(-4) : "";
 
   const modal = document.createElement("div");
   modal.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4";
@@ -170,17 +170,13 @@ function openAISettings() {
           Tu API key se guarda <strong>solo en este navegador</strong>. Nunca se envía a nuestros servidores.
           ${hasKey ? '<br><span class="text-emerald-400 mt-1 inline-block">✓ Key guardada — se usará automáticamente</span>' : ""}
         </div>
-
         <div>
           <label class="block text-sm text-gray-400 mb-1">API Key ${hasKey ? "(ya configurada)" : ""}</label>
-          <input id="ai-key" type="password" 
-                 value=""
+          <input id="ai-key" type="password" value="" autocomplete="off"
                  placeholder="${hasKey ? masked + ' — escribe una nueva para cambiarla' : 'sk-... o tu clave'}"
-                 autocomplete="off"
                  class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
-          <p class="text-xs text-gray-500 mt-1">Déjalo vacío para mantener la key actual. Borra y guarda para eliminar.</p>
+          <p class="text-xs text-gray-500 mt-1">Déjalo vacío para mantener la key actual.</p>
         </div>
-
         <div>
           <label class="block text-sm text-gray-400 mb-1">Base URL</label>
           <input id="ai-url" type="text" value="${AI_CONFIG.baseURL || ""}"
@@ -191,18 +187,15 @@ function openAISettings() {
             OpenRouter: https://openrouter.ai/api/v1
           </p>
         </div>
-
         <div>
           <label class="block text-sm text-gray-400 mb-1">Modelo</label>
           <input id="ai-model" type="text" value="${AI_CONFIG.model || ""}"
                  class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
         </div>
-
         <div class="flex items-center gap-3">
           <input type="checkbox" id="ai-use" ${AI_CONFIG.useAI ? "checked" : ""} class="w-5 h-5 accent-emerald-500">
           <label for="ai-use" class="text-sm">Usar IA automáticamente cuando haya key</label>
         </div>
-
         <div class="flex gap-3">
           <button onclick="saveAISettings()"
                   class="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-semibold transition">
@@ -226,10 +219,7 @@ function saveAISettings() {
     model: document.getElementById("ai-model").value.trim(),
     useAI: document.getElementById("ai-use").checked
   };
-  // Solo actualizar key si el usuario escribió algo nuevo
-  if (keyInput) {
-    config.apiKey = keyInput;
-  }
+  if (keyInput) config.apiKey = keyInput;
   setAIConfig(config);
   document.querySelector(".fixed")?.remove();
   alert(hasAPIKey()
@@ -248,6 +238,16 @@ function openAddCourse() {
         <button onclick="this.closest('.fixed').remove()" class="text-3xl text-gray-400 hover:text-white">×</button>
       </div>
       <div class="p-6 space-y-4 overflow-y-auto">
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Nivel de estudio</label>
+          <select id="new-course-level"
+                  class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 outline-none focus:border-emerald-500">
+            <option value="escuela">Escuela</option>
+            <option value="secundaria" selected>Secundaria</option>
+            <option value="tecnica">Carrera técnica</option>
+            <option value="universidad">Universidad</option>
+          </select>
+        </div>
         <div>
           <label class="block text-sm text-gray-400 mb-1">Nombre del curso</label>
           <input id="new-course-name" placeholder="Ej: Física Cuántica"
@@ -285,6 +285,7 @@ function openAddCourse() {
 }
 
 function saveNewCourse() {
+  const level = document.getElementById("new-course-level").value;
   const name = document.getElementById("new-course-name").value.trim();
   const desc = document.getElementById("new-course-desc").value.trim();
   const icon = document.getElementById("new-course-icon").value.trim() || "📚";
@@ -300,19 +301,27 @@ function saveNewCourse() {
     return alert("JSON de preguntas inválido: " + e.message);
   }
 
-  addCourse(name, { icon, description: desc, questions });
+  addCourse(name, { icon, description: desc, questions, custom: true }, level);
   document.querySelector(".fixed")?.remove();
-  alert(`✅ Curso "${name}" añadido correctamente`);
-  populateCourseSelect();
+  alert(`✅ Curso "${name}" añadido en ${level}`);
+  if (studyLevel === level) populateCourseSelect();
 }
 
+/* ========== SELECTOR DE CURSOS (por nivel) ========== */
 function populateCourseSelect() {
   const select = document.getElementById("topic-input");
   if (!select || select.tagName !== "SELECT") return;
-  const names = typeof getCourseNames === "function" ? getCourseNames() : [];
+
+  const names = typeof getCourseNames === "function" ? getCourseNames(studyLevel) : [];
+  if (names.length === 0) {
+    select.innerHTML = `<option value="">No hay cursos en este nivel</option>`;
+    return;
+  }
+
   select.innerHTML = names
     .map((n) => {
-      const icon = COURSES[n]?.icon || "📘";
+      const course = typeof getCourse === "function" ? getCourse(studyLevel, n) : null;
+      const icon = course?.icon || "📘";
       return `<option value="${n}">${icon} ${n}</option>`;
     })
     .join("");
@@ -338,8 +347,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("num-q").addEventListener("input", (e) => updateCount(e.target));
     setDiff(2);
     setStudyLevel("secundaria");
-  }
-  if (document.getElementById("topic-input")?.tagName === "SELECT") {
-    populateCourseSelect();
   }
 });

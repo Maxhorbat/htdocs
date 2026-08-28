@@ -187,7 +187,7 @@ El campo "correct" es el índice (0-3) de la respuesta correcta.`;
 async function generateExamQuestions(topic, count, difficulty = 2, studyLevel = "secundaria") {
   let localQuestions = [];
   if (typeof getQuestionsFromCourse === "function") {
-    localQuestions = getQuestionsFromCourse(topic, count, difficulty);
+    localQuestions = getQuestionsFromCourse(topic, count, difficulty, studyLevel);
   }
 
   // Automatizado: si hay key y useAI, usar IA
