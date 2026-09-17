@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Universo Realista de Amor - A & F</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      user-select: none;
+    }
+
+    /* Canvas principal */
+    #spaceCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* Contenedor invisible del iframe de música */
+    .youtube-audio-container {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Encabezado */
+    .header {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+      width: 90%;
+    }
+    .header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, #ffffff 10%, #e9d5ff 50%, #d8b4fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 18px rgba(192, 132, 252, 0.7));
+      margin-bottom: 2px;
+    }
+    .header p {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 5px;
+      color: rgba(233, 213, 255, 0.85);
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+    }
+
+    /* Indicador inferior */
+    .instruction {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: rgba(216, 180, 254, 0.9);
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.8);
+      z-index: 10;
+      pointer-events: none;
+      text-align: center;
+      width: 90%;
+      animation: floatPulse 3s ease-in-out infinite;
+    }
+    @keyframes floatPulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+    }
+
+    /* Carta estilo vidrio con neón */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 1, 8, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card {
+      background: linear-gradient(135deg, rgba(35, 18, 55, 0.75) 0%, rgba(12, 6, 28, 0.9) 100%);
+      border: 1px solid rgba(224, 170, 255, 0.35);
+      box-shadow: 0 0 45px rgba(168, 85, 247, 0.3), inset 0 0 30px rgba(192, 132, 252, 0.12);
+      border-radius: 24px;
+      padding: 42px 32px;
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      transform: scale(0.88) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.active .card {
+      transform: scale(1) translateY(0);
+    }
+
+    .card-body {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.98rem;
+      line-height: 1.85;
+      color: #f3e8ff;
+      text-shadow: 0 0 8px rgba(233, 213, 255, 0.4);
+      margin-bottom: 25px;
+      text-align: justify;
+      text-justify: inter-word;
+      font-weight: 300;
+    }
+
+    .card-footer {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.3rem;
+      color: #f472b6;
+      text-shadow: 0 0 12px #f472b6, 0 0 25px #e879f9, 0 0 40px #c084fc;
+      margin-top: 10px;
+      display: block;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 22px;
+      background: none;
+      border: none;
+      color: #e9d5ff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .close-btn:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>A & F</h1>
+    <p>Nuestro Universo Incalculable</p>
+  </div>
+
+  <div class="instruction">✨ Toca la pantalla para activar la música y ver estrellas fugaces | Toca la Supernova central ✨</div>
+
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- Iframe de reproducción de música -->
+  <div class="youtube-audio-container">
+    <iframe 
+      id="ytAudio"
+      width="100" 
+      height="100" 
+      src="https://www.youtube.com/embed/jb0K64SGsfc?autoplay=1&loop=1&playlist=jb0K64SGsfc&enablejsapi=1" 
+      title="Perfect (spanish version) - Kevin &amp; Karla" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      referrerpolicy="strict-origin-when-cross-origin" 
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="modal-overlay" id="loveModal">
+    <div class="card">
+      <button class="close-btn" id="closeBtn">&times;</button>
+      <div class="card-body">
+        Solo han pasado dos meses pero nuestros corazones ya se pertenecian desde q nos vimos ,se q al principio tuviste tus dudas pero eso es bueno asi me diste la oportunidad de ganarme tu confianza y para serte sincero cuando me diste el si para ser novios en mi mente pasaron tantas probabilidades en las cuales solo veia una vida contigo ,ahora estoy seguro q no hay mujer en la tierra aparte de mi madre que ame tanto como lo ago yo ,para mi tu fuiste eres y seras el amor de mi vida
+      </div>
+      <span class="card-footer">TE AMO 3 MILLONES</span>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+    const modal = document.getElementById('loveModal');
+    const closeBtn = document.getElementById('closeBtn');
+    const ytIframe = document.getElementById('ytAudio');
+
+    let width, height, dpr;
+    let stars3D = [];
+    let nebulaGradients = [];
+    let shootingStars = [];
+    let centralSupernova;
+
+    // Forzar inicio de reproducción mediante JS API
+    function forcePlayAudio() {
+      if (ytIframe && ytIframe.contentWindow) {
+        ytIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      }
+    }
+
+    function initCanvas() {
+      dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      createStars();
+      createNebulae();
+      initSupernova();
+    }
+
+    function createStars() {
+      stars3D = [];
+      const starCount = Math.floor((width * height) / 1600);
+      const starColors = ['#9bb0ff', '#aabfff', '#cad8ff', '#f8f7ff', '#fff4ea', '#ffd2a1', '#ffcc6f', '#f472b6', '#c084fc'];
+
+      for (let i = 0; i < starCount; i++) {
+        stars3D.push({
+          x: (Math.random() - 0.5) * width * 2,
+          y: (Math.random() - 0.5) * height * 2,
+          z: Math.random() * width,
+          size: Math.random() * 1.6 + 0.3,
+          color: starColors[Math.floor(Math.random() * starColors.length)],
+          twinkleSpeed: 0.01 + Math.random() * 0.035,
+          twinklePhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function createNebulae() {
+      nebulaGradients = [
+        { x: width * 0.2, y: height * 0.3, r: Math.min(width, height) * 0.45, color: 'rgba(76, 29, 149, 0.22)' },
+        { x: width * 0.8, y: height * 0.7, r: Math.min(width, height) * 0.5, color: 'rgba(124, 58, 237, 0.18)' },
+        { x: width * 0.5, y: height * 0.5, r: Math.min(width, height) * 0.55, color: 'rgba(192, 38, 211, 0.14)' },
+        { x: width * 0.3, y: height * 0.8, r: Math.min(width, height) * 0.4, color: 'rgba(14, 116, 144, 0.15)' }
+      ];
+    }
+
+    function initSupernova() {
+      centralSupernova = {
+        x: width / 2,
+        y: height / 2,
+        baseRadius: 15,
+        pulse: 0
+      };
+    }
+
+    function drawConstellations() {
+      const scale = Math.min(width, height) / 850;
+      
+      const ax = width * 0.22;
+      const ay = height * 0.5;
+      const ptsA = [
+        {x: ax, y: ay - 100 * scale},
+        {x: ax - 55 * scale, y: ay + 80 * scale},
+        {x: ax + 55 * scale, y: ay + 80 * scale},
+        {x: ax - 32 * scale, y: ay + 12 * scale},
+        {x: ax + 32 * scale, y: ay + 12 * scale}
+      ];
+
+      const fx = width * 0.78;
+      const fy = height * 0.5;
+      const ptsF = [
+        {x: fx - 45 * scale, y: fy - 100 * scale},
+        {x: fx - 45 * scale, y: fy + 80 * scale},
+        {x: fx + 45 * scale, y: fy - 100 * scale},
+        {x: fx - 45 * scale, y: fy - 10 * scale},
+        {x: fx + 30 * scale, y: fy - 10 * scale}
+      ];
+
+      ctx.save();
+      ctx.lineWidth = 1.3;
+      ctx.strokeStyle = 'rgba(216, 180, 254, 0.45)';
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = '#c084fc';
+
+      ctx.beginPath();
+      ctx.moveTo(ptsA[1].x, ptsA[1].y);
+      ctx.lineTo(ptsA[0].x, ptsA[0].y);
+      ctx.lineTo(ptsA[2].x, ptsA[2].y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(ptsA[3].x, ptsA[3].y);
+      ctx.lineTo(ptsA[4].x, ptsA[4].y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(ptsF[1].x, ptsF[1].y);
+      ctx.lineTo(ptsF[0].x, ptsF[0].y);
+      ctx.lineTo(ptsF[2].x, ptsF[2].y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(ptsF[3].x, ptsF[3].y);
+      ctx.lineTo(ptsF[4].x, ptsF[4].y);
+      ctx.stroke();
+
+      [...ptsA, ...ptsF].forEach(p => {
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 16;
+        ctx.shadowColor = '#e9d5ff';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    function addShootingStar(x, y) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 11 + Math.random() * 8;
+      shootingStars.push({
+        x: x,
+        y: y,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        length: 110 + Math.random() * 80,
+        life: 1,
+        decay: 0.016 + Math.random() * 0.01,
+        color: ['#f472b6', '#e9d5ff', '#38bdf8', '#fbbf24'][Math.floor(Math.random() * 4)]
+      });
+    }
+
+    function render() {
+      ctx.fillStyle = '#020106';
+      ctx.fillRect(0, 0, width, height);
+
+      nebulaGradients.forEach(n => {
+        const g = ctx.createRadialGradient(n.x, n.y, 10, n.x, n.y, n.r);
+        g.addColorStop(0, n.color);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, width, height);
+      });
+
+      const cx = width / 2;
+      const cy = height / 2;
+
+      stars3D.forEach(s => {
+        s.twinklePhase += s.twinkleSpeed;
+        const alpha = 0.3 + 0.7 * Math.abs(Math.sin(s.twinklePhase));
+
+        const k = 400 / (400 + s.z);
+        const px = s.x * k + cx;
+        const py = s.y * k + cy;
+
+        if (px >= 0 && px <= width && py >= 0 && py <= height) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = s.color;
+          ctx.beginPath();
+          ctx.arc(px, py, s.size * k, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (s.size > 1.2) {
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = s.color;
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      });
+
+      drawConstellations();
+
+      centralSupernova.pulse += 0.03;
+      const pulseFactor = Math.sin(centralSupernova.pulse);
+      const currentRadius = centralSupernova.baseRadius + pulseFactor * 2.5;
+
+      ctx.save();
+      const flareGrad = ctx.createRadialGradient(
+        centralSupernova.x, centralSupernova.y, 0,
+        centralSupernova.x, centralSupernova.y, 75 + pulseFactor * 15
+      );
+      flareGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      flareGrad.addColorStop(0.2, 'rgba(244, 114, 182, 0.85)');
+      flareGrad.addColorStop(0.55, 'rgba(192, 132, 252, 0.35)');
+      flareGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+      ctx.fillStyle = flareGrad;
+      ctx.beginPath();
+      ctx.arc(centralSupernova.x, centralSupernova.y, 85 + pulseFactor * 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 28;
+      ctx.shadowColor = '#f472b6';
+      ctx.beginPath();
+      ctx.arc(centralSupernova.x, centralSupernova.y, currentRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const st = shootingStars[i];
+        st.x += st.dx;
+        st.y += st.dy;
+        st.life -= st.decay;
+
+        if (st.life <= 0) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.strokeStyle = st.color;
+        ctx.globalAlpha = st.life;
+        ctx.lineWidth = 2.2;
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = st.color;
+        ctx.beginPath();
+        ctx.moveTo(st.x, st.y);
+        ctx.lineTo(st.x - st.dx * (st.length / 10), st.y - st.dy * (st.length / 10));
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(render);
+    }
+
+    function handleInteraction(e) {
+      forcePlayAudio();
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const dist = Math.hypot(clientX - centralSupernova.x, clientY - centralSupernova.y);
+      if (dist < 60) {
+        modal.classList.add('active');
+        return;
+      }
+
+      addShootingStar(clientX, clientY);
+      addShootingStar(clientX, clientY);
+    }
+
+    window.addEventListener('resize', initCanvas);
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction);
+
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      modal.classList.remove('active');
+    });
+
+    initCanvas();
+    render();
+  </script>
+</body>
+</html>

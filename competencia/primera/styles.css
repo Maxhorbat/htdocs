@@ -1,0 +1,252 @@
+/* ==========================================
+   VARIABLES Y CONFIGURACIÓN GENERAL
+   ========================================== */
+:root {
+    --bg-principal: #FDFBF7;
+    --texto-oscuro: #2C2825;
+    --dorado-sol: #D4A359;
+    --terracota: #A8583B;
+    --verde-olivo: #5A6B43;
+    --blanco-suave: #FAF6F0;
+    --borde-tarjeta: #EAE3D2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lora', serif;
+    background-color: var(--bg-principal);
+    color: var(--texto-oscuro);
+    line-height: 1.8;
+}
+
+h1, h2, h3, .brand {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+}
+
+/* ==========================================
+   HEADER & NAVEGACIÓN
+   ========================================== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: rgba(44, 40, 37, 0.9);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dorado-sol);
+    text-decoration: none;
+}
+
+nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+nav a:hover, nav a.active {
+    color: var(--dorado-sol);
+}
+
+/* ==========================================
+   HERO SECTION CON IMAGEN DE FONDO
+   ========================================== */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    /* Imagen de fondo con filtro oscuro para mejor lectura */
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), 
+                url('ima/santo.jpg') center/cover no-repeat;
+    color: #FFFFFF;
+}
+
+.hero h1 {
+    font-size: 3.8rem;
+    color: #FFFFFF;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    max-width: 700px;
+    font-style: italic;
+    color: #F0EAE1;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.btn-main {
+    display: inline-block;
+    padding: 14px 35px;
+    background-color: var(--dorado-sol);
+    color: var(--texto-oscuro);
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.btn-main:hover {
+    background-color: var(--terracota);
+    color: #FFFFFF;
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+   HEADER SECUNDARIO PARA OTRAS PÁGINAS
+   ========================================== */
+.page-header {
+    padding: 140px 8% 40px;
+    background-color: var(--verde-olivo);
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.8rem;
+    color: var(--dorado-sol);
+    margin-bottom: 10px;
+}
+
+/* ==========================================
+   SECCIONES Y CONTENIDOS
+   ========================================== */
+section, main {
+    padding: 70px 8%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--terracota);
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background-color: var(--dorado-sol);
+    margin: 15px auto 0;
+}
+
+/* Grid de Criaturas */
+.grid-criaturas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--blanco-suave);
+    padding: 35px 25px;
+    border-radius: 12px;
+    border: 1px solid var(--borde-tarjeta);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.card .icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+/* Texto de Poema */
+.cantico-text {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    line-height: 2.2;
+    text-align: center;
+    background: var(--blanco-suave);
+    padding: 40px;
+    border-left: 4px solid var(--dorado-sol);
+    border-radius: 8px;
+}
+
+/* Formulario */
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-form input, 
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 8px;
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    background-color: #FFFFFF;
+}
+
+.contact-form button {
+    padding: 14px;
+    background-color: var(--terracota);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.contact-form button:hover {
+    background-color: var(--verde-olivo);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: var(--texto-oscuro);
+    color: #A09A93;
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.5rem; }
+    .hero p { font-size: 1.1rem; }
+    header { flex-direction: column; gap: 10px; }
+    nav a { margin: 0 10px; }
+}
