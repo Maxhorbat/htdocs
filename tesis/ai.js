@@ -1,278 +1,106 @@
 /**
- * ai.js — Conexión segura con IA
- * 
- * Seguridad:
- * - La API key solo vive en localStorage de ESTE navegador
- * - Nunca se envía a ningún servidor propio
- * - Solo se usa al llamar a la API que tú configuraste
- * - No se imprime en consola ni en logs
- * - Si hay key guardada, se usa IA automáticamente
+ * ai.js — Módulo de integración con la API de IA
  */
 
 const AI_CONFIG = {
-  apiKey: localStorage.getItem("ai_api_key") || "",
-  baseURL: localStorage.getItem("ai_base_url") || "https://api.openai.com/v1",
-  model: localStorage.getItem("ai_model") || "gpt-4o-mini",
-  // Si hay key, usar IA por defecto (automatizado)
-  useAI: localStorage.getItem("ai_use") !== "false" && !!(localStorage.getItem("ai_api_key"))
+  apiKey: localStorage.getItem("ai_key") || "",
+  baseURL: localStorage.getItem("ai_url") || "https://api.openai.com/v1",
+  model: localStorage.getItem("ai_model") || "gpt-3.5-turbo",
+  useAI: localStorage.getItem("ai_use") === "true"
 };
 
-/** Niveles de estudio reconocidos por la IA */
-const STUDY_LEVELS = {
-  escuela: {
-    id: "escuela",
-    label: "Escuela (primaria)",
-    description: "6-12 años. Conceptos básicos, lenguaje simple, ejemplos cotidianos."
-  },
-  secundaria: {
-    id: "secundaria",
-    label: "Secundaria",
-    description: "12-15 años. Conceptos intermedios de la educación media."
-  },
-  tecnica: {
-    id: "tecnica",
-    label: "Carrera técnica",
-    description: "Formación técnica/profesional. Enfoque práctico y aplicado."
-  },
-  universidad: {
-    id: "universidad",
-    label: "Universidad",
-    description: "Nivel universitario. Conceptos avanzados, rigor académico."
-  }
-};
-
-function setAIConfig({ apiKey, baseURL, model, useAI }) {
-  if (apiKey !== undefined) {
-    // No guardar espacios ni caracteres basura
-    const clean = String(apiKey).trim();
-    AI_CONFIG.apiKey = clean;
-    if (clean) {
-      localStorage.setItem("ai_api_key", clean);
-      // Si hay key y no se forzó useAI=false, activar IA
-      if (useAI === undefined) {
-        AI_CONFIG.useAI = true;
-        localStorage.setItem("ai_use", "true");
-      }
-    } else {
-      localStorage.removeItem("ai_api_key");
-      AI_CONFIG.useAI = false;
-      localStorage.setItem("ai_use", "false");
-    }
-  }
-  if (baseURL !== undefined) {
-    AI_CONFIG.baseURL = String(baseURL).trim().replace(/\/$/, "");
-    localStorage.setItem("ai_base_url", AI_CONFIG.baseURL);
-  }
-  if (model !== undefined) {
-    AI_CONFIG.model = String(model).trim();
-    localStorage.setItem("ai_model", AI_CONFIG.model);
-  }
-  if (useAI !== undefined) {
-    AI_CONFIG.useAI = !!useAI;
-    localStorage.setItem("ai_use", String(!!useAI));
-  }
-}
-
-/** ¿Hay API key configurada? */
 function hasAPIKey() {
-  return !!(AI_CONFIG.apiKey && AI_CONFIG.apiKey.length > 10);
+  return Boolean(AI_CONFIG.apiKey && AI_CONFIG.apiKey.trim().length > 0);
 }
 
-/** ¿Se usará IA en este momento? */
-function shouldUseAI() {
-  return hasAPIKey() && AI_CONFIG.useAI;
+function setAIConfig(config) {
+  if (config.apiKey !== undefined) {
+    AI_CONFIG.apiKey = config.apiKey;
+    localStorage.setItem("ai_key", config.apiKey);
+  }
+  if (config.baseURL !== undefined) {
+    AI_CONFIG.baseURL = config.baseURL;
+    localStorage.setItem("ai_url", config.baseURL);
+  }
+  if (config.model !== undefined) {
+    AI_CONFIG.model = config.model;
+    localStorage.setItem("ai_model", config.model);
+  }
+  if (config.useAI !== undefined) {
+    AI_CONFIG.useAI = config.useAI;
+    localStorage.setItem("ai_use", config.useAI);
+  }
 }
 
-/**
- * Genera preguntas con IA adaptadas al nivel de estudio + dificultad
- */
-async function generateQuestionsWithAI(topic, count, difficulty = 2, studyLevel = "secundaria") {
+async function fetchAIQuestions(topic, count, difficulty, studyLevel) {
   if (!hasAPIKey()) {
-    throw new Error("No hay API key. Configúrala con el botón 🤖 (solo una vez).");
+    throw new Error("No hay API Key configurada.");
   }
 
-  const levelInfo = STUDY_LEVELS[studyLevel] || STUDY_LEVELS.secundaria;
-  const difficultyText = {
-    1: "FÁCIL: preguntas sencillas, respuesta directa, sin trucos",
-    2: "MEDIO: requieren razonamiento moderado",
-    3: "DIFÍCIL: razonamiento profundo, casos límite o aplicación avanzada"
-  }[difficulty] || "MEDIO";
+  const endpoint = `${AI_CONFIG.baseURL.replace(/\/+$/, "")}/chat/completions`;
+  
+  const diffMap = { 1: "fácil", 2: "intermedio", 3: "difícil" };
+  const diffLabel = diffMap[difficulty] || "intermedio";
 
-  const systemPrompt = `Eres un experto generador de exámenes educativos de alta calidad.
+  const systemPrompt = `Eres un generador estricto de exámenes en formato JSON. 
+Debes responder ÚNICAMENTE con un array JSON válido sin bloques de código Markdown (\`\`\`json) ni texto explicativo.`;
 
-NIVEL DE ESTUDIO: ${levelInfo.label}
-Descripción del nivel: ${levelInfo.description}
+  const userPrompt = `Genera exactamente ${count} preguntas de opción múltiple ÚNICAS (sin repetir ninguna) sobre el tema "${topic}".
+Nivel de estudios: ${studyLevel}.
+Dificultad: ${diffLabel}.
 
-DIFICULTAD: ${difficultyText}
-
-REGLAS OBLIGATORIAS:
-1. Genera exactamente ${count} preguntas de opción múltiple sobre: "${topic}"
-2. TODAS las preguntas deben ser DIFERENTES entre sí. Nunca repitas la misma pregunta ni una muy similar.
-3. Adapta el vocabulario, profundidad y ejemplos al nivel de estudio indicado.
-4. Si el nivel es "Escuela", usa lenguaje simple y ejemplos de la vida diaria.
-5. Si es "Universidad", puedes usar terminología técnica y conceptos avanzados.
-6. Las opciones incorrectas deben ser plausibles (distractores realistas).
-7. Responde SOLO con un JSON válido, sin markdown, sin texto extra:
-
+Estructura obligatoria por pregunta (JSON Array):
 [
   {
     "q": "Texto de la pregunta",
-    "options": ["opción A", "opción B", "opción C", "opción D"],
+    "options": ["Opción A", "Opción B", "Opción C", "Opción D"],
     "correct": 0,
-    "exp": "Explicación breve y clara de la respuesta correcta"
+    "exp": "Explicación breve de la respuesta correcta"
   }
 ]
+REGLA CRÍTICA: Debes entregar exactamente ${count} objetos en el array. Respuestas concisas para no truncar el JSON.`;
 
-El campo "correct" es el índice (0-3) de la respuesta correcta.`;
+  // Aumentamos max_tokens para permitir respuestas largas de 20+ preguntas
+  const calculatedMaxTokens = Math.max(2000, count * 180);
 
-  const response = await fetch(`${AI_CONFIG.baseURL}/chat/completions`, {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${AI_CONFIG.apiKey}`
     },
     body: JSON.stringify({
-      model: AI_CONFIG.model,
+      model: AI_CONFIG.model || "gpt-3.5-turbo",
       messages: [
         { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Genera ${count} preguntas sobre "${topic}" para nivel ${levelInfo.label}, dificultad ${difficultyText.split(":")[0]}.`
-        }
+        { role: "user", content: userPrompt }
       ],
       temperature: 0.7,
-      max_tokens: 2500
+      max_tokens: calculatedMaxTokens
     })
   });
 
   if (!response.ok) {
-    let errMsg = `${response.status}`;
-    try {
-      const errBody = await response.json();
-      errMsg = errBody.error?.message || errMsg;
-    } catch (_) {
-      errMsg = await response.text().catch(() => errMsg);
-    }
-    // No revelar la key en el error
-    throw new Error(`Error de la API: ${errMsg}`);
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `Error HTTP ${response.status}`);
   }
 
   const data = await response.json();
-  const content = data.choices?.[0]?.message?.content || "";
+  let content = data.choices?.[0]?.message?.content || "";
 
-  let jsonStr = content.trim();
-  if (jsonStr.startsWith("```")) {
-    jsonStr = jsonStr.replace(/```json?/gi, "").replace(/```/g, "").trim();
-  }
+  // Limpiar posibles etiquetas de código markdown devueltas por la IA
+  content = content.replace(/```json/g, "").replace(/```/g, "").trim();
 
+  let parsedQuestions = [];
   try {
-    const questions = JSON.parse(jsonStr);
-    if (!Array.isArray(questions) || questions.length === 0) {
-      throw new Error("La IA no devolvió un array de preguntas");
-    }
-    const mapped = questions.map((q) => ({
-      q: String(q.q || ""),
-      options: Array.isArray(q.options) ? q.options.map(String) : ["A", "B", "C", "D"],
-      correct: Math.min(3, Math.max(0, Number(q.correct) || 0)),
-      exp: String(q.exp || "")
-    }));
-    // Eliminar preguntas repetidas (mismo texto)
-    const seen = new Set();
-    const unique = [];
-    for (const q of mapped) {
-      const key = q.q.trim().toLowerCase();
-      if (!key || seen.has(key)) continue;
-      seen.add(key);
-      unique.push(q);
-    }
-    return unique;
+    parsedQuestions = JSON.parse(content);
   } catch (e) {
-    console.error("Error parseando respuesta de IA (contenido omitido por seguridad)");
-    throw new Error("La IA no devolvió un JSON válido. Intenta de nuevo.");
+    throw new Error("La IA truncó la respuesta o devolvió un JSON inválido. Intenta de nuevo.");
   }
+
+  if (!Array.isArray(parsedQuestions)) {
+    throw new Error("Formato de respuesta inválido de la IA.");
+  }
+
+  return parsedQuestions;
 }
-
-/**
- * Función principal: IA automática si hay key, si no → banco local
- */
-async function generateExamQuestions(topic, count, difficulty = 2, studyLevel = "secundaria") {
-  let localQuestions = [];
-  if (typeof getQuestionsFromCourse === "function") {
-    localQuestions = getQuestionsFromCourse(topic, count, difficulty, studyLevel);
-  }
-
-  // Automatizado: si hay key y useAI, usar IA
-  if (!shouldUseAI()) {
-    if (localQuestions.length > 0) return localQuestions;
-    return createFallbackQuestions(topic, count);
-  }
-
-  try {
-    console.log("🤖 Generando preguntas con IA (nivel:", studyLevel, ")");
-    let aiQuestions = await generateQuestionsWithAI(topic, count, difficulty, studyLevel);
-    // Si la IA devolvió menos (por deduplicación), completar con banco local sin repetir
-    if (aiQuestions.length < count && localQuestions.length > 0) {
-      const used = new Set(aiQuestions.map((q) => q.q.trim().toLowerCase()));
-      for (const q of localQuestions) {
-        if (aiQuestions.length >= count) break;
-        const key = String(q.q || "").trim().toLowerCase();
-        if (key && !used.has(key)) {
-          used.add(key);
-          aiQuestions.push(q);
-        }
-      }
-    }
-    console.log("✅ Preguntas generadas:", aiQuestions.length);
-    return aiQuestions;
-  } catch (error) {
-    console.warn("⚠️ Falló la IA, usando banco local:", error.message);
-    if (localQuestions.length > 0) return localQuestions;
-    return createFallbackQuestions(topic, count);
-  }
-}
-
-function createFallbackQuestions(topic, count) {
-  const qs = [];
-  for (let i = 0; i < count; i++) {
-    qs.push({
-      q: `Pregunta de ejemplo sobre ${topic} #${i + 1}`,
-      options: ["Opción A", "Opción B", "Opción C", "Opción D"],
-      correct: 0,
-      exp: "Pregunta de ejemplo. Configura la IA o usa un curso del banco local."
-    });
-  }
-  return qs;
-}
-
-async function createCourseWithAI(courseName, description, numQuestions = 8, studyLevel = "secundaria") {
-  if (!hasAPIKey()) {
-    throw new Error("Necesitas una API key para generar cursos con IA");
-  }
-  const questions = await generateQuestionsWithAI(courseName, numQuestions, 2, studyLevel);
-  const newCourse = {
-    icon: "📚",
-    description: description || `Curso sobre ${courseName}`,
-    questions
-  };
-  if (typeof addCourse === "function") {
-    addCourse(courseName, newCourse);
-  }
-  return newCourse;
-}
-
-/** Borrar API key de forma segura */
-function clearAPIKey() {
-  AI_CONFIG.apiKey = "";
-  AI_CONFIG.useAI = false;
-  localStorage.removeItem("ai_api_key");
-  localStorage.setItem("ai_use", "false");
-}
-
-window.AI_CONFIG = AI_CONFIG;
-window.STUDY_LEVELS = STUDY_LEVELS;
-window.setAIConfig = setAIConfig;
-window.hasAPIKey = hasAPIKey;
-window.shouldUseAI = shouldUseAI;
-window.generateExamQuestions = generateExamQuestions;
-window.createCourseWithAI = createCourseWithAI;
-window.clearAPIKey = clearAPIKey;

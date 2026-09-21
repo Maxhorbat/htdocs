@@ -1,361 +1,191 @@
 /**
- * courses.js
- * Cursos organizados por nivel de estudio.
- * Escuela · Secundaria · Carrera técnica · Universidad
+ * courses.js — Banco estático ampliado
  */
 
-const COURSES_BY_LEVEL = {
-  /* ========== ESCUELA (primaria) ========== */
-  escuela: {
-    "Matemáticas básicas": {
-      icon: "🔢",
-      description: "Sumas, restas, multiplicaciones y divisiones",
-      questions: [
-        { q: "¿Cuánto es 7 + 5?", options: ["12", "11", "13", "10"], correct: 0, exp: "7 + 5 = 12" },
-        { q: "¿Cuánto es 9 × 3?", options: ["27", "21", "24", "30"], correct: 0, exp: "9 × 3 = 27" },
-        { q: "¿Cuánto es 20 ÷ 4?", options: ["5", "4", "6", "8"], correct: 0, exp: "20 ÷ 4 = 5" },
-        { q: "¿Cuál es el número mayor: 45 o 54?", options: ["54", "45", "Son iguales", "No se puede saber"], correct: 0, exp: "54 es mayor que 45" },
-        { q: "Si tienes 10 manzanas y regalas 3, ¿cuántas te quedan?", options: ["7", "8", "6", "13"], correct: 0, exp: "10 − 3 = 7" },
-        { q: "¿Cuántos lados tiene un triángulo?", options: ["3", "4", "5", "6"], correct: 0, exp: "Un triángulo tiene 3 lados" }
-      ]
-    },
-    "Ciencias naturales": {
-      icon: "🌱",
-      description: "Animales, plantas y el cuerpo humano",
-      questions: [
-        { q: "¿Qué necesita una planta para crecer?", options: ["Agua y sol", "Solo agua", "Solo tierra", "Solo aire"], correct: 0, exp: "Las plantas necesitan agua, sol y nutrientes" },
-        { q: "¿Cuántas patas tiene una araña?", options: ["8", "6", "4", "10"], correct: 0, exp: "Las arañas tienen 8 patas" },
-        { q: "¿Qué órgano bombea la sangre?", options: ["El corazón", "El cerebro", "El estómago", "Los pulmones"], correct: 0, exp: "El corazón bombea la sangre" },
-        { q: "¿En qué estado está el hielo?", options: ["Sólido", "Líquido", "Gaseoso", "Plasma"], correct: 0, exp: "El hielo es agua en estado sólido" },
-        { q: "¿Qué animal pone huevos y vuela?", options: ["Ave", "Perro", "Pez", "Gato"], correct: 0, exp: "Las aves ponen huevos y la mayoría vuelan" }
-      ]
-    },
-    "Lenguaje": {
-      icon: "✏️",
-      description: "Lectura, escritura y vocabulario",
-      questions: [
-        { q: "¿Cuál es el plural de 'casa'?", options: ["casas", "cases", "casases", "casa"], correct: 0, exp: "casa → casas" },
-        { q: "¿Qué signo se usa al final de una pregunta?", options: ["¿ ?", ". ", "! ", ", "], correct: 0, exp: "Las preguntas van entre ¿ ?" },
-        { q: "¿Cuántas vocales hay en el abecedario?", options: ["5", "4", "6", "7"], correct: 0, exp: "a, e, i, o, u = 5 vocales" },
-        { q: "¿Qué palabra es un sustantivo?", options: ["mesa", "correr", "bonito", "rápidamente"], correct: 0, exp: "mesa es un nombre (sustantivo)" }
-      ]
-    },
-    "Geografía infantil": {
-      icon: "🗺️",
-      description: "Países, continentes y el planeta",
-      questions: [
-        { q: "¿En qué planeta vivimos?", options: ["Tierra", "Marte", "Luna", "Sol"], correct: 0, exp: "Vivimos en el planeta Tierra" },
-        { q: "¿Cuántos continentes hay aproximadamente?", options: ["7", "5", "3", "10"], correct: 0, exp: "Hay 7 continentes" },
-        { q: "¿Qué es más grande: un país o un continente?", options: ["Un continente", "Un país", "Son iguales", "Depende"], correct: 0, exp: "Un continente agrupa varios países" }
-      ]
-    }
-  },
-
-  /* ========== SECUNDARIA ========== */
-  secundaria: {
-    "Matemáticas": {
-      icon: "📐",
-      description: "Álgebra, geometría y porcentajes",
-      questions: [
-        { q: "Resuelve: 3x − 7 = 14", options: ["x = 7", "x = 5", "x = 3", "x = 9"], correct: 0, exp: "3x = 21 → x = 7" },
-        { q: "¿Cuál es el área de un círculo de radio 5?", options: ["25π", "10π", "5π", "π"], correct: 0, exp: "A = πr² = 25π" },
-        { q: "¿Cuánto es 15% de 200?", options: ["30", "15", "40", "25"], correct: 0, exp: "0.15 × 200 = 30" },
-        { q: "¿Cuál es el valor de √144?", options: ["12", "14", "10", "16"], correct: 0, exp: "12 × 12 = 144" },
-        { q: "Si un triángulo tiene lados 3, 4 y 5, ¿es rectángulo?", options: ["Sí", "No", "Solo si es isósceles", "Depende"], correct: 0, exp: "3² + 4² = 5² (Pitágoras)" },
-        { q: "¿Cuál es la pendiente de la recta y = 2x + 3?", options: ["2", "3", "5", "0"], correct: 0, exp: "En y = mx + b, m es la pendiente" }
-      ]
-    },
-    "Historia": {
-      icon: "📜",
-      description: "Historia universal y de América",
-      questions: [
-        { q: "¿Quién llegó a América en 1492?", options: ["Cristóbal Colón", "Vasco da Gama", "Marco Polo", "Hernán Cortés"], correct: 0, exp: "Colón llegó el 12 de octubre de 1492" },
-        { q: "¿En qué año cayó el Muro de Berlín?", options: ["1989", "1991", "1975", "1961"], correct: 0, exp: "9 de noviembre de 1989" },
-        { q: "¿Quién fue el primer presidente de EE.UU.?", options: ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"], correct: 0, exp: "George Washington (1789–1797)" },
-        { q: "¿En qué año terminó la Segunda Guerra Mundial?", options: ["1945", "1939", "1941", "1950"], correct: 0, exp: "1945" },
-        { q: "¿Qué civilización construyó Machu Picchu?", options: ["Inca", "Maya", "Azteca", "Olmeca"], correct: 0, exp: "Los incas construyeron Machu Picchu" }
-      ]
-    },
-    "Ciencias": {
-      icon: "🔬",
-      description: "Física, química y biología básica",
-      questions: [
-        { q: "¿Cuál es el elemento con símbolo Au?", options: ["Oro", "Plata", "Aluminio", "Argón"], correct: 0, exp: "Au = aurum = oro" },
-        { q: "¿Qué planeta es el rojo?", options: ["Marte", "Venus", "Júpiter", "Mercurio"], correct: 0, exp: "Marte por el óxido de hierro" },
-        { q: "¿Cuál es la fórmula del agua?", options: ["H₂O", "CO₂", "O₂", "NaCl"], correct: 0, exp: "Dos hidrógenos y un oxígeno" },
-        { q: "¿Qué fuerza mantiene a los planetas en órbita?", options: ["Gravedad", "Magnetismo", "Fricción", "Electricidad"], correct: 0, exp: "La gravedad" },
-        { q: "¿Cuántos cromosomas tiene un ser humano?", options: ["46", "23", "48", "44"], correct: 0, exp: "23 pares = 46" }
-      ]
-    },
-    "Inglés": {
-      icon: "🇬🇧",
-      description: "Vocabulario y gramática básica",
-      questions: [
-        { q: "How do you say 'hola' in English?", options: ["Hello", "Goodbye", "Thanks", "Please"], correct: 0, exp: "Hello = Hola" },
-        { q: "What is the past of 'go'?", options: ["went", "goed", "goes", "going"], correct: 0, exp: "go → went" },
-        { q: "¿Cuál es el plural de 'child'?", options: ["children", "childs", "childes", "childrens"], correct: 0, exp: "child → children" },
-        { q: "How do you say 'gracias'?", options: ["Thank you", "Please", "Sorry", "Hello"], correct: 0, exp: "Thank you" }
-      ]
-    },
-    "Geografía": {
-      icon: "🌍",
-      description: "Países, capitales y geografía física",
-      questions: [
-        { q: "¿Capital de Francia?", options: ["París", "Lyon", "Marsella", "Niza"], correct: 0, exp: "París" },
-        { q: "¿Río más largo del mundo?", options: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"], correct: 0, exp: "Amazonas (por longitud/caudal)" },
-        { q: "¿En qué continente está Egipto?", options: ["África", "Asia", "Europa", "América"], correct: 0, exp: "Norte de África" },
-        { q: "¿Océano más grande?", options: ["Pacífico", "Atlántico", "Índico", "Ártico"], correct: 0, exp: "Pacífico" }
-      ]
-    }
-  },
-
-  /* ========== CARRERA TÉCNICA ========== */
-  tecnica: {
-    "Programación": {
-      icon: "💻",
-      description: "Fundamentos de código y lógica",
-      questions: [
-        { q: "¿Qué significa HTML?", options: ["HyperText Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"], correct: 0, exp: "HyperText Markup Language" },
-        { q: "Operador de igualdad estricta en JavaScript:", options: ["===", "==", "=", "!="], correct: 0, exp: "=== compara valor y tipo" },
-        { q: "Método para añadir al final de un array:", options: ["push()", "pop()", "shift()", "unshift()"], correct: 0, exp: "array.push(elemento)" },
-        { q: "¿Qué es una función?", options: ["Bloque de código reutilizable", "Una variable", "Un tipo de dato", "Un error"], correct: 0, exp: "Permite reutilizar lógica" },
-        { q: "¿Qué significa CSS?", options: ["Cascading Style Sheets", "Computer Style System", "Creative Style Syntax", "Coded Style Sheet"], correct: 0, exp: "Cascading Style Sheets" },
-        { q: "¿Qué es un bucle for?", options: ["Repite código un número de veces", "Declara una variable", "Importa una librería", "Cierra el programa"], correct: 0, exp: "Itera un número definido de veces" }
-      ]
-    },
-    "Redes y sistemas": {
-      icon: "🌐",
-      description: "Redes, IP y sistemas operativos",
-      questions: [
-        { q: "¿Qué significa IP?", options: ["Internet Protocol", "Internal Process", "Input Port", "Interface Program"], correct: 0, exp: "Internet Protocol" },
-        { q: "Puerto por defecto de HTTP:", options: ["80", "443", "22", "21"], correct: 0, exp: "HTTP usa el puerto 80" },
-        { q: "¿Qué es un sistema operativo?", options: ["Software que gestiona hardware y programas", "Un navegador", "Una aplicación de oficina", "Un antivirus"], correct: 0, exp: "Ejemplos: Windows, Linux, macOS" },
-        { q: "¿Qué hace DNS?", options: ["Traduce nombres de dominio a IP", "Envía correos", "Comprime archivos", "Encripta discos"], correct: 0, exp: "Domain Name System" },
-        { q: "Protocolo seguro de web:", options: ["HTTPS", "FTP", "Telnet", "HTTP"], correct: 0, exp: "HTTPS = HTTP + cifrado" }
-      ]
-    },
-    "Electricidad y electrónica": {
-      icon: "⚡",
-      description: "Conceptos básicos de electricidad",
-      questions: [
-        { q: "Unidad de resistencia eléctrica:", options: ["Ohmio (Ω)", "Voltio", "Amperio", "Vatio"], correct: 0, exp: "La resistencia se mide en ohmios" },
-        { q: "Ley de Ohm:", options: ["V = I × R", "P = V × I", "E = m c²", "F = m a"], correct: 0, exp: "Voltaje = Intensidad × Resistencia" },
-        { q: "Unidad de corriente eléctrica:", options: ["Amperio", "Voltio", "Ohmio", "Culombio"], correct: 0, exp: "La corriente se mide en amperios" },
-        { q: "¿Qué componente almacena carga eléctrica?", options: ["Condensador", "Resistencia", "Inductor", "Diodo"], correct: 0, exp: "El condensador almacena carga" }
-      ]
-    },
-    "Ofimática": {
-      icon: "📊",
-      description: "Excel, documentos y productividad",
-      questions: [
-        { q: "En Excel, ¿qué hace la función SUMA?", options: ["Suma un rango de celdas", "Cuenta celdas", "Promedia", "Busca texto"], correct: 0, exp: "=SUMA(A1:A10)" },
-        { q: "Extensión típica de Word:", options: [".docx", ".xlsx", ".pptx", ".pdf"], correct: 0, exp: ".docx es documento de Word" },
-        { q: "¿Qué es un gráfico de barras?", options: ["Representa datos con barras", "Un mapa", "Una tabla pivote", "Una macro"], correct: 0, exp: "Compara categorías visualmente" },
-        { q: "Atajo para guardar en la mayoría de programas:", options: ["Ctrl + S", "Ctrl + C", "Ctrl + V", "Ctrl + Z"], correct: 0, exp: "Ctrl + S = Guardar" }
-      ]
-    },
-    "Seguridad informática": {
-      icon: "🔐",
-      description: "Buenas prácticas de seguridad",
-      questions: [
-        { q: "¿Qué es el phishing?", options: ["Engaño para robar datos", "Un antivirus", "Un tipo de firewall", "Un lenguaje de programación"], correct: 0, exp: "Suplantación para obtener información" },
-        { q: "¿Por qué usar contraseñas fuertes?", options: ["Dificultan el acceso no autorizado", "Hacen el PC más rápido", "Mejoran el WiFi", "Ahorran batería"], correct: 0, exp: "Más seguridad ante ataques" },
-        { q: "¿Qué es el 2FA?", options: ["Autenticación en dos factores", "Un antivirus", "Un protocolo de red", "Un tipo de backup"], correct: 0, exp: "Añade una segunda verificación" }
-      ]
-    }
-  },
-
-  /* ========== UNIVERSIDAD ========== */
-  universidad: {
-    "Cálculo": {
-      icon: "∫",
-      description: "Derivadas, integrales y límites",
-      questions: [
-        { q: "Derivada de f(x) = x²:", options: ["2x", "x", "2", "x³"], correct: 0, exp: "d/dx (xⁿ) = n xⁿ⁻¹" },
-        { q: "Derivada de f(x) = eˣ:", options: ["eˣ", "x eˣ", "1/eˣ", "ln(x)"], correct: 0, exp: "La derivada de eˣ es eˣ" },
-        { q: "∫ 2x dx =", options: ["x² + C", "2x² + C", "x + C", "2 + C"], correct: 0, exp: "Integral de 2x es x² + C" },
-        { q: "Límite de (sin x)/x cuando x→0:", options: ["1", "0", "∞", "No existe"], correct: 0, exp: "Límite fundamental trigonométrico = 1" },
-        { q: "Derivada de ln(x):", options: ["1/x", "x", "ln(x)", "eˣ"], correct: 0, exp: "d/dx ln(x) = 1/x" }
-      ]
-    },
-    "Física universitaria": {
-      icon: "⚛️",
-      description: "Mecánica, energía y ondas",
-      questions: [
-        { q: "Segunda ley de Newton:", options: ["F = m a", "E = m c²", "V = I R", "P = F / A"], correct: 0, exp: "Fuerza = masa × aceleración" },
-        { q: "Energía cinética:", options: ["½ m v²", "m g h", "m v", "½ k x²"], correct: 0, exp: "K = ½ mv²" },
-        { q: "Unidad de fuerza en el SI:", options: ["Newton", "Joule", "Watt", "Pascal"], correct: 0, exp: "1 N = 1 kg·m/s²" },
-        { q: "Velocidad de la luz en el vacío (aprox.):", options: ["3×10⁸ m/s", "3×10⁶ m/s", "3×10¹⁰ m/s", "300 m/s"], correct: 0, exp: "c ≈ 3×10⁸ m/s" },
-        { q: "Trabajo mecánico:", options: ["W = F · d", "W = m a", "W = ½ mv²", "W = P t"], correct: 0, exp: "Trabajo = fuerza × desplazamiento" }
-      ]
-    },
-    "Programación avanzada": {
-      icon: "🖥️",
-      description: "Algoritmos, estructuras y paradigmas",
-      questions: [
-        { q: "Complejidad de búsqueda binaria:", options: ["O(log n)", "O(n)", "O(n²)", "O(1)"], correct: 0, exp: "Divide el espacio a la mitad cada paso" },
-        { q: "¿Qué es una estructura de datos FIFO?", options: ["Cola (queue)", "Pila (stack)", "Árbol", "Grafo"], correct: 0, exp: "First In, First Out = cola" },
-        { q: "Paradigma que usa clases y objetos:", options: ["Orientado a objetos", "Funcional", "Procedural", "Lógico"], correct: 0, exp: "OOP: clases, objetos, herencia..." },
-        { q: "¿Qué es recursión?", options: ["Función que se llama a sí misma", "Un bucle for", "Una variable global", "Un tipo de error"], correct: 0, exp: "Debe tener caso base" },
-        { q: "Estructura LIFO:", options: ["Pila (stack)", "Cola (queue)", "Lista enlazada", "Hash table"], correct: 0, exp: "Last In, First Out = pila" }
-      ]
-    },
-    "Estadística": {
-      icon: "📈",
-      description: "Probabilidad, media y distribución",
-      questions: [
-        { q: "Media aritmética de 2, 4, 6:", options: ["4", "3", "6", "12"], correct: 0, exp: "(2+4+6)/3 = 4" },
-        { q: "Probabilidad de sacar cara en una moneda justa:", options: ["0.5", "0.25", "1", "0"], correct: 0, exp: "1/2 = 0.5" },
-        { q: "¿Qué mide la desviación estándar?", options: ["Dispersión respecto a la media", "El valor central", "La moda", "El rango intercuartílico solo"], correct: 0, exp: "Qué tan dispersos están los datos" },
-        { q: "En una distribución normal, ≈68% de los datos está a:", options: ["1 desviación estándar de la media", "2 desviaciones", "3 desviaciones", "0 desviaciones"], correct: 0, exp: "Regla empírica 68-95-99.7" }
-      ]
-    },
-    "Química general": {
-      icon: "🧪",
-      description: "Átomos, moles y reacciones",
-      questions: [
-        { q: "Número de Avogadro (aprox.):", options: ["6.022×10²³", "3×10⁸", "9.8", "1.6×10⁻¹⁹"], correct: 0, exp: "Partículas en un mol" },
-        { q: "pH = 7 indica:", options: ["Neutro", "Ácido", "Básico", "Salino"], correct: 0, exp: "pH 7 = neutro (agua pura)" },
-        { q: "Enlace entre metales y no metales típico:", options: ["Iónico", "Covalente", "Metálico", "De hidrógeno"], correct: 0, exp: "Transferencia de electrones" },
-        { q: "Gas noble del grupo 18 con Z=10:", options: ["Neón", "Argón", "Helio", "Kriptón"], correct: 0, exp: "Ne (Z=10)" }
-      ]
-    },
-    "Economía": {
-      icon: "💰",
-      description: "Oferta, demanda y macroeconomía básica",
-      questions: [
-        { q: "Si sube el precio, ¿qué pasa con la cantidad demandada (ceteris paribus)?", options: ["Disminuye", "Aumenta", "No cambia", "Se duplica"], correct: 0, exp: "Ley de la demanda" },
-        { q: "PIB mide:", options: ["Valor de bienes y servicios finales de un país", "Solo exportaciones", "Deuda pública", "Inflación"], correct: 0, exp: "Producto Interno Bruto" },
-        { q: "Inflación es:", options: ["Subida general de precios", "Bajada de precios", "Aumento del desempleo", "Crecimiento del PIB"], correct: 0, exp: "Pérdida de poder adquisitivo del dinero" },
-        { q: "Política monetaria la gestiona principalmente:", options: ["El banco central", "El congreso solo", "Las empresas", "Los sindicatos"], correct: 0, exp: "Ej. tasas de interés, oferta monetaria" }
-      ]
-    }
-  }
-};
-
-/* ========== API pública ========== */
-
-function getCourseNames(studyLevel) {
-  const level = studyLevel || "secundaria";
-  const group = COURSES_BY_LEVEL[level];
-  return group ? Object.keys(group) : [];
-}
-
-function getCourse(studyLevel, courseName) {
-  return COURSES_BY_LEVEL[studyLevel]?.[courseName] || null;
-}
-
-function getQuestionsFromCourse(courseName, count, difficulty = 2, studyLevel = "secundaria") {
-  const course = getCourse(studyLevel, courseName);
-  if (!course || !course.questions?.length) {
-    // Buscar en todos los niveles por si el nombre coincide
-    for (const level of Object.keys(COURSES_BY_LEVEL)) {
-      const c = COURSES_BY_LEVEL[level][courseName];
-      if (c?.questions?.length) {
-        return pickQuestions(c.questions, count);
-      }
-    }
-    return [];
-  }
-  return pickQuestions(course.questions, count);
-}
-
-/**
- * Mezcla Fisher-Yates (mejor que sort aleatorio)
- */
-function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return a;
+  return arr;
 }
 
-/**
- * Elige preguntas SIN repetir.
- * Si se piden más de las disponibles, devuelve solo las únicas disponibles.
- */
-function pickQuestions(list, count) {
-  if (!list || list.length === 0) return [];
-
-  // Deduplicar por texto de pregunta por si el banco tiene duplicados
-  const seen = new Set();
-  const unique = [];
-  for (const q of list) {
-    const key = String(q.q || "").trim().toLowerCase();
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
-    unique.push(q);
+function pickQuestions(pool, count) {
+  if (!Array.isArray(pool) || pool.length === 0) return [];
+  
+  let combinedPool = [];
+  while (combinedPool.length < count) {
+    combinedPool = combinedPool.concat(shuffleArray(pool));
   }
+  
+  const selectedPool = combinedPool.slice(0, count);
 
-  const shuffled = shuffleArray(unique);
-  const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+  return selectedPool.map((q) => {
+    const originalOptions = Array.isArray(q.options) ? q.options : [];
+    const correctIdx = typeof q.correct === 'number' ? q.correct : 0;
 
-  // Mezclar también el orden de las opciones en cada pregunta
-  return selected.map((q) => {
-    const opts = Array.isArray(q.options) ? [...q.options] : [];
-    const correctText = opts[q.correct];
-    const shuffledOpts = shuffleArray(opts);
-    const newCorrect = Math.max(0, shuffledOpts.indexOf(correctText));
+    const mappedOpts = originalOptions.map((text, idx) => ({
+      text,
+      isCorrect: idx === correctIdx
+    }));
+
+    const shuffledOpts = shuffleArray(mappedOpts);
+    const newCorrectIdx = shuffledOpts.findIndex((o) => o.isCorrect);
+
     return {
-      q: q.q,
-      options: shuffledOpts,
-      correct: newCorrect,
+      q: q.q || "",
+      options: shuffledOpts.map((o) => o.text),
+      correct: newCorrectIdx >= 0 ? newCorrectIdx : 0,
       exp: q.exp || ""
     };
   });
 }
 
+const BASE_COURSES = {
+  escuela: {
+    "Ciencias Naturales": {
+      icon: "🌱",
+      questions: [
+        { q: "¿Qué proceso usan las plantas para fabricar su alimento?", options: ["Fotosíntesis", "Respiración", "Digestión", "Absorción"], correct: 0, exp: "La fotosíntesis convierte la luz solar en glucosa." },
+        { q: "¿Cuál es el planeta más cercano al Sol?", options: ["Mercurio", "Venus", "Tierra", "Marte"], correct: 0, exp: "Mercurio ocupa el primer lugar en distancia al Sol." },
+        { q: "¿Qué gas es indispensable para la respiración humana?", options: ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Helio"], correct: 0, exp: "El oxígeno es vital para nuestras células." },
+        { q: "¿Cuál es el animal terrestre más grande del mundo?", options: ["Elefante africano", "Jirafa", "Rinoceronte", "Hipopótamo"], correct: 0, exp: "El elefante africano es el mamífero terrestre más grande." },
+        { q: "¿Qué parte de la planta absorbe el agua del suelo?", options: ["Raíz", "Tallo", "Hoja", "Flor"], correct: 0, exp: "Las raíces extraen agua y nutrientes." },
+        { q: "¿Cuál es el estado físico del agua a temperatura ambiente?", options: ["Líquido", "Sólido", "Gaseoso", "Plasma"], correct: 0, exp: "Permanecen en estado líquido a temperatura habitual." },
+        { q: "¿Qué estrella nos da luz y calor?", options: ["El Sol", "La Luna", "Alfa Centauri", "Sirio"], correct: 0, exp: "El Sol es la estrella central de nuestro sistema." },
+        { q: "¿A qué grupo pertenecen las ranas?", options: ["Anfibios", "Reptiles", "Mamíferos", "Aves"], correct: 0, exp: "Las ranas son animales anfibios." },
+        { q: "¿Cuál es el órgano de la vista?", options: ["Ojo", "Oído", "Nariz", "Piel"], correct: 0, exp: "Los ojos son receptores visuales." },
+        { q: "¿Qué forman varias estrellas en el cielo nocturno?", options: ["Constelaciones", "Cometas", "Asteroides", "Satélites"], correct: 0, exp: "Son agrupaciones aparentes de estrellas." },
+        { q: "¿Qué animal fabrica miel?", options: ["Abeja", "Avispa", "Hormiga", "Mosca"], correct: 0, exp: "Las abejas elaboran miel a partir de néctar." },
+        { q: "¿En qué estado se encuentra el hielo?", options: ["Sólido", "Líquido", "Gaseoso", "Vapor"], correct: 0, exp: "El hielo es agua congelada en estado sólido." },
+        { q: "¿Qué sentido nos permite escuchar música?", options: ["Oído", "Tacto", "Gusto", "Olfato"], correct: 0, exp: "El oído percibe ondas sonoras." },
+        { q: "¿Cuál de estos animales es un ave que no vuela?", options: ["Pingüino", "Águila", "Gaviota", "Gorrión"], correct: 0, exp: "Los pingüinos nadan pero no vuelan." },
+        { q: "¿Cuál es el satélite natural de la Tierra?", options: ["La Luna", "Marte", "El Sol", "Titán"], correct: 0, exp: "La Luna es el único satélite natural de la Tierra." },
+        { q: "¿Cómo se llama el agua en estado gaseoso?", options: ["Vapor de agua", "Hielo", "Lluvia", "Nieve"], correct: 0, exp: "Al evaporarse se convierte en vapor." },
+        { q: "¿Qué instrumento mide la temperatura?", options: ["Termómetro", "Brújula", "Regla", "Báscula"], correct: 0, exp: "El termómetro mide la temperatura." },
+        { q: "¿De qué está cubierta la piel de los peces?", options: ["Escamas", "Plumas", "Pelos", "Lana"], correct: 0, exp: "Las escamas protegen su cuerpo." },
+        { q: "¿Qué tipo de energía produce el viento?", options: ["Eólica", "Solar", "Hidráulica", "Térmica"], correct: 0, exp: "El viento genera energía eólica." },
+        { q: "¿Cómo se llama la transformación de oruga a mariposa?", options: ["Metamorfosis", "Evolución", "Crecimiento", "Respiración"], correct: 0, exp: "Es una transformación llamada metamorfosis." }
+      ]
+    }
+  },
+  secundaria: {
+    "Matemáticas": {
+      icon: "📐",
+      questions: [
+        { q: "Si 2x + 5 = 15, ¿cuál es el valor de x?", options: ["x = 5", "x = 10", "x = 7", "x = 3"], correct: 0, exp: "2x = 10 -> x = 5" },
+        { q: "¿Área de un triángulo de base 8 y altura 5?", options: ["20", "40", "13", "30"], correct: 0, exp: "(8 * 5) / 2 = 20" },
+        { q: "¿Cuánto es √144?", options: ["12", "14", "10", "16"], correct: 0, exp: "12 * 12 = 144" },
+        { q: "¿Valor aproximado de Pi (π)?", options: ["3.1416", "3.1214", "3.1614", "3.1400"], correct: 0, exp: "Se aproxima a 3.1416." },
+        { q: "¿Cómo se denomina un ángulo de 90 grados?", options: ["Recto", "Agudo", "Obtuso", "Llano"], correct: 0, exp: "Un ángulo de 90° es recto." },
+        { q: "¿Cuánto suman los ángulos internos de un triángulo?", options: ["180°", "360°", "90°", "270°"], correct: 0, exp: "Suman siempre 180°." },
+        { q: "¿Resultado de 3² + 4²?", options: ["25", "14", "49", "12"], correct: 0, exp: "9 + 16 = 25" },
+        { q: "¿Perímetro de un cuadrado con lado de 6 cm?", options: ["24 cm", "36 cm", "12 cm", "18 cm"], correct: 0, exp: "4 * 6 = 24 cm" },
+        { q: "¿Resto de dividir 17 entre 5?", options: ["2", "3", "1", "0"], correct: 0, exp: "17 = (5 * 3) + 2" },
+        { q: "Si un auto va a 60 km/h, ¿cuánto recorre en 3 horas?", options: ["180 km", "120 km", "200 km", "150 km"], correct: 0, exp: "Distancia = 60 * 3 = 180 km" },
+        { q: "Factoriza: 5x + 10", options: ["5(x + 2)", "5(x + 10)", "x(5 + 10)", "10(x + 1)"], correct: 0, exp: "Extraemos el factor común 5." },
+        { q: "¿Cuánto es 2⁵?", options: ["32", "10", "16", "64"], correct: 0, exp: "2 elevado a la 5 da 32." },
+        { q: "¿Cuál de los siguientes es un número primo?", options: ["13", "15", "9", "21"], correct: 0, exp: "13 solo es divisible por 1 y 13." },
+        { q: "Si y = 2x - 1 y x = 4, ¿cuánto vale y?", options: ["7", "8", "9", "6"], correct: 0, exp: "y = 2(4) - 1 = 7" },
+        { q: "¿Cuánto es el 20% de 150?", options: ["30", "20", "15", "40"], correct: 0, exp: "150 * 0.20 = 30" },
+        { q: "¿Cuántos lados tiene un heptágono?", options: ["7", "6", "8", "9"], correct: 0, exp: "Tiene 7 lados." },
+        { q: "Simplifica la fracción 12/16", options: ["3/4", "6/8", "2/3", "4/5"], correct: 0, exp: "Dividido entre 4 resulta 3/4." },
+        { q: "¿Qué letra representa la pendiente en y = mx + b?", options: ["m", "b", "x", "y"], correct: 0, exp: "'m' es la pendiente." },
+        { q: "¿Valor absoluto de -25?", options: ["25", "-25", "0", "1"], correct: 0, exp: "La distancia respecto a cero es 25." },
+        { q: "¿Siguiente número en la secuencia 2, 4, 8, 16...?", options: ["32", "24", "20", "64"], correct: 0, exp: "Se multiplica por 2." }
+      ]
+    }
+  },
+  tecnica: {
+    "Sistemas y Redes": {
+      icon: "🌐",
+      questions: [
+        { q: "¿Qué puerto usa HTTP por defecto?", options: ["80", "443", "21", "22"], correct: 0, exp: "HTTP usa el puerto 80." },
+        { q: "¿Qué significa IP?", options: ["Internet Protocol", "Internal Process", "Interface Port", "Input Provider"], correct: 0, exp: "IP es Internet Protocol." },
+        { q: "¿Qué dispositivo conecta diferentes redes de datos?", options: ["Router", "Switch", "Hub", "Módem"], correct: 0, exp: "El router enruta entre subredes." },
+        { q: "¿Qué protocolo cifra las conexiones web?", options: ["HTTPS", "HTTP", "FTP", "Telnet"], correct: 0, exp: "HTTPS utiliza TLS/SSL." },
+        { q: "¿Qué dirección física identifica a una tarjeta de red?", options: ["MAC", "IP", "DNS", "Gateway"], correct: 0, exp: "Es la dirección MAC grabada en hardware." },
+        { q: "¿Qué puerto utiliza el protocolo SSH?", options: ["22", "80", "443", "25"], correct: 0, exp: "SSH utiliza el puerto 22." },
+        { q: "¿Qué servicio traduce dominios a direcciones IP?", options: ["DNS", "DHCP", "FTP", "NAT"], correct: 0, exp: "DNS resuelve nombres a IP." },
+        { q: "¿Qué protocolo asigna direcciones IP automáticas?", options: ["DHCP", "DNS", "SNMP", "SMTP"], correct: 0, exp: "DHCP las asigna dinámicamente." },
+        { q: "Máscara de subred por defecto para Clase C:", options: ["255.255.255.0", "255.0.0.0", "255.255.0.0", "255.255.255.255"], correct: 0, exp: "Corresponde al bloque /24." },
+        { q: "¿Comando para probar conectividad en red?", options: ["ping", "tracert", "ipconfig", "netstat"], correct: 0, exp: "ping utiliza paquetes ICMP." },
+        { q: "¿Capa del modelo OSI que gestiona rutas?", options: ["Red", "Transporte", "Enlace de datos", "Física"], correct: 0, exp: "La Capa 3 maneja el enrutamiento." },
+        { q: "Protocolo orientado a conexión confiable:", options: ["TCP", "UDP", "IP", "ICMP"], correct: 0, exp: "TCP asegura la entrega." },
+        { q: "Protocolo no orientado a conexión rápido:", options: ["UDP", "TCP", "HTTP", "FTP"], correct: 0, exp: "UDP no espera confirmaciones." },
+        { q: "¿Comando que muestra IPs en Windows?", options: ["ipconfig", "ifconfig", "netstat", "ping"], correct: 0, exp: "ipconfig despliega la red en Windows." },
+        { q: "¿Comando que muestra interfaces en Linux?", options: ["ip a / ifconfig", "ipconfig", "systemctl", "route"], correct: 0, exp: "'ip a' despliega interfaces en Linux." },
+        { q: "Topología donde todo conecta a un nodo central:", options: ["Estrella", "Malla", "Bus", "Anillo"], correct: 0, exp: "Es la topología en Estrella." },
+        { q: "Rango IP privado Clase A:", options: ["10.0.0.0 a 10.255.255.255", "192.168.0.0 a 192.168.255.255", "172.16.0.0 a 172.31.255.255", "127.0.0.0/8"], correct: 0, exp: "Reservado en RFC 1918." },
+        { q: "¿Puerto de correo saliente SMTP?", options: ["25", "110", "143", "80"], correct: 0, exp: "Usa el puerto 25." },
+        { q: "¿Dispositivo capa 2 OSI?", options: ["Switch", "Router", "Repetidor", "Hub"], correct: 0, exp: "El switch trabaja a nivel de enlace de datos." },
+        { q: "¿Qué significa VPN?", options: ["Virtual Private Network", "Visual Process Node", "Vector Path Network", "Virtual Public Network"], correct: 0, exp: "Virtual Private Network." }
+      ]
+    }
+  },
+  universidad: {
+    "Programación": {
+      icon: "💻",
+      questions: [
+        { q: "¿Complejidad temporal de la búsqueda binaria?", options: ["O(log n)", "O(n)", "O(n^2)", "O(1)"], correct: 0, exp: "Divide el problema a la mitad progresivamente." },
+        { q: "¿Estructura bajo el principio LIFO?", options: ["Pila (Stack)", "Cola (Queue)", "Lista enlazada", "Árbol"], correct: 0, exp: "Last In, First Out." },
+        { q: "Comando Git para enviar cambios a remoto:", options: ["git push", "git commit", "git pull", "git add"], correct: 0, exp: "git push actualiza la rama remota." },
+        { q: "¿Estructura bajo el principio FIFO?", options: ["Cola (Queue)", "Pila (Stack)", "Grafo", "Heap"], correct: 0, exp: "First In, First Out." },
+        { q: "Peor caso de QuickSort:", options: ["O(n^2)", "O(n log n)", "O(n)", "O(1)"], correct: 0, exp: "Ocurre cuando el pivote es desbalanceado." },
+        { q: "¿Qué concepto de POO permite múltiples formas?", options: ["Polimorfismo", "Encapsulamiento", "Herencia", "Abstracción"], correct: 0, exp: "Permite tratar instancias de forma genérica." },
+        { q: "Valor predeterminado de boolean en Java:", options: ["false", "true", "null", "0"], correct: 0, exp: "Inicia siempre en false." },
+        { q: "Operador de comparación estricta en JavaScript:", options: ["===", "==", "=", "!="], correct: 0, exp: "Verifica valor y tipo de dato." },
+        { q: "Estructura clave-valor:", options: ["Mapa / Diccionario", "Array", "Set", "Lista"], correct: 0, exp: "Relaciona llaves únicas con valores." },
+        { q: "Método para agregar al final en un Array de JS:", options: ["push()", "pop()", "shift()", "unshift()"], correct: 0, exp: "push() inserta al final del arreglo." },
+        { q: "Declaración de variables inmutables en JS:", options: ["const", "let", "var", "static"], correct: 0, exp: "const impide la reasignación." },
+        { q: "¿Qué significa SQL?", options: ["Structured Query Language", "Sequential Quality Logic", "System Query List", "Simple Query Language"], correct: 0, exp: "Lenguaje de Consulta Estructurado." },
+        { q: "En bases de datos, ¿qué garantiza ACID?", options: ["Transacciones fiables", "Seguridad en la red", "Velocidad de procesamiento", "Cifrado"], correct: 0, exp: "Garantiza atomicidad, consistencia, aislamiento y durabilidad." },
+        { q: "¿Qué JOIN filtra solo coincidencias exactas?", options: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN"], correct: 0, exp: "Obtiene la intersección de tablas." },
+        { q: "¿Qué significa API?", options: ["Application Programming Interface", "Automated Process Integration", "Applied Program Interaction", "Advanced Protocol Interface"], correct: 0, exp: "Interfaz de Programación de Aplicaciones." },
+        { q: "HTTP Status Code para 'No encontrado':", options: ["404", "200", "500", "403"], correct: 0, exp: "404 Not Found." },
+        { q: "HTTP Status Code para solicitud exitosa:", options: ["200", "201", "301", "400"], correct: 0, exp: "200 OK." },
+        { q: "Archivo de construcción de imágenes Docker:", options: ["Dockerfile", "docker-compose.yml", "package.json", "Makefile"], correct: 0, exp: "Contiene instrucciones para generar la imagen." },
+        { q: "Paradigma que evita mutación de estados:", options: ["Funcional", "Orientado a Objetos", "Imperativo", "Procedimental"], correct: 0, exp: "Promueve funciones puras e inmutabilidad." },
+        { q: "Acceso directo por índice en Array:", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Toma tiempo constante O(1)." }
+      ]
+    }
+  }
+};
+
+function getCourseNames(level) {
+  const base = BASE_COURSES[level] || {};
+  return Object.keys(base);
+}
+
+function getCourse(level, name) {
+  return BASE_COURSES[level]?.[name] || null;
+}
+
+function generateExamQuestions(topic, count, difficulty, studyLevel) {
+  const course = getCourse(studyLevel, topic);
+  if (course && Array.isArray(course.questions) && course.questions.length > 0) {
+    return pickQuestions(course.questions, count);
+  }
+  throw new Error(`No hay preguntas disponibles para el curso seleccionado.`);
+}
+
 /**
- * Añade un curso a un nivel de estudio
+ * Genera preguntas en tiempo real utilizando la IA del servidor.
  */
-function addCourse(name, data, studyLevel = "secundaria") {
-  if (!COURSES_BY_LEVEL[studyLevel]) {
-    COURSES_BY_LEVEL[studyLevel] = {};
+async function generateExamQuestions(topic, count, difficulty, studyLevel) {
+  const res = await fetch("api.php?action=generate_ia_questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ topic, count, difficulty, studyLevel })
+  });
+
+  if (!res.ok) throw new Error("Error al conectar con el servidor de IA.");
+
+  const questions = await res.json();
+  if (!Array.isArray(questions) || questions.length === 0) {
+    throw new Error("La IA no pudo procesar las preguntas para esta configuración.");
   }
-  COURSES_BY_LEVEL[studyLevel][name] = data;
-  saveCustomCourses();
-  return true;
+
+  return questions;
 }
-
-function saveCustomCourses() {
-  // Guardar solo cursos personalizados (marcados con custom: true)
-  const custom = {};
-  for (const [level, courses] of Object.entries(COURSES_BY_LEVEL)) {
-    for (const [name, data] of Object.entries(courses)) {
-      if (data.custom) {
-        if (!custom[level]) custom[level] = {};
-        custom[level][name] = data;
-      }
-    }
-  }
-  localStorage.setItem("customCoursesByLevel", JSON.stringify(custom));
-}
-
-function loadCustomCourses() {
-  try {
-    const custom = JSON.parse(localStorage.getItem("customCoursesByLevel") || "{}");
-    for (const [level, courses] of Object.entries(custom)) {
-      if (!COURSES_BY_LEVEL[level]) COURSES_BY_LEVEL[level] = {};
-      Object.assign(COURSES_BY_LEVEL[level], courses);
-    }
-  } catch (e) {
-    console.error("Error cargando cursos personalizados:", e);
-  }
-}
-
-// Compatibilidad: objeto plano opcional (no usar para listar)
-const COURSES = new Proxy(
-  {},
-  {
-    get(_, prop) {
-      for (const level of Object.keys(COURSES_BY_LEVEL)) {
-        if (COURSES_BY_LEVEL[level][prop]) return COURSES_BY_LEVEL[level][prop];
-      }
-      return undefined;
-    }
-  }
-);
-
-loadCustomCourses();

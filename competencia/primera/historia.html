@@ -3,40 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia | El Cántico de las Criaturas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Historia y Legado | El Cántico de las Criaturas</title>
+    
+    <!-- Fuentes Tipográficas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600&family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="loaded">
 
-    <header>
-        <a href="index.html" class="brand">San Francisco</a>
-        <nav>
+    <!-- ══════════════════════════════════════
+         NAVEGACIÓN SUPERIOR
+    ══════════════════════════════════════ -->
+    <header class="main-nav">
+        <a href="index.html" class="brand">
+            <span class="cross">✠</span> San Francisco
+        </a>
+        <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="historia.html" class="active">Historia</a>
             <a href="criaturas.html">El Cántico</a>
             <a href="contacto.html">Contacto</a>
+            <a href="criaturas.html" class="nav-btn-explore">Explorar</a>
         </nav>
     </header>
 
+    <!-- ══════════════════════════════════════
+         CABECERA DE PÁGINA
+    ══════════════════════════════════════ -->
     <div class="page-header">
-        <h1>Origen e Historia</h1>
-        <p>El legado poético y espiritual de San Francisco de Asís</p>
+        <span class="page-tag">✠ Memoria y Crónica Sacra</span>
+        <h1>Orígenes y <em>Legado Histórico</em></h1>
+        <p>El nacimiento de la obra poética y el impacto universal de San Francisco de Asís a través de ocho siglos.</p>
     </div>
 
-    <main style="max-width: 800px; margin: 0 auto;">
-        <h2>El Contexto de la Obra</h2>
-        <p style="margin-bottom: 20px;">
-            Escrito hacia el año 1224 en el convento de San Damián, cerca de Asís, este poema fue redactado en un dialecto umbro (italiano vulgar) en lugar del latín habitual de la época, para que pudiera ser comprendido y cantado por el pueblo.
-        </p>
-        <p style="margin-bottom: 20px;">
-            San Francisco lo compuso en un momento de grave enfermedad y ceguera parcial. A pesar del sufrimiento físico, el cántico expresa una profunda alegría y comunión con el mundo creado.
-        </p>
+    <!-- ══════════════════════════════════════
+         CINTA MARQUEE SACRA
+    ══════════════════════════════════════ -->
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="marquee-item">✠ San Damián c. 1224</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Dialecto Umbro</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Belén de Greccio 1223</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Diálogo en Damieta 1219</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Orden de Frailes Menores</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Laudato Si'</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">✠ San Damián c. 1224</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Dialecto Umbro</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Belén de Greccio 1223</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Diálogo en Damieta 1219</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Orden de Frailes Menores</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Laudato Si'</span><span class="marquee-dot">·</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         BLOQUES HISTÓRICOS EN LÍNEA TEMPORAL
+    ══════════════════════════════════════ -->
+    <main class="history-section">
+        <div class="history-inner">
+            
+            <!-- Bloque 1: Origen -->
+            <div class="history-block rv">
+                <div class="history-img">
+                    <img src="ima/santo.jpg" alt="San Francisco en San Damián" loading="lazy">
+                </div>
+                <div class="history-text">
+                    <span class="history-badge">San Damián, Asís · c. 1224</span>
+                    <h2>El Nacimiento en Medio del Dolor y la Luz</h2>
+                    <p>El <em>Cántico de las Criaturas</em> no nació en un momento de fácil deleite, sino en el valle de Umbría cuando Francisco se hallaba postrado en el convento de San Damián, aquejado por una dolorosa enfermedad ocular y los estigmas de La Verna que casi le privaban de la vista. En lugar de sumirse en la amargura, Francisco experimentó una íntima revelación celestial y entonó la más pura alabanza cósmica al Creador.</p>
+                </div>
+            </div>
+
+            <!-- Bloque 2: Dialecto Umbro -->
+            <div class="history-block rv">
+                <div class="history-img">
+                    <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=800&q=80" alt="Manuscrito de Asís" loading="lazy">
+                </div>
+                <div class="history-text">
+                    <span class="history-badge">Revolución Lingüística</span>
+                    <h2>La Primera Joya de la Poesía en Lengua Italiana</h2>
+                    <p>En el siglo XIII, la liturgia, la diplomacia y las letras cultas se redactaban exclusivamente en latín. Francisco rompió el canon elitista componiendo el himno en <strong>dialecto umbro</strong>, la lengua viva del pueblo llano. Por esta razón, la crítica literaria universal reconoce al <em>Cántico</em> como la piedra angular inaugural de la literatura lírica italiana, anterior incluso a la <em>Divina Comedia</em> de Dante.</p>
+                </div>
+            </div>
+
+            <!-- Bloque 3: La Orden Franciscana -->
+            <div class="history-block rv">
+                <div class="history-img">
+                    <img src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80" alt="Comunidad Franciscana" loading="lazy">
+                </div>
+                <div class="history-text">
+                    <span class="history-badge">Orden de los Frailes Menores (OFM)</span>
+                    <h2>Una Misión Viva en Más de 110 Naciones</h2>
+                    <p>Fundada con el ideal evangélico de la santa pobreza, la hermandad de los Frailes Menores se expandió vertiginosamente por el orbe. Hoy en día, los sacerdotes y frailes franciscanos custodian los Santos Lugares en Tierra Santa (Custodia Terrae Sanctae), administran hospitales, asilos y comedores solidarios, y defienden los derechos de las comunidades más desfavorecidas con el lema de <em>Paz y Bien</em>.</p>
+                </div>
+            </div>
+
+            <!-- Bloque 4: Contribuciones Inmortales -->
+            <div class="history-block rv">
+                <div class="history-img">
+                    <img src="https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=800&q=80" alt="Basílica de San Francisco de Asís" loading="lazy">
+                </div>
+                <div class="history-text">
+                    <span class="history-badge">Aportes Universales</span>
+                    <h2>Del Pesebre de Greccio a la Encíclica Laudato Si'</h2>
+                    <p>El influjo de San Francisco abarca hitos imborrables: la creación del <strong>primer Belén de Navidad</strong> en la cueva de Greccio (1223), el audaz encuentro pacífico con el Sultán al-Kamil en pleno asedio de las Cruzadas (1219), y la inspiración directa para la encíclica ecologista papal <em>Laudato Si'</em>, que convoca a la humanidad contemporánea al cuidado amoroso de nuestra «casa común».</p>
+                </div>
+            </div>
+
+        </div>
     </main>
 
+    <!-- ══════════════════════════════════════
+         PIE DE PÁGINA
+    ══════════════════════════════════════ -->
     <footer>
-        <p>&copy; 2026 El Cántico de las Criaturas — Todos los derechos reservados.</p>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">✠ San Francisco</div>
+                <p class="footer-about">Homenaje interactivo al <em>Cántico de las Criaturas</em>, compuesto por San Francisco de Asís en el dialecto umbro en 1224. Celebrando la hermandad del ser humano con la naturaleza.</p>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Navegación</p>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia & Legado</a></li>
+                    <li><a href="criaturas.html">El Cántico</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Santuarios</p>
+                <ul>
+                    <li><a href="historia.html">San Damián (Asís)</a></li>
+                    <li><a href="historia.html">Basílica Papal</a></li>
+                    <li><a href="historia.html">La Porciúncula</a></li>
+                    <li><a href="historia.html">Monte Subasio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Tradición</p>
+                <ul>
+                    <li><a href="criaturas.html">El Hermano Sol</a></li>
+                    <li><a href="criaturas.html">Hermana Luna</a></li>
+                    <li><a href="criaturas.html">Madre Tierra</a></li>
+                    <li><a href="criaturas.html">Laudato Si'</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bot">
+            <span class="footer-copy">&copy; 2026 El Cántico de las Criaturas · Todos los derechos reservados</span>
+            <div class="footer-motto">✠ PAX ET BONUM ✠</div>
+        </div>
     </footer>
 
+    <!-- Botón de información -->
+    <button id="info-btn" onclick="openP()" title="Información Histórica y Créditos">✠</button>
+
+    <div id="popup">
+        <div class="pbg" onclick="closeP()"></div>
+        <div class="pbox">
+            <button class="p-close" onclick="closeP()">✕</button>
+            <h2 class="p-title">El Cántico de las Criaturas</h2>
+            <p class="p-sub">Contexto Histórico · Teología Franciscana · Créditos Técnicos</p>
+            
+            <hr class="p-hr">
+            <p class="p-sh">📜 Origen y Dialecto Umbro (1224)</p>
+            <div class="p-badge">San Damián, Asís · San Francisco de Asís</div>
+            <div class="p-block">
+                <p class="p-bl">Contexto de Composición</p>
+                <p class="p-bt">Compuesto dos años antes de su tránsito al Creador, cuando Francisco sufría una severa enfermedad ocular. Francisco eligió la lengua vulgar de su pueblo (dialecto umbro) en lugar del latín eclesiástico, convirtiendo al poema en el primer monumento lírico de la literatura en lengua italiana.</p>
+            </div>
+
+            <hr class="p-hr">
+            <p class="p-sh">🎬 Arquitectura Interactiva Scroll-Driven</p>
+            <div class="p-badge">GSAP 3 · ScrollTrigger · Canvas Frame Scrubbing</div>
+            <div class="p-block">
+                <p class="p-bl">Fusión Tecnológica</p>
+                <p class="p-bt">Inspirado en el galardonado proyecto 'Golden Hour Beach Sunset' (#CodePenChallenge), el Hero sincroniza 192 fotogramas continuos del atardecer con el desplazamiento del usuario sobre un Canvas optimizado mediante interpolación lineal (lerp) en RequestAnimationFrame, simbolizando la luz eterna del Hermano Sol.</p>
+            </div>
+            
+            <hr class="p-hr">
+            <p style="font-size:11px; color:rgba(248,244,236,.4); letter-spacing:.08em; text-align:center;">✠ PAX ET BONUM · ASÍS, ITALIA · 1224-2026 ✠</p>
+        </div>
+    </div>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -3,50 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Cántico | Las Criaturas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>El Cántico de las Criaturas | Texto Sagrado</title>
+    
+    <!-- Fuentes Tipográficas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600&family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="loaded">
 
-    <header>
-        <a href="index.html" class="brand">San Francisco</a>
-        <nav>
+    <!-- ══════════════════════════════════════
+         NAVEGACIÓN SUPERIOR
+    ══════════════════════════════════════ -->
+    <header class="main-nav">
+        <a href="index.html" class="brand">
+            <span class="cross">✠</span> San Francisco
+        </a>
+        <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="historia.html">Historia</a>
             <a href="criaturas.html" class="active">El Cántico</a>
             <a href="contacto.html">Contacto</a>
+            <a href="criaturas.html" class="nav-btn-explore">Explorar</a>
         </nav>
     </header>
 
+    <!-- ══════════════════════════════════════
+         CABECERA DE PÁGINA
+    ══════════════════════════════════════ -->
     <div class="page-header">
-        <h1>Texto Completo del Cántico</h1>
-        <p>Alabanza de las Criaturas de Dios</p>
+        <span class="page-tag">✠ Texto Sagrado Original · Dialecto Umbro c. 1224</span>
+        <h1>Canticum Fratris <em>Solis</em></h1>
+        <p>«Alabanza coral a Dios a través de los elementos primordiales del cosmos»</p>
     </div>
 
-    <main>
-        <div class="cantico-text">
-            <p>Altísimo, omnipotente, buen Señor,<br>
-            tuyas son las alabanzas, la gloria y el honor y toda bendición.<br><br>
-            Alabado seas, mi Señor, en todas tus criaturas,<br>
-            especialmente en el hermano sol,<br>
-            por quien nos das el día y la luz.<br><br>
-            Alabado seas, mi Señor, por la hermana luna y las estrellas,<br>
-            en el cielo las has formado claras, preciosas y bellas.<br><br>
-            Alabado seas, mi Señor, por el hermano viento,<br>
-            por el aire y la nube y el cielo sereno y todo tiempo.<br><br>
-            Alabado seas, mi Señor, por la hermana agua,<br>
-            la cual es muy útil y humilde y preciosa y casta.<br><br>
-            Alabado seas, mi Señor, por el hermano fuego,<br>
-            por el cual alumbras la noche, y es bello y alegre y robusto y fuerte.<br><br>
-            Alabado seas, mi Señor, por nuestra hermana la madre tierra,<br>
-            la cual nos sustenta y gobierna y produce diversos frutos.<br></p>
+    <!-- ══════════════════════════════════════
+         CINTA MARQUEE SACRA
+    ══════════════════════════════════════ -->
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="marquee-item">✠ Hermano Sol</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Luna y las Estrellas</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermano Viento</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Agua</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermano Fuego</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Madre Tierra</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Muerte Corporal</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">✠ Hermano Sol</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Luna y las Estrellas</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermano Viento</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Agua</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermano Fuego</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Madre Tierra</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Hermana Muerte Corporal</span><span class="marquee-dot">·</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PERGAMINO ILUMINADO DEL CÁNTICO
+    ══════════════════════════════════════ -->
+    <main class="manuscript-wrapper">
+        <div class="manuscript-container rv">
+            <div class="manuscript-decor-top">✠</div>
+            <div class="manuscript-text">
+                <p>Altísimo, omnipotente, buen Señor,<br>
+                tuyas son las alabanzas, la gloria y el honor y toda bendición.</p>
+
+                <p style="margin-top: 24px;">A ti solo, Altísimo, corresponden,<br>
+                y ningún hombre es digno de hacer de ti mención.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, en todas tus criaturas,<br>
+                especialmente en el señor <strong>hermano sol</strong>,<br>
+                por quien nos das el día y la luz.<br>
+                Y él es bello y radiante con gran esplendor:<br>
+                de ti, Altísimo, lleva significación.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por la <strong>hermana luna</strong> y las <strong>estrellas</strong>:<br>
+                en el cielo las has formado claras, preciosas y bellas.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por el <strong>hermano viento</strong>,<br>
+                y por el aire y el nublado y el cielo sereno y todo tiempo,<br>
+                por el cual a tus criaturas das sustento.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por la <strong>hermana agua</strong>,<br>
+                la cual es muy útil y humilde y preciosa y casta.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por el <strong>hermano fuego</strong>,<br>
+                por el cual iluminas la noche:<br>
+                y él es bello y alegre y robusto y fuerte.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por nuestra <strong>hermana la madre tierra</strong>,<br>
+                la cual nos sostiene y gobierna,<br>
+                y produce diversos frutos con coloridas flores y hierbas.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por aquellos que perdonan por tu amor,<br>
+                y soportan enfermedad y tribulación.<br>
+                Bienaventurados aquellos que las sufran en paz,<br>
+                porque de ti, Altísimo, coronados serán.</p>
+
+                <p style="margin-top: 24px;">Alabado seas, mi Señor, por nuestra <strong>hermana la muerte corporal</strong>,<br>
+                de la cual ningún hombre viviente puede escapar.<br>
+                ¡Ay de aquellos que mueran en pecado mortal!<br>
+                Bienaventurados aquellos a quienes encuentre en tu santísima voluntad,<br>
+                porque la muerte segunda no les hará mal.</p>
+
+                <p style="margin-top: 30px; font-weight: bold; color: #8f381d; font-family: var(--cinzel); letter-spacing: 1px;">
+                    Alabad y bendecid a mi Señor,<br>
+                    y dadle gracias y servidle con gran humildad.
+                </p>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             DESGLOSE ICONOGRÁFICO DE LAS CRIATURAS
+        ══════════════════════════════════════ -->
+        <div class="creatures-grid">
+            <div class="creature-card rv">
+                <span class="creature-icon">☀️</span>
+                <h3 class="creature-title">El Hermano Sol</h3>
+                <p class="creature-verse">«Bello y radiante con gran esplendor; de ti, Altísimo, lleva significación.» Fuente inagotable de luz, calor y consuelo.</p>
+            </div>
+
+            <div class="creature-card rv d1">
+                <span class="creature-icon">🌙</span>
+                <h3 class="creature-title">Hermana Luna y Estrellas</h3>
+                <p class="creature-verse">«Claras, preciosas y bellas en el firmamento.» Custodias de la quietud nocturna y guías del peregrino en la oscuridad.</p>
+            </div>
+
+            <div class="creature-card rv d2">
+                <span class="creature-icon">💨</span>
+                <h3 class="creature-title">El Hermano Viento</h3>
+                <p class="creature-verse">«Por el aire, el nublado, el sereno y todo tiempo.» Aliento invisible que transporta las semillas y da vida a cuanto respira.</p>
+            </div>
+
+            <div class="creature-card rv">
+                <span class="creature-icon">💧</span>
+                <h3 class="creature-title">La Hermana Agua</h3>
+                <p class="creature-verse">«Muy útil, humilde, preciosa y casta.» Don de purificación, manantial de vida que sacia la sed de los valles.</p>
+            </div>
+
+            <div class="creature-card rv d1">
+                <span class="creature-icon">🔥</span>
+                <h3 class="creature-title">El Hermano Fuego</h3>
+                <p class="creature-verse">«Bello, alegre, robusto y fuerte.» Luz que vence las tinieblas de la noche y calienta los hogares de los desamparados.</p>
+            </div>
+
+            <div class="creature-card rv d2">
+                <span class="creature-icon">🌿</span>
+                <h3 class="creature-title">La Hermana Madre Tierra</h3>
+                <p class="creature-verse">«Nos sostiene, gobierna y produce coloridas flores y hierbas.» Hogar compartido que nutre amorosamente a toda vida creada.</p>
+            </div>
         </div>
     </main>
 
+    <!-- ══════════════════════════════════════
+         PIE DE PÁGINA
+    ══════════════════════════════════════ -->
     <footer>
-        <p>&copy; 2026 El Cántico de las Criaturas — Todos los derechos reservados.</p>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">✠ San Francisco</div>
+                <p class="footer-about">Homenaje interactivo al <em>Cántico de las Criaturas</em>, compuesto por San Francisco de Asís en el dialecto umbro en 1224. Celebrando la hermandad del ser humano con la naturaleza.</p>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Navegación</p>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia & Legado</a></li>
+                    <li><a href="criaturas.html">El Cántico</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Santuarios</p>
+                <ul>
+                    <li><a href="historia.html">San Damián (Asís)</a></li>
+                    <li><a href="historia.html">Basílica Papal</a></li>
+                    <li><a href="historia.html">La Porciúncula</a></li>
+                    <li><a href="historia.html">Monte Subasio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Tradición</p>
+                <ul>
+                    <li><a href="criaturas.html">El Hermano Sol</a></li>
+                    <li><a href="criaturas.html">Hermana Luna</a></li>
+                    <li><a href="criaturas.html">Madre Tierra</a></li>
+                    <li><a href="criaturas.html">Laudato Si'</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bot">
+            <span class="footer-copy">&copy; 2026 El Cántico de las Criaturas · Todos los derechos reservados</span>
+            <div class="footer-motto">✠ PAX ET BONUM ✠</div>
+        </div>
     </footer>
 
+    <!-- Botón de información -->
+    <button id="info-btn" onclick="openP()" title="Información Histórica y Créditos">✠</button>
+
+    <div id="popup">
+        <div class="pbg" onclick="closeP()"></div>
+        <div class="pbox">
+            <button class="p-close" onclick="closeP()">✕</button>
+            <h2 class="p-title">El Cántico de las Criaturas</h2>
+            <p class="p-sub">Contexto Histórico · Teología Franciscana · Créditos Técnicos</p>
+            
+            <hr class="p-hr">
+            <p class="p-sh">📜 Origen y Dialecto Umbro (1224)</p>
+            <div class="p-badge">San Damián, Asís · San Francisco de Asís</div>
+            <div class="p-block">
+                <p class="p-bl">Contexto de Composición</p>
+                <p class="p-bt">Compuesto dos años antes de su tránsito al Creador, cuando Francisco sufría una severa enfermedad ocular. Francisco eligió la lengua vulgar de su pueblo (dialecto umbro) en lugar del latín eclesiástico, convirtiendo al poema en el primer monumento lírico de la literatura en lengua italiana.</p>
+            </div>
+
+            <hr class="p-hr">
+            <p class="p-sh">🎬 Arquitectura Interactiva Scroll-Driven</p>
+            <div class="p-badge">GSAP 3 · ScrollTrigger · Canvas Frame Scrubbing</div>
+            <div class="p-block">
+                <p class="p-bl">Fusión Tecnológica</p>
+                <p class="p-bt">Inspirado en el galardonado proyecto 'Golden Hour Beach Sunset' (#CodePenChallenge), el Hero sincroniza 192 fotogramas continuos del atardecer con el desplazamiento del usuario sobre un Canvas optimizado mediante interpolación lineal (lerp) en RequestAnimationFrame, simbolizando la luz eterna del Hermano Sol.</p>
+            </div>
+            
+            <hr class="p-hr">
+            <p style="font-size:11px; color:rgba(248,244,236,.4); letter-spacing:.08em; text-align:center;">✠ PAX ET BONUM · ASÍS, ITALIA · 1224-2026 ✠</p>
+        </div>
+    </div>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

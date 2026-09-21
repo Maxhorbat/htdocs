@@ -3,56 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio | El Cántico de las Criaturas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>El Cántico de las Criaturas | San Francisco de Asís</title>
+    
+    <!-- Tipografías de Alta Definición -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600&family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Estilos Maestros -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="brand">San Francisco</a>
-        <nav>
+    <!-- ══════════════════════════════════════
+         PANTALLA DE CARGA (PRELOADER SACRO)
+    ══════════════════════════════════════ -->
+    <div id="loader">
+        <div class="loader-orb loader-orb-1"></div>
+        <div class="loader-orb loader-orb-2"></div>
+        <div class="loader-icon">✠</div>
+        <div class="loader-logo">San Francisco</div>
+        <div class="loader-tagline">El Cántico de las Criaturas · Asís, 1224</div>
+        <div class="loader-bar-wrap">
+            <div class="loader-bar" id="loader-bar"></div>
+        </div>
+        <div class="loader-pct" id="loader-pct">0%</div>
+        <div class="loader-status" id="loader-status">Invocando la bendición del Hermano Sol…</div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         BARRA DE NAVEGACIÓN SUPERIOR
+    ══════════════════════════════════════ -->
+    <header class="main-nav">
+        <a href="index.html" class="brand">
+            <span class="cross">✠</span> San Francisco
+        </a>
+        <nav class="nav-links">
             <a href="index.html" class="active">Inicio</a>
             <a href="historia.html">Historia</a>
             <a href="criaturas.html">El Cántico</a>
             <a href="contacto.html">Contacto</a>
+            <a href="criaturas.html" class="nav-btn-explore">Explorar</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>El Cántico de las Criaturas</h1>
-        <p>«Alabado seas, mi Señor, en todas tus criaturas, especialmente en el hermano sol, por quien nos das el día y la luz.»</p>
-        <a href="criaturas.html" class="btn-main">Descubrir las Criaturas</a>
-    </section>
+    <!-- ══════════════════════════════════════
+         HERO — LIENZO SCROLL-DRIVEN (CANVAS)
+    ══════════════════════════════════════ -->
+    <section id="hero-scroll">
+        <div id="hero-sticky">
+            <canvas id="hv"></canvas>
+            <div id="hv-grad"></div>
+            
+            <div id="hero-text">
+                <p class="h-eyebrow">Asís · Umbría, Italia · c. 1224</p>
+                <h1 class="h-title">
+                    <span class="outline">Hermano</span><br>
+                    el <span class="italic">Sol</span><br>
+                    <span class="outline">&amp; Toda</span> <span class="italic">Creación</span>
+                </h1>
+                <p class="h-sub">«Alabado seas, mi Señor, en todas tus criaturas, especialmente en el hermano sol, por quien nos das el día y la luz. Y él es bello y radiante con gran esplendor: de ti, Altísimo, lleva significación.»</p>
+                <div class="h-cta-row">
+                    <a class="btn-fill" href="criaturas.html">✠ Explorar la Creación</a>
+                    <a class="btn-ghost" href="#armonia">Conocer la Visión</a>
+                </div>
+            </div>
 
-    <main>
-        <h2 class="section-title">Una Oda a la Naturaleza</h2>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto 40px;">
-            El Cántico de las Criaturas es un cántico religioso cristiano compuesto por San Francisco de Asís. Es un poema que expresa una profunda gratitud y hermandad con todos los elementos de la creación.
-        </p>
-        
-        <div class="grid-criaturas">
-            <div class="card">
-                <span class="icon">☀️</span>
-                <h3>Hermano Sol</h3>
-                <p>Trae el día y la luz, reflejo de la majestad divina.</p>
+            <!-- Indicador de desplazamiento inferior -->
+            <div class="scroll-ind" id="sind">
+                <div class="scroll-dot"></div>
+                <span>Desplazar para contemplar</span>
             </div>
-            <div class="card">
-                <span class="icon">💧</span>
-                <h3>Hermana Agua</h3>
-                <p>Humilde, preciosa, útil y casta para la vida.</p>
-            </div>
-            <div class="card">
-                <span class="icon">🌱</span>
-                <h3>Madre Tierra</h3>
-                <p>Nos sustenta, gobierna y regala frutos y flores.</p>
+            
+            <div class="side-label">Solis Canticum · San Damián</div>
+            
+            <!-- Barra de progreso del recorrido -->
+            <div id="scrub-progress">
+                <div id="scrub-bar"></div>
             </div>
         </div>
-    </main>
+    </section>
 
+    <!-- ══════════════════════════════════════
+         CINTA MARQUEE SACRA
+    ══════════════════════════════════════ -->
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="marquee-item">✠ Solis Canticum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Francisco de Asís</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">El Hermano Sol</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">La Hermana Luna</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">La Madre Tierra</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Pax et Bonum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Damián 1224</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Laudato Si'</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">✠ Solis Canticum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Francisco de Asís</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">El Hermano Sol</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">La Hermana Luna</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">La Madre Tierra</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Pax et Bonum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Damián 1224</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Laudato Si'</span><span class="marquee-dot">·</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN DIAGONAL: ARMONÍA UNIVERSAL
+    ══════════════════════════════════════ -->
+    <section class="diag-section" id="armonia">
+        <div class="diag-inner">
+            <div class="diag-left">
+                <div class="tag-line rv">La Cosmovisión Franciscana</div>
+                <h2 class="big-serif rv d1">La Creación canta.<br><em>El alma contempla.</em><br>Todo es fraternidad.</h2>
+                <p class="body-text rv d2">San Francisco transformó la comprensión del cosmos. La naturaleza no es mero escenario ni recurso para explotar; es una sinfonía viva donde cada criatura es hermana y hermano ante Dios. En medio de la ceguera y el dolor corporal en San Damián, Francisco no maldijo la luz que no podía ver, sino que compuso el himno solar más radiante de la humanidad.</p>
+                <a class="btn-fill rv d3" href="historia.html">Descubrir el Legado</a>
+            </div>
+            
+            <div class="diag-right rv d1">
+                <div class="stat-tile">
+                    <div class="stat-n">1224</div>
+                    <div class="stat-l">Año de Composición</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-n">800+</div>
+                    <div class="stat-l">Años de Trascendencia</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-n">110+</div>
+                    <div class="stat-l">Países con Presencia OFM</div>
+                </div>
+                <div class="stat-tile">
+                    <div class="stat-n">∞</div>
+                    <div class="stat-l">Fraternidad Universal</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         ELEMENTOS SAGRADOS DEL CÁNTICO
+    ══════════════════════════════════════ -->
+    <section class="exp-section" id="elementos">
+        <div class="exp-header">
+            <div class="exp-num rv">03</div>
+            <div class="exp-head-right">
+                <div class="tag-line rv" style="justify-content: flex-end;">Alabanza en la Naturaleza</div>
+                <h2 class="big-serif rv d1" style="text-align: right;">Criaturas que<br><em>revelan al Creador</em></h2>
+            </div>
+        </div>
+        
+        <div class="exp-cards">
+            <!-- Tarjeta 1 -->
+            <div class="exp-card rv">
+                <div class="exp-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="La Creación Divina" loading="lazy">
+                    <div class="exp-img-overlay"></div>
+                </div>
+                <div class="exp-card-body">
+                    <p class="exp-tag">Cosmos Sagrado</p>
+                    <h3 class="exp-title">La Creación<br><em>Divina</em></h3>
+                    <p class="exp-desc">Una perspectiva pura donde el cielo, los valles y las aguas no son objetos de conquista, sino un hogar sagrado de dones divinos.</p>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2 -->
+            <div class="exp-card rv d1">
+                <div class="exp-img-wrap">
+                    <img src="ima/santo.jpg" alt="San Francisco y el Hermano Sol" loading="lazy">
+                    <div class="exp-img-overlay"></div>
+                </div>
+                <div class="exp-card-body">
+                    <p class="exp-tag">La Luz del Día</p>
+                    <h3 class="exp-title">El Hermano<br><em>Sol Radiante</em></h3>
+                    <p class="exp-desc">Símbolo visible del Altísimo que ilumina nuestros días con calor y fidelidad; imagen radiante de la gracia que fecunda el mundo.</p>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3 -->
+            <div class="exp-card rv d2">
+                <div class="exp-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80" alt="La Madre Tierra" loading="lazy">
+                    <div class="exp-img-overlay"></div>
+                </div>
+                <div class="exp-card-body">
+                    <p class="exp-tag">Nutrición & Vida</p>
+                    <h3 class="exp-title">Nuestra Hermana<br><em>Madre Tierra</em></h3>
+                    <p class="exp-desc">Hermana generosa que nos sostiene, nos cobija y produce flores de brillantes colores, frutos y hierbas salutíferas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         BLOQUE DE CITA MONUMENTAL
+    ══════════════════════════════════════ -->
+    <section class="quote-block">
+        <div class="quote-bg-text">SOLIS</div>
+        <div class="quote-icon">✠</div>
+        <blockquote class="quote-text rv">
+            «Altísimo, omnipotente, buen Señor, tuyas son las alabanzas, la gloria y el honor y <mark>toda bendición</mark>. A ti solo, Altísimo, corresponden, y ningún hombre es digno de hacer de ti mención.»
+        </blockquote>
+        <p class="quote-attr rv d1">— San Francisco de Asís · San Damián (c. 1224)</p>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         FRANJA AMBIENTAL DEL SANTUARIO
+    ══════════════════════════════════════ -->
+    <div class="vstrip">
+        <video autoplay muted playsinline loop src="https://rassweiler-it.de/images/codepen/0c7239a9-dde1-4fe7-8625-98e20aea34aa.mp4">
+        </video>
+        <div class="vstrip-overlay"></div>
+        <div class="vstrip-content">
+            <div>
+                <p class="vstrip-label rv">Umbría Mística · Monte Subasio</p>
+                <h2 class="vstrip-title rv d1">La creación proclama<br><em>Su eterna hermosura</em></h2>
+                <a class="btn-fill rv d2" href="criaturas.html">✠ Leer el Cántico Completo</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SANTUARIOS E IGLESIAS PRINCIPALES
+    ══════════════════════════════════════ -->
+    <section class="rooms" id="santuarios">
+        <div class="rooms-inner">
+            <div class="rooms-title-row">
+                <div>
+                    <div class="tag-line rv">Patrimonio de Asís</div>
+                    <h2 class="big-serif rv d1">Santuarios e Iglesias <em>Principales</em></h2>
+                </div>
+                <a class="btn-ghost rv" href="historia.html">Ver Crónica Histórica</a>
+            </div>
+
+            <div class="rooms-grid rv">
+                <!-- Santuario Principal -->
+                <div class="r-card r-main">
+                    <img class="r-img" src="https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=1200&q=80" alt="Basílica Papal de San Francisco" loading="lazy">
+                    <div class="r-info">
+                        <p class="r-type">Patrimonio de la Humanidad</p>
+                        <h3 class="r-name">Basílica Papal de San Francisco (Asís)</h3>
+                        <p class="r-desc">Corazón espiritual y tumba del Santo en Italia. Custodia los célebres frescos de Giotto y Cimabue que inmortalizan su fraternidad con la creación.</p>
+                    </div>
+                </div>
+
+                <!-- Santuarios Secundarios Apilados -->
+                <div class="r-stacked">
+                    <div class="r-card r-secondary">
+                        <img class="r-img" src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80" alt="Monasterio de San Damián" loading="lazy">
+                        <div class="r-info">
+                            <p class="r-type">Cuna del Cántico · 1224</p>
+                            <h3 class="r-name">Monasterio de San Damián</h3>
+                            <p class="r-desc">Lugar místico donde el crucifijo habló al Poverello y donde compuso las estrofas del Cántico de las Criaturas.</p>
+                        </div>
+                    </div>
+
+                    <div class="r-card r-secondary">
+                        <img class="r-img" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80" alt="La Porciúncula" loading="lazy">
+                        <div class="r-info">
+                            <p class="r-type">Santa María de los Ángeles</p>
+                            <h3 class="r-name">La Porciúncula</h3>
+                            <p class="r-desc">Pequeña capilla donde nació la Orden de los Frailes Menores y donde Francisco entregó su alma en 1226 rodeado de sus hermanos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN DE CONTACTO & FRATERNIDAD
+    ══════════════════════════════════════ -->
+    <section class="book" id="comunidad">
+        <div>
+            <div class="tag-line rv">Fraternidad Universal</div>
+            <h2 class="book-title rv d1">Comparte una<br><em>reflexión de paz</em></h2>
+            <p class="book-sub rv d2">Como enseñaba el Santo de Asís, la paz no se impone: se cultiva en el diálogo, la contemplación y la humildad compartida con toda la creación.</p>
+        </div>
+
+        <div class="book-form-side rv d1">
+            <form action="contacto.html" method="get">
+                <div class="form-group-modern" style="margin-bottom: 16px;">
+                    <label for="f-nombre">Nombre de Fraternidad</label>
+                    <input type="text" id="f-nombre" placeholder="Tu nombre..." required>
+                </div>
+                <div class="form-group-modern" style="margin-bottom: 16px;">
+                    <label for="f-correo">Correo Electrónico</label>
+                    <input type="email" id="f-correo" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group-modern" style="margin-bottom: 20px;">
+                    <label for="f-msg">Mensaje o Intención</label>
+                    <textarea id="f-msg" rows="3" placeholder="Escribe tu reflexión sobre la creación..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit-sacro" style="width: 100%;">Enviar Mensaje de Paz</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         PIE DE PÁGINA (FOOTER SACRO)
+    ══════════════════════════════════════ -->
     <footer>
-        <p>&copy; 2026 El Cántico de las Criaturas — Todos los derechos reservados.</p>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">✠ San Francisco</div>
+                <p class="footer-about">Homenaje interactivo al <em>Cántico de las Criaturas</em>, compuesto por San Francisco de Asís en el dialecto umbro en 1224. Celebrando la hermandad del ser humano con la naturaleza.</p>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Navegación</p>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia & Legado</a></li>
+                    <li><a href="criaturas.html">El Cántico</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Santuarios</p>
+                <ul>
+                    <li><a href="historia.html">San Damián (Asís)</a></li>
+                    <li><a href="historia.html">Basílica Papal</a></li>
+                    <li><a href="historia.html">La Porciúncula</a></li>
+                    <li><a href="historia.html">Monte Subasio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Tradición</p>
+                <ul>
+                    <li><a href="criaturas.html">El Hermano Sol</a></li>
+                    <li><a href="criaturas.html">Hermana Luna</a></li>
+                    <li><a href="criaturas.html">Madre Tierra</a></li>
+                    <li><a href="criaturas.html">Laudato Si'</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bot">
+            <span class="footer-copy">&copy; 2026 El Cántico de las Criaturas · Todos los derechos reservados</span>
+            <div class="footer-motto">✠ PAX ET BONUM ✠</div>
+        </div>
     </footer>
+
+    <!-- ══════════════════════════════════════
+         BOTÓN FLOTANTE & MODAL INFORMATIVO
+    ══════════════════════════════════════ -->
+    <button id="info-btn" onclick="openP()" title="Información Histórica y Créditos">✠</button>
+
+    <div id="popup">
+        <div class="pbg" onclick="closeP()"></div>
+        <div class="pbox">
+            <button class="p-close" onclick="closeP()">✕</button>
+            <h2 class="p-title">El Cántico de las Criaturas</h2>
+            <p class="p-sub">Contexto Histórico · Teología Franciscana · Créditos Técnicos</p>
+            
+            <hr class="p-hr">
+            <p class="p-sh">📜 Origen y Dialecto Umbro (1224)</p>
+            <div class="p-badge">San Damián, Asís · San Francisco de Asís</div>
+            <div class="p-block">
+                <p class="p-bl">Contexto de Composición</p>
+                <p class="p-bt">Compuesto dos años antes de su tránsito al Creador, cuando Francisco sufría una severa enfermedad ocular. Francisco eligió la lengua vulgar de su pueblo (dialecto umbro) en lugar del latín eclesiástico, convirtiendo al poema en el primer monumento lírico de la literatura en lengua italiana.</p>
+            </div>
+
+            <hr class="p-hr">
+            <p class="p-sh">🎬 Arquitectura Interactiva Scroll-Driven</p>
+            <div class="p-badge">GSAP 3 · ScrollTrigger · Canvas Frame Scrubbing</div>
+            <div class="p-block">
+                <p class="p-bl">Fusión Tecnológica</p>
+                <p class="p-bt">Inspirado en el galardonado proyecto 'Golden Hour Beach Sunset' (#CodePenChallenge), el Hero sincroniza 192 fotogramas continuos del atardecer con el desplazamiento del usuario sobre un Canvas optimizado mediante interpolación lineal (lerp) en RequestAnimationFrame, simbolizando la luz eterna del Hermano Sol.</p>
+            </div>
+            
+            <hr class="p-hr">
+            <p style="font-size:11px; color:rgba(248,244,236,.4); letter-spacing:.08em; text-align:center;">✠ PAX ET BONUM · ASÍS, ITALIA · 1224-2026 ✠</p>
+        </div>
+    </div>
+
+    <!-- Librerías de Animación GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>

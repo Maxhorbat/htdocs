@@ -3,39 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto | El Cántico de las Criaturas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Contacto y Comunidad | El Cántico de las Criaturas</title>
+    
+    <!-- Fuentes Tipográficas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600&family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="loaded">
 
-    <header>
-        <a href="index.html" class="brand">San Francisco</a>
-        <nav>
+    <!-- ══════════════════════════════════════
+         NAVEGACIÓN SUPERIOR
+    ══════════════════════════════════════ -->
+    <header class="main-nav">
+        <a href="index.html" class="brand">
+            <span class="cross">✠</span> San Francisco
+        </a>
+        <nav class="nav-links">
             <a href="index.html">Inicio</a>
             <a href="historia.html">Historia</a>
             <a href="criaturas.html">El Cántico</a>
             <a href="contacto.html" class="active">Contacto</a>
+            <a href="criaturas.html" class="nav-btn-explore">Explorar</a>
         </nav>
     </header>
 
+    <!-- ══════════════════════════════════════
+         CABECERA DE PÁGINA
+    ══════════════════════════════════════ -->
     <div class="page-header">
-        <h1>Únete a la Comunidad</h1>
-        <p>Escríbenos o comparte tu mensaje con nosotros</p>
+        <span class="page-tag">✠ Fraternidad & Comunión Universal</span>
+        <h1>Comunidad y <em>Reflexión</em></h1>
+        <p>Escríbenos para compartir intenciones de oración, estudios ecológicos o pensamientos inspirados en San Francisco de Asís.</p>
     </div>
 
-    <main>
-        <form class="contact-form" onsubmit="event.preventDefault(); alert('¡Mensaje enviado con éxito!');">
-            <input type="text" placeholder="Tu nombre completo" required>
-            <input type="email" placeholder="Tu correo electrónico" required>
-            <textarea rows="5" placeholder="Tu mensaje o reflexión..." required></textarea>
-            <button type="submit">Enviar Mensaje</button>
-        </form>
+    <!-- ══════════════════════════════════════
+         CINTA MARQUEE SACRA
+    ══════════════════════════════════════ -->
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="marquee-item">✠ Pax et Bonum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Fraternidad Universal</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Alabanza Cósmica</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Damián de Asís</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Custodia de la Creación</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">✠ Pax et Bonum</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Fraternidad Universal</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Alabanza Cósmica</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">San Damián de Asís</span><span class="marquee-dot">·</span>
+            <span class="marquee-item">Custodia de la Creación</span><span class="marquee-dot">·</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECCIÓN PRINCIPAL DE CONTACTO
+    ══════════════════════════════════════ -->
+    <main class="book" style="border: none; padding-top: 100px; padding-bottom: 140px;">
+        <div class="rv">
+            <div class="tag-line">Espacio de Diálogo</div>
+            <h2 class="book-title">Envía tu <em>mensaje de paz</em></h2>
+            <p class="book-sub">«El Señor te bendiga y te guarde; te muestre su rostro y tenga piedad de ti. Vuelva a ti su mirada y te conceda la paz.»</p>
+            <p class="book-sub" style="margin-top: 16px; font-size: 13px; color: var(--gp);">
+                ✠ San Francisco de Asís · Bendición a Fray León
+            </p>
+        </div>
+
+        <div class="book-form-side rv d1">
+            <form id="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-confirm').style.display='block'; this.reset();">
+                <div class="form-group-modern" style="margin-bottom: 16px;">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" placeholder="Escribe tu nombre y apellido..." required>
+                </div>
+
+                <div class="form-group-modern" style="margin-bottom: 16px;">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@dominio.com" required>
+                </div>
+
+                <div class="form-group-modern" style="margin-bottom: 20px;">
+                    <label for="mensaje">Mensaje o Reflexión Sacra</label>
+                    <textarea id="mensaje" rows="5" placeholder="Escribe aquí tu pensamiento, reflexión o intención..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit-sacro" style="width: 100%;">
+                    ✠ Enviar Mensaje de Fraternidad
+                </button>
+
+                <div id="form-confirm" style="display: none; margin-top: 18px; padding: 14px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gp); color: var(--gp); font-size: 13px; text-align: center; border-radius: 2px;">
+                    ✠ Tu reflexión ha sido recibida con gratitud y bendición. ¡Paz y Bien!
+                </div>
+            </form>
+        </div>
     </main>
 
+    <!-- ══════════════════════════════════════
+         PIE DE PÁGINA
+    ══════════════════════════════════════ -->
     <footer>
-        <p>&copy; 2026 El Cántico de las Criaturas — Todos los derechos reservados.</p>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">✠ San Francisco</div>
+                <p class="footer-about">Homenaje interactivo al <em>Cántico de las Criaturas</em>, compuesto por San Francisco de Asís en el dialecto umbro en 1224. Celebrando la hermandad del ser humano con la naturaleza.</p>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Navegación</p>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="historia.html">Historia & Legado</a></li>
+                    <li><a href="criaturas.html">El Cántico</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Santuarios</p>
+                <ul>
+                    <li><a href="historia.html">San Damián (Asís)</a></li>
+                    <li><a href="historia.html">Basílica Papal</a></li>
+                    <li><a href="historia.html">La Porciúncula</a></li>
+                    <li><a href="historia.html">Monte Subasio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <p class="footer-col-h">Tradición</p>
+                <ul>
+                    <li><a href="criaturas.html">El Hermano Sol</a></li>
+                    <li><a href="criaturas.html">Hermana Luna</a></li>
+                    <li><a href="criaturas.html">Madre Tierra</a></li>
+                    <li><a href="criaturas.html">Laudato Si'</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bot">
+            <span class="footer-copy">&copy; 2026 El Cántico de las Criaturas · Todos los derechos reservados</span>
+            <div class="footer-motto">✠ PAX ET BONUM ✠</div>
+        </div>
     </footer>
 
+    <!-- Botón de información -->
+    <button id="info-btn" onclick="openP()" title="Información Histórica y Créditos">✠</button>
+
+    <div id="popup">
+        <div class="pbg" onclick="closeP()"></div>
+        <div class="pbox">
+            <button class="p-close" onclick="closeP()">✕</button>
+            <h2 class="p-title">El Cántico de las Criaturas</h2>
+            <p class="p-sub">Contexto Histórico · Teología Franciscana · Créditos Técnicos</p>
+            
+            <hr class="p-hr">
+            <p class="p-sh">📜 Origen y Dialecto Umbro (1224)</p>
+            <div class="p-badge">San Damián, Asís · San Francisco de Asís</div>
+            <div class="p-block">
+                <p class="p-bl">Contexto de Composición</p>
+                <p class="p-bt">Compuesto dos años antes de su tránsito al Creador, cuando Francisco sufría una severa enfermedad ocular. Francisco eligió la lengua vulgar de su pueblo (dialecto umbro) en lugar del latín eclesiástico, convirtiendo al poema en el primer monumento lírico de la literatura en lengua italiana.</p>
+            </div>
+
+            <hr class="p-hr">
+            <p class="p-sh">🎬 Arquitectura Interactiva Scroll-Driven</p>
+            <div class="p-badge">GSAP 3 · ScrollTrigger · Canvas Frame Scrubbing</div>
+            <div class="p-block">
+                <p class="p-bl">Fusión Tecnológica</p>
+                <p class="p-bt">Inspirado en el galardonado proyecto 'Golden Hour Beach Sunset' (#CodePenChallenge), el Hero sincroniza 192 fotogramas continuos del atardecer con el desplazamiento del usuario sobre un Canvas optimizado mediante interpolación lineal (lerp) en RequestAnimationFrame, simbolizando la luz eterna del Hermano Sol.</p>
+            </div>
+            
+            <hr class="p-hr">
+            <p style="font-size:11px; color:rgba(248,244,236,.4); letter-spacing:.08em; text-align:center;">✠ PAX ET BONUM · ASÍS, ITALIA · 1224-2026 ✠</p>
+        </div>
+    </div>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
