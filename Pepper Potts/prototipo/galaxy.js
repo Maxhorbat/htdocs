@@ -1,6 +1,6 @@
 /**
- * GalaxyGenerator - Majestic Crimson Spiral Galaxy with Differential Rotation & Volumetric Core
- * Built for Three.js
+ * GalaxyGenerator - Crimson Spiral Galaxy
+ * Optimizado: conteos y detalle adaptativos según calidad del dispositivo
  */
 
 (function (root, factory) {
@@ -14,9 +14,6 @@
 }(typeof self !== 'undefined' ? self : this, function (THREE) {
     'use strict';
 
-    /**
-     * Genera una textura procedural circular con caída suave para las partículas de estrellas
-     */
     function createStarSpriteTexture() {
         const canvas = document.createElement('canvas');
         canvas.width = 64;
@@ -39,9 +36,6 @@
         return texture;
     }
 
-    /**
-     * Genera una textura de polvo nebular suave
-     */
     function createNebulaCloudTexture() {
         const canvas = document.createElement('canvas');
         canvas.width = 128;
@@ -57,87 +51,64 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 128, 128);
 
-        const texture = new THREE.CanvasTexture(canvas);
-        return texture;
+        return new THREE.CanvasTexture(canvas);
     }
 
-    /**
-     * Shaders GLSL para las partículas estelares de la galaxia
-     */
     const GalaxyShader = {
-        vertexShader: `
-            precision highp float;
-            uniform float uTime;
-            uniform float uSize;
-            uniform float uPixelRatio;
-
-            attribute float aScale;
-            attribute float aRandomness;
-            attribute float aOrbitSpeed;
-            attribute float aDistance;
-            attribute vec3 aInitialColor;
-
-            varying vec3 vColor;
-            varying float vAlpha;
-
-            void main() {
-                // Rotación orbital diferencial: las estrellas internas orbitan a mayor velocidad angular
-                float angle = aOrbitSpeed * uTime * 0.18;
-                
-                // Rotación en el plano XZ (plano galáctico)
-                float cosA = cos(angle);
-                float sinA = sin(angle);
-                
-                vec3 rotatedPosition = position;
-                rotatedPosition.x = position.x * cosA - position.z * sinA;
-                rotatedPosition.z = position.x * sinA + position.z * cosA;
-
-                // Ondulación cósmica vertical
-                rotatedPosition.y += sin(uTime * 0.4 + aDistance * 0.1) * (0.3 + aDistance * 0.02);
-
-                vec4 mvPosition = modelViewMatrix * vec4(rotatedPosition, 1.0);
-                gl_Position = projectionMatrix * mvPosition;
-
-                // Tamaño de partícula adaptativo a la distancia de la cámara y resolución
-                float distFactor = max(1.0, -mvPosition.z * 0.035);
-                gl_PointSize = (uSize * aScale * uPixelRatio) / distFactor;
-                gl_PointSize = max(gl_PointSize, 2.0);
-
-                // Centelleo estelar sutil
-                float twinkle = 0.88 + 0.12 * sin(uTime * 2.8 + aRandomness * 60.0);
-                vColor = aInitialColor * twinkle;
-                vAlpha = min(1.0, 0.5 + 0.5 * (1.0 - smoothstep(110.0, 150.0, aDistance)));
-            }
-        `,
-        fragmentShader: `
-            precision highp float;
-            uniform sampler2D uTexture;
-            varying vec3 vColor;
-            varying float vAlpha;
-
-            void main() {
-                vec4 texColor = texture2D(uTexture, gl_PointCoord);
-                gl_FragColor = vec4(vColor * texColor.rgb, texColor.a * vAlpha);
-            }
-        `
+        vertexShader: [
+            'precision mediump float;',
+            'uniform float uTime;',
+            'uniform float uSize;',
+            'uniform float uPixelRatio;',
+            'attribute float aScale;',
+            'attribute float aRandomness;',
+            'attribute float aOrbitSpeed;',
+            'attribute float aDistance;',
+            'attribute vec3 aInitialColor;',
+            'varying vec3 vColor;',
+            'varying float vAlpha;',
+            'void main() {',
+            '  float angle = aOrbitSpeed * uTime * 0.18;',
+            '  float cosA = cos(angle);',
+            '  float sinA = sin(angle);',
+            '  vec3 rotatedPosition = position;',
+            '  rotatedPosition.x = position.x * cosA - position.z * sinA;',
+            '  rotatedPosition.z = position.x * sinA + position.z * cosA;',
+            '  rotatedPosition.y += sin(uTime * 0.4 + aDistance * 0.1) * (0.25 + aDistance * 0.015);',
+            '  vec4 mvPosition = modelViewMatrix * vec4(rotatedPosition, 1.0);',
+            '  gl_Position = projectionMatrix * mvPosition;',
+            '  float distFactor = max(1.0, -mvPosition.z * 0.035);',
+            '  gl_PointSize = (uSize * aScale * uPixelRatio) / distFactor;',
+            '  gl_PointSize = max(gl_PointSize, 1.5);',
+            '  float twinkle = 0.88 + 0.12 * sin(uTime * 2.8 + aRandomness * 60.0);',
+            '  vColor = aInitialColor * twinkle;',
+            '  vAlpha = min(1.0, 0.5 + 0.5 * (1.0 - smoothstep(100.0, 145.0, aDistance)));',
+            '}'
+        ].join('\n'),
+        fragmentShader: [
+            'precision mediump float;',
+            'uniform sampler2D uTexture;',
+            'varying vec3 vColor;',
+            'varying float vAlpha;',
+            'void main() {',
+            '  vec4 texColor = texture2D(uTexture, gl_PointCoord);',
+            '  gl_FragColor = vec4(vColor * texColor.rgb, texColor.a * vAlpha);',
+            '}'
+        ].join('\n')
     };
 
-    /**
-     * Construye la galaxia espiral roja completa
-     */
-    function createRedGalaxy(options = {}) {
-        const {
-            starCount = 85000,
-            radius = 120,
-            arms = 4,
-            spiralTwist = 3.8,
-            coreRadius = 16,
-            thickness = 7.0
-        } = options;
+    function createRedGalaxy(options) {
+        options = options || {};
+        const starCount = options.starCount || 45000;
+        const radius = options.radius || 110;
+        const arms = options.arms || 4;
+        const spiralTwist = options.spiralTwist || 3.6;
+        const coreRadius = options.coreRadius || 15;
+        const thickness = options.thickness || 6.5;
+        const nebulaCount = options.nebulaCount !== undefined ? options.nebulaCount : 30;
 
         const galaxyGroup = new THREE.Group();
 
-        // 1. GENERACIÓN DE PARTÍCULAS ESTELARES ESPIRALES
         const positions = new Float32Array(starCount * 3);
         const colors = new Float32Array(starCount * 3);
         const scales = new Float32Array(starCount);
@@ -145,15 +116,14 @@
         const orbitSpeeds = new Float32Array(starCount);
         const distances = new Float32Array(starCount);
 
-        const colorCore = new THREE.Color('#ffffff');      // Núcleo blanco estelar
-        const colorInnerGlow = new THREE.Color('#ff5544');  // Resplandor escarlata ardiente
-        const colorMidArm = new THREE.Color('#ff1d45');    // Rojo carmesí brillante en los brazos
-        const colorOuterArm = new THREE.Color('#c40d2a');  // Rubí vivo
-        const colorRimDust = new THREE.Color('#6a0316');   // Polvo cósmico
+        const colorCore = new THREE.Color('#ffffff');
+        const colorInnerGlow = new THREE.Color('#ff5544');
+        const colorMidArm = new THREE.Color('#ff1d45');
+        const colorOuterArm = new THREE.Color('#c40d2a');
+        const colorRimDust = new THREE.Color('#6a0316');
 
         for (let i = 0; i < starCount; i++) {
             const i3 = i * 3;
-
             const rNorm = Math.pow(Math.random(), 1.7);
             const r = rNorm * radius;
             distances[i] = r;
@@ -163,10 +133,10 @@
             const spiralAngle = Math.pow(r / radius, 0.75) * spiralTwist;
             const finalAngle = armAngle + spiralAngle;
 
-            const spreadFactor = Math.pow(r / radius, 0.6) * 7.5 + 0.8;
+            const spreadFactor = Math.pow(r / radius, 0.6) * 7.0 + 0.8;
             const randomX = (Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1)) * spreadFactor;
             const randomZ = (Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1)) * spreadFactor;
-            
+
             const heightFalloff = Math.max(0.1, 1.0 - (r / radius) * 0.4);
             const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1)) * (thickness * heightFalloff);
 
@@ -175,28 +145,21 @@
             positions[i3 + 2] = Math.sin(finalAngle) * r + randomZ;
 
             orbitSpeeds[i] = 1.0 / Math.sqrt(Math.max(4.0, r * 0.5 + 2.0));
-            scales[i] = (0.7 + Math.random() * 2.0) * (r < coreRadius ? 1.5 : 1.0);
+            scales[i] = (0.65 + Math.random() * 1.9) * (r < coreRadius ? 1.45 : 1.0);
             randomness[i] = Math.random();
 
-            let starColor;
             const normDist = r / radius;
-
+            let starColor;
             if (normDist < 0.08) {
                 starColor = colorCore.clone().lerp(colorInnerGlow, normDist / 0.08);
             } else if (normDist < 0.35) {
-                const t = (normDist - 0.08) / 0.27;
-                starColor = colorInnerGlow.clone().lerp(colorMidArm, t);
+                starColor = colorInnerGlow.clone().lerp(colorMidArm, (normDist - 0.08) / 0.27);
             } else if (normDist < 0.75) {
-                const t = (normDist - 0.35) / 0.4;
-                starColor = colorMidArm.clone().lerp(colorOuterArm, t);
+                starColor = colorMidArm.clone().lerp(colorOuterArm, (normDist - 0.35) / 0.4);
             } else {
-                const t = (normDist - 0.75) / 0.25;
-                starColor = colorOuterArm.clone().lerp(colorRimDust, t);
+                starColor = colorOuterArm.clone().lerp(colorRimDust, (normDist - 0.75) / 0.25);
             }
-
-            if (Math.random() < 0.1) {
-                starColor.addScalar(0.25);
-            }
+            if (Math.random() < 0.08) starColor.addScalar(0.22);
 
             colors[i3] = starColor.r;
             colors[i3 + 1] = starColor.g;
@@ -212,14 +175,15 @@
         geometry.setAttribute('aDistance', new THREE.BufferAttribute(distances, 1));
 
         const starTexture = createStarSpriteTexture();
+        const pixelRatio = (window.__APP_QUALITY__ && window.__APP_QUALITY__.pixelRatio) || Math.min(window.devicePixelRatio || 1, 2);
 
         const galaxyMaterial = new THREE.ShaderMaterial({
             vertexShader: GalaxyShader.vertexShader,
             fragmentShader: GalaxyShader.fragmentShader,
             uniforms: {
                 uTime: { value: 0 },
-                uSize: { value: 36.0 },
-                uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+                uSize: { value: 32.0 },
+                uPixelRatio: { value: pixelRatio },
                 uTexture: { value: starTexture }
             },
             depthWrite: false,
@@ -230,108 +194,99 @@
         const starPoints = new THREE.Points(geometry, galaxyMaterial);
         galaxyGroup.add(starPoints);
 
-        // 2. NÚCLEO GALÁCTICO SUPERMASIVO & HALOS VOLUMÉTRICOS DE RESPLANDOR
-        // Esfera externa de resplandor rubí
-        const coreGlowGeom = new THREE.SphereGeometry(6.0, 32, 32);
+        // Núcleo (menos segmentos en low)
+        const coreSeg = (window.__APP_QUALITY__ && window.__APP_QUALITY__.level === 0) ? 16 : 28;
+
+        const coreGlowGeom = new THREE.SphereGeometry(5.8, coreSeg, coreSeg);
         const coreGlowMat = new THREE.MeshBasicMaterial({
             color: 0xff2d55,
             transparent: true,
-            opacity: 0.9,
+            opacity: 0.85,
             blending: THREE.AdditiveBlending
         });
-        const coreGlowMesh = new THREE.Mesh(coreGlowGeom, coreGlowMat);
-        galaxyGroup.add(coreGlowMesh);
+        galaxyGroup.add(new THREE.Mesh(coreGlowGeom, coreGlowMat));
 
-        // Halo de resplandor interior blanco estelar puro
-        const coreInnerGeom = new THREE.SphereGeometry(2.8, 32, 32);
+        const coreInnerGeom = new THREE.SphereGeometry(2.6, coreSeg, coreSeg);
         const coreInnerMat = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             blending: THREE.AdditiveBlending
         });
-        const coreInnerMesh = new THREE.Mesh(coreInnerGeom, coreInnerMat);
-        galaxyGroup.add(coreInnerMesh);
+        galaxyGroup.add(new THREE.Mesh(coreInnerGeom, coreInnerMat));
 
-        // Gran aureola de corona galáctica (bilboard)
         const coronaTexture = createNebulaCloudTexture();
         const coronaMat = new THREE.SpriteMaterial({
             map: coronaTexture,
             color: 0xff3b5c,
             blending: THREE.AdditiveBlending,
             transparent: true,
-            opacity: 0.85
+            opacity: 0.8
         });
         const coronaSprite = new THREE.Sprite(coronaMat);
-        coronaSprite.scale.set(45, 45, 1);
+        coronaSprite.scale.set(42, 42, 1);
         galaxyGroup.add(coronaSprite);
 
-        // Segunda aureola inmensa y suave
         const bigHaloMat = new THREE.SpriteMaterial({
             map: coronaTexture,
             color: 0xe60026,
             blending: THREE.AdditiveBlending,
             transparent: true,
-            opacity: 0.45
+            opacity: 0.4
         });
         const bigHaloSprite = new THREE.Sprite(bigHaloMat);
-        bigHaloSprite.scale.set(95, 95, 1);
+        bigHaloSprite.scale.set(88, 88, 1);
         galaxyGroup.add(bigHaloSprite);
 
-        // Anillo de acreción ardiente con inclinación
-        const ringGeom = new THREE.RingGeometry(6.0, 16.0, 64);
+        const ringSeg = (window.__APP_QUALITY__ && window.__APP_QUALITY__.level === 0) ? 32 : 56;
+        const ringGeom = new THREE.RingGeometry(5.8, 15.0, ringSeg);
         const ringMat = new THREE.MeshBasicMaterial({
             color: 0xff2d4d,
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.8,
             blending: THREE.AdditiveBlending
         });
         const ringMesh = new THREE.Mesh(ringGeom, ringMat);
         ringMesh.rotation.x = Math.PI * 0.5;
         galaxyGroup.add(ringMesh);
 
-        // 3. NUBES DE NEBULOSA CÓSMICA VOLUMÉTRICA
+        // Nebulosas
         const nebulaTexture = createNebulaCloudTexture();
-        const nebulaCount = 45;
         const nebulaMat = new THREE.MeshBasicMaterial({
             map: nebulaTexture,
             transparent: true,
-            opacity: 0.4,
+            opacity: 0.38,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide
         });
 
         for (let n = 0; n < nebulaCount; n++) {
-            const nGeom = new THREE.PlaneGeometry(35 + Math.random() * 45, 35 + Math.random() * 45);
+            const nGeom = new THREE.PlaneGeometry(32 + Math.random() * 40, 32 + Math.random() * 40);
             const nMesh = new THREE.Mesh(nGeom, nebulaMat);
-
             const nAngle = Math.random() * Math.PI * 2;
-            const nDist = 12 + Math.pow(Math.random(), 1.2) * (radius * 0.75);
-
+            const nDist = 12 + Math.pow(Math.random(), 1.2) * (radius * 0.72);
             nMesh.position.set(
                 Math.cos(nAngle) * nDist,
-                (Math.random() - 0.5) * 8.0,
+                (Math.random() - 0.5) * 7.5,
                 Math.sin(nAngle) * nDist
             );
-            nMesh.rotation.x = Math.PI * 0.5 + (Math.random() - 0.5) * 0.3;
+            nMesh.rotation.x = Math.PI * 0.5 + (Math.random() - 0.5) * 0.28;
             nMesh.rotation.z = Math.random() * Math.PI * 2;
-
             galaxyGroup.add(nMesh);
         }
 
-        // 4. LUZ PUNTUAL RADIANTE CENTRAL
-        const coreLight = new THREE.PointLight(0xff3355, 8.0, 500, 1.0);
+        const coreLight = new THREE.PointLight(0xff3355, 6.5, 420, 1.1);
         coreLight.position.set(0, 0, 0);
         galaxyGroup.add(coreLight);
 
-        // Luz estelar cálida secundaria
-        const warmLight = new THREE.PointLight(0xffc2a0, 4.5, 240, 1.1);
-        warmLight.position.set(0, 3, 0);
-        galaxyGroup.add(warmLight);
+        if (!(window.__APP_QUALITY__ && window.__APP_QUALITY__.level === 0)) {
+            const warmLight = new THREE.PointLight(0xffc2a0, 3.8, 200, 1.2);
+            warmLight.position.set(0, 3, 0);
+            galaxyGroup.add(warmLight);
+        }
 
-        // Inclinación de la galaxia
         galaxyGroup.rotation.x = 0.55;
         galaxyGroup.rotation.z = -0.25;
 
@@ -341,18 +296,17 @@
             coreLight: coreLight,
             update: function (time) {
                 galaxyMaterial.uniforms.uTime.value = time;
-                galaxyGroup.rotation.y = time * 0.025;
-                coreLight.intensity = 7.5 + Math.sin(time * 1.5) * 1.0;
-                ringMesh.rotation.z = time * 0.15;
-                coronaSprite.scale.set(45 + Math.sin(time * 2.0) * 3.0, 45 + Math.sin(time * 2.0) * 3.0, 1);
+                galaxyGroup.rotation.y = time * 0.022;
+                coreLight.intensity = 6.2 + Math.sin(time * 1.4) * 0.9;
+                ringMesh.rotation.z = time * 0.13;
+                const pulse = 42 + Math.sin(time * 1.8) * 2.5;
+                coronaSprite.scale.set(pulse, pulse, 1);
             }
         };
     }
 
-    /**
-     * Genera un fondo cósmico inmersivo de estrellas distantes
-     */
-    function createDeepSpaceStarfield(count = 4500) {
+    function createDeepSpaceStarfield(count) {
+        count = count || 3000;
         const starGeom = new THREE.BufferGeometry();
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
@@ -368,34 +322,35 @@
             const i3 = i * 3;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(Math.random() * 2 - 1);
-            const dist = 400 + Math.random() * 400;
+            const dist = 380 + Math.random() * 380;
 
             positions[i3] = dist * Math.sin(phi) * Math.cos(theta);
             positions[i3 + 1] = dist * Math.sin(phi) * Math.sin(theta);
             positions[i3 + 2] = dist * Math.cos(phi);
 
-            const chosenColor = starTypes[Math.floor(Math.random() * starTypes.length)];
-            colors[i3] = chosenColor.r;
-            colors[i3 + 1] = chosenColor.g;
-            colors[i3 + 2] = chosenColor.b;
+            const c = starTypes[Math.floor(Math.random() * starTypes.length)];
+            colors[i3] = c.r;
+            colors[i3 + 1] = c.g;
+            colors[i3 + 2] = c.b;
         }
 
         starGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         starGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const starMat = new THREE.PointsMaterial({
-            size: 2.8,
+            size: 2.4,
             vertexColors: true,
             transparent: true,
-            opacity: 0.9,
-            depthWrite: false
+            opacity: 0.88,
+            depthWrite: false,
+            sizeAttenuation: true
         });
 
         return new THREE.Points(starGeom, starMat);
     }
 
     return {
-        createRedGalaxy,
-        createDeepSpaceStarfield
+        createRedGalaxy: createRedGalaxy,
+        createDeepSpaceStarfield: createDeepSpaceStarfield
     };
 }));

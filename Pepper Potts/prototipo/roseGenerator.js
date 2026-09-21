@@ -1,6 +1,6 @@
 /**
- * RoseGenerator - Procedural 3D Realistic Red Rose & Floating Petals
- * Built for Three.js
+ * RoseGenerator - Procedural 3D Red Rose & Floating Petals
+ * Optimizado: segmentos y materiales adaptativos según calidad del dispositivo
  */
 
 (function (root, factory) {
@@ -14,56 +14,49 @@
 }(typeof self !== 'undefined' ? self : this, function (THREE) {
     'use strict';
 
-    // Paleta de rojos profundos aterciopelados y brillo cósmico radiante
     const PETAL_COLORS = {
-        coreDark: 0x8a091e,       // Carmesí profundo en el centro
-        innerDeep: 0xbb0f2e,      // Rojo sangre aterciopelado
-        midVelvet: 0xe61c3d,      // Rubí luminoso
-        outerRuby: 0xff2d55,      // Rojo pasión vibrante
-        sheenHighlight: 0xff7090, // Brillo rasante aterciopelado vivo (sheen Fresnel)
+        coreDark: 0x8a091e,
+        innerDeep: 0xbb0f2e,
+        midVelvet: 0xe61c3d,
+        outerRuby: 0xff2d55,
+        sheenHighlight: 0xff7090,
         dewGlaze: 0xffa0b5
     };
 
+    function getSeg() {
+        const q = (window.__APP_QUALITY__ && window.__APP_QUALITY__.petalSeg) || 16;
+        return Math.max(8, Math.min(22, q));
+    }
+
     /**
-     * Genera la geometría curvada y orgánica de un pétalo de rosa individual
+     * Geometría de pétalo (segmentos adaptativos)
      */
     function createPetalGeometry(width, height, curlFactor, cupFactor, reflexFactor, ruffleIntensity) {
-        const segX = 22;
-        const segY = 22;
-        const geom = new THREE.PlaneGeometry(width, height, segX, segY);
+        const seg = getSeg();
+        const geom = new THREE.PlaneGeometry(width, height, seg, seg);
         const pos = geom.attributes.position;
         const v = new THREE.Vector3();
 
         for (let i = 0; i < pos.count; i++) {
             v.fromBufferAttribute(pos, i);
 
-            // Coordenadas normalizadas: nx de -1 a 1 (ancho), ny de 0 a 1 (altura)
             const nx = v.x / (width * 0.5);
             const ny = (v.y + height * 0.5) / height;
 
-            // 1. Contorno orgánico de pétalo de rosa
             const contour = Math.pow(Math.sin(ny * Math.PI), 0.65) * (1.0 - 0.15 * Math.pow(ny, 2.5));
             v.x = nx * (width * 0.5) * Math.max(0.05, contour);
 
-            // 2. Concavidad transversal (ahuecamiento del pétalo)
             const cup = -cupFactor * (1.0 - Math.pow(nx, 2)) * Math.sin(ny * Math.PI * 0.85);
-
-            // 3. Arqueo longitudinal (inclinación progresiva hacia afuera)
             const arch = -curlFactor * Math.pow(ny, 1.8) * height * 0.4;
 
-            // 4. Reflexión hacia atrás en el borde superior
             let reflex = 0;
             if (ny > 0.6) {
                 const tipProgress = (ny - 0.6) / 0.4;
                 reflex = reflexFactor * Math.pow(tipProgress, 2.0) * height * 0.45;
             }
 
-            // 5. Ondulaciones orgánicas sutiles en los márgenes
             const ruffle = Math.sin(nx * 9.0 + ny * 6.0) * ruffleIntensity * Math.sin(ny * Math.PI) * 0.08;
-
             v.z = cup + arch + reflex + ruffle;
-
-            // Desplazar el punto de pivote hacia la base del pétalo
             v.y += height * 0.48;
 
             pos.setXYZ(i, v.x, v.y, v.z);
@@ -74,20 +67,32 @@
     }
 
     /**
-     * Crea materiales físicos avanzados con propiedades aterciopeladas
+     * Material: Physical en high/medium, Standard en low (mucho más barato)
      */
-    function createPetalMaterial(colorHex, opacity = 1.0) {
-        return new THREE.MeshPhysicalMaterial({
+    function createPetalMaterial(colorHex, opacity, usePhysical) {
+        if (usePhysical && THREE.MeshPhysicalMaterial) {
+            return new THREE.MeshPhysicalMaterial({
+                color: colorHex,
+                roughness: 0.28,
+                metalness: 0.02,
+                clearcoat: 0.35,
+                clearcoatRoughness: 0.15,
+                sheen: 1.1,
+                sheenColor: new THREE.Color(PETAL_COLORS.sheenHighlight),
+                sheenRoughness: 0.4,
+                transmission: 0.06,
+                thickness: 0.2,
+                side: THREE.DoubleSide,
+                transparent: opacity < 1.0,
+                opacity: opacity,
+                depthWrite: true
+            });
+        }
+        // Fallback rápido y estable
+        return new THREE.MeshStandardMaterial({
             color: colorHex,
-            roughness: 0.25,
-            metalness: 0.02,
-            clearcoat: 0.4,
-            clearcoatRoughness: 0.12,
-            sheen: 1.3,
-            sheenColor: new THREE.Color(PETAL_COLORS.sheenHighlight),
-            sheenRoughness: 0.35,
-            transmission: 0.1, // Translucidez orgánica estelar
-            thickness: 0.25,
+            roughness: 0.35,
+            metalness: 0.05,
             side: THREE.DoubleSide,
             transparent: opacity < 1.0,
             opacity: opacity,
@@ -95,41 +100,35 @@
         });
     }
 
-    /**
-     * Construye una flor de rosa completa con tallo, sépalos y pétalos en espiral áurea
-     */
-    function createRose(options = {}) {
-        const {
-            scale = 1.0,
-            colorVariant = 0,
-            includeStem = true,
-            petalCount = 34
-        } = options;
+    function createRose(options) {
+        options = options || {};
+        const scale = options.scale !== undefined ? options.scale : 1.0;
+        const includeStem = options.includeStem !== false;
+        const petalCount = options.petalCount || 28;
+        const usePhysical = options.usePhysical !== false;
+        const includeInnerLight = options.includeInnerLight !== false;
 
         const roseGroup = new THREE.Group();
 
-        // Variaciones sutiles de color
         const hueShift = (Math.random() - 0.5) * 0.03;
         const baseColorInner = new THREE.Color(PETAL_COLORS.innerDeep).offsetHSL(hueShift, 0.02, 0.02);
         const baseColorMid = new THREE.Color(PETAL_COLORS.midVelvet).offsetHSL(hueShift, 0.03, 0.03);
         const baseColorOuter = new THREE.Color(PETAL_COLORS.outerRuby).offsetHSL(hueShift, 0.04, 0.04);
 
-        const innerMat = createPetalMaterial(baseColorInner.getHex());
-        const midMat = createPetalMaterial(baseColorMid.getHex());
-        const outerMat = createPetalMaterial(baseColorOuter.getHex());
+        const innerMat = createPetalMaterial(baseColorInner.getHex(), 1, usePhysical);
+        const midMat = createPetalMaterial(baseColorMid.getHex(), 1, usePhysical);
+        const outerMat = createPetalMaterial(baseColorOuter.getHex(), 1, usePhysical);
 
-        // Proporción áurea de Fibonacci (~137.5 grados en radianes)
         const goldenAngle = 2.399963;
 
         for (let i = 0; i < petalCount; i++) {
-            const progress = i / (petalCount - 1);
+            const progress = i / Math.max(1, petalCount - 1);
             let pWidth, pHeight, curl, cup, reflex, ruffle, mat;
-            let radius, angle, tilt, roll;
+            let radius, tilt, roll;
 
-            angle = i * goldenAngle + (Math.random() - 0.5) * 0.15;
+            const angle = i * goldenAngle + (Math.random() - 0.5) * 0.12;
 
             if (progress < 0.26) {
-                // Capullo interno
                 const localP = progress / 0.26;
                 pWidth = 0.55 + localP * 0.35;
                 pHeight = 0.95 + localP * 0.35;
@@ -138,12 +137,10 @@
                 reflex = 0.05;
                 ruffle = 0.08;
                 mat = innerMat;
-
                 radius = 0.08 + localP * 0.18;
                 tilt = 0.15 + localP * 0.25;
                 roll = (Math.random() - 0.5) * 0.15;
             } else if (progress < 0.6) {
-                // Pétalos intermedios
                 const localP = (progress - 0.26) / 0.34;
                 pWidth = 0.9 + localP * 0.65;
                 pHeight = 1.3 + localP * 0.45;
@@ -152,46 +149,42 @@
                 reflex = 0.25 + localP * 0.45;
                 ruffle = 0.15 + localP * 0.1;
                 mat = midMat;
-
                 radius = 0.25 + localP * 0.4;
                 tilt = 0.4 + localP * 0.55;
                 roll = (Math.random() - 0.5) * 0.25;
             } else {
-                // Pétalos exteriores maduros
                 const localP = (progress - 0.6) / 0.4;
-                pWidth = 1.6 + localP * 0.55;
-                pHeight = 1.75 + localP * 0.3;
-                curl = 0.85 + localP * 0.4;
+                pWidth = 1.55 + localP * 0.5;
+                pHeight = 1.7 + localP * 0.28;
+                curl = 0.85 + localP * 0.38;
                 cup = 0.5 - localP * 0.2;
-                reflex = 0.75 + localP * 0.55;
-                ruffle = 0.28 + localP * 0.18;
+                reflex = 0.7 + localP * 0.5;
+                ruffle = 0.25 + localP * 0.15;
                 mat = outerMat;
-
-                radius = 0.65 + localP * 0.48;
-                tilt = 0.95 + localP * 0.35;
-                roll = (Math.random() - 0.5) * 0.35;
+                radius = 0.65 + localP * 0.45;
+                tilt = 0.95 + localP * 0.32;
+                roll = (Math.random() - 0.5) * 0.32;
             }
 
             const petalGeom = createPetalGeometry(pWidth, pHeight, curl, cup, reflex, ruffle);
             const petalMesh = new THREE.Mesh(petalGeom, mat);
 
-            // Posicionamiento concéntrico radial
-            const px = Math.cos(angle) * radius;
-            const pz = Math.sin(angle) * radius;
-            const py = (1.0 - progress) * 0.45;
-
-            petalMesh.position.set(px, py, pz);
+            petalMesh.position.set(
+                Math.cos(angle) * radius,
+                (1.0 - progress) * 0.45,
+                Math.sin(angle) * radius
+            );
             petalMesh.rotation.y = -angle + Math.PI * 0.5;
             petalMesh.rotation.x = tilt;
             petalMesh.rotation.z = roll;
 
-            const s = 1.0 + (Math.random() - 0.5) * 0.08;
+            const s = 1.0 + (Math.random() - 0.5) * 0.07;
             petalMesh.scale.set(s, s, s);
 
+            // Frustum culling por defecto está activo
             roseGroup.add(petalMesh);
         }
 
-        // Tallo y sépalos
         if (includeStem) {
             const calyxMat = new THREE.MeshStandardMaterial({
                 color: 0x224820,
@@ -199,7 +192,7 @@
                 metalness: 0.05
             });
 
-            const receptacleGeom = new THREE.SphereGeometry(0.38, 16, 12);
+            const receptacleGeom = new THREE.SphereGeometry(0.38, qualitySeg(12, 8), qualitySeg(10, 6));
             receptacleGeom.scale(1.0, 1.25, 1.0);
             const receptacleMesh = new THREE.Mesh(receptacleGeom, calyxMat);
             receptacleMesh.position.y = -0.3;
@@ -210,7 +203,6 @@
                 const sepalGeom = new THREE.ConeGeometry(0.16, 1.2, 4);
                 sepalGeom.scale(1.0, 1.0, 0.25);
                 const sepalMesh = new THREE.Mesh(sepalGeom, calyxMat);
-
                 sepalMesh.position.set(
                     Math.cos(sAngle) * 0.35,
                     -0.2,
@@ -228,24 +220,19 @@
                 new THREE.Vector3(-0.08, -3.0, 0.06),
                 new THREE.Vector3(0.02, -4.5, -0.02)
             ]);
-            const stemGeom = new THREE.TubeGeometry(stemCurve, 30, 0.09, 10, false);
+            const tubeSeg = qualitySeg(24, 12);
+            const stemGeom = new THREE.TubeGeometry(stemCurve, tubeSeg, 0.09, qualitySeg(8, 5), false);
             const stemMesh = new THREE.Mesh(stemGeom, calyxMat);
             roseGroup.add(stemMesh);
 
-            const thornGeom = new THREE.ConeGeometry(0.07, 0.26, 6);
+            const thornGeom = new THREE.ConeGeometry(0.07, 0.26, 5);
             thornGeom.scale(0.5, 1.0, 1.0);
-            const thornMat = new THREE.MeshStandardMaterial({
-                color: 0x5a2020,
-                roughness: 0.45
-            });
-
-            const thornPositions = [
+            const thornMat = new THREE.MeshStandardMaterial({ color: 0x5a2020, roughness: 0.45 });
+            [
                 { y: -1.2, angle: 0.8 },
                 { y: -2.1, angle: 3.2 },
                 { y: -3.4, angle: 1.9 }
-            ];
-
-            thornPositions.forEach(tp => {
+            ].forEach(function (tp) {
                 const thorn = new THREE.Mesh(thornGeom, thornMat);
                 thorn.position.set(
                     Math.cos(tp.angle) * 0.12,
@@ -258,74 +245,74 @@
             });
         }
 
-        // Luz interior cálida de la rosa (ilumina los pétalos desde adentro hacia afuera)
-        const innerGlow = new THREE.PointLight(0xff3355, 1.2, 10, 1.8);
-        innerGlow.position.set(0, 0.5, 0);
-        roseGroup.add(innerGlow);
+        if (includeInnerLight) {
+            const innerGlow = new THREE.PointLight(0xff3355, 0.9, 8, 2.0);
+            innerGlow.position.set(0, 0.5, 0);
+            roseGroup.add(innerGlow);
+        }
 
         roseGroup.scale.set(scale, scale, scale);
 
         roseGroup.userData = {
             basePosition: new THREE.Vector3(),
             driftVelocity: new THREE.Vector3(
-                (Math.random() - 0.5) * 0.012,
-                (Math.random() - 0.5) * 0.008,
-                (Math.random() - 0.5) * 0.012
+                (Math.random() - 0.5) * 0.01,
+                (Math.random() - 0.5) * 0.007,
+                (Math.random() - 0.5) * 0.01
             ),
             rotationVelocity: new THREE.Vector3(
-                (Math.random() - 0.5) * 0.005 + 0.002,
-                (Math.random() - 0.5) * 0.008 + 0.004,
-                (Math.random() - 0.5) * 0.004
+                (Math.random() - 0.5) * 0.004 + 0.0015,
+                (Math.random() - 0.5) * 0.007 + 0.003,
+                (Math.random() - 0.5) * 0.0035
             ),
             bobbingPhase: Math.random() * Math.PI * 2,
-            bobbingAmplitude: 1.0 + Math.random() * 1.5,
-            bobbingSpeed: 0.5 + Math.random() * 0.6,
+            bobbingAmplitude: 0.9 + Math.random() * 1.3,
+            bobbingSpeed: 0.45 + Math.random() * 0.55,
             isRose: true
         };
 
         return roseGroup;
     }
 
-    /**
-     * Genera pétalos sueltos que flotan independientemente en el espacio
-     */
-    function createLoosePetal(scale = 1.0) {
-        const pWidth = (1.4 + Math.random() * 0.8) * scale;
-        const pHeight = (1.6 + Math.random() * 0.9) * scale;
-        const curl = 0.4 + Math.random() * 0.6;
-        const cup = 0.35 + Math.random() * 0.3;
-        const reflex = 0.4 + Math.random() * 0.5;
-        const ruffle = 0.2 + Math.random() * 0.2;
+    function qualitySeg(high, low) {
+        const level = (window.__APP_QUALITY__ && window.__APP_QUALITY__.level) || 2;
+        return level === 0 ? low : high;
+    }
+
+    function createLoosePetal(scale, usePhysical) {
+        scale = scale !== undefined ? scale : 1.0;
+        usePhysical = usePhysical !== false;
+
+        const pWidth = (1.35 + Math.random() * 0.75) * scale;
+        const pHeight = (1.55 + Math.random() * 0.85) * scale;
+        const curl = 0.4 + Math.random() * 0.55;
+        const cup = 0.35 + Math.random() * 0.28;
+        const reflex = 0.4 + Math.random() * 0.45;
+        const ruffle = 0.2 + Math.random() * 0.18;
 
         const geom = createPetalGeometry(pWidth, pHeight, curl, cup, reflex, ruffle);
-        
         const colors = [PETAL_COLORS.midVelvet, PETAL_COLORS.outerRuby, PETAL_COLORS.innerDeep];
         const chosenColor = colors[Math.floor(Math.random() * colors.length)];
-        const mat = createPetalMaterial(chosenColor, 0.95);
+        const mat = createPetalMaterial(chosenColor, 0.95, usePhysical);
 
         const mesh = new THREE.Mesh(geom, mat);
-        
+
         mesh.userData = {
-            driftSpeed: new THREE.Vector3(
-                (Math.random() - 0.5) * 0.02,
-                (Math.random() - 0.5) * 0.015,
-                (Math.random() - 0.5) * 0.02
-            ),
             rotSpeed: new THREE.Vector3(
-                (Math.random() - 0.5) * 0.018,
-                (Math.random() - 0.5) * 0.022,
-                (Math.random() - 0.5) * 0.015
+                (Math.random() - 0.5) * 0.016,
+                (Math.random() - 0.5) * 0.02,
+                (Math.random() - 0.5) * 0.014
             ),
             tumblePhase: Math.random() * Math.PI * 2,
-            tumbleFreq: 0.5 + Math.random() * 0.5
+            tumbleFreq: 0.45 + Math.random() * 0.5
         };
 
         return mesh;
     }
 
     return {
-        createRose,
-        createLoosePetal,
-        PETAL_COLORS
+        createRose: createRose,
+        createLoosePetal: createLoosePetal,
+        PETAL_COLORS: PETAL_COLORS
     };
 }));
