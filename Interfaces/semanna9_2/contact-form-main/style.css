@@ -1,0 +1,770 @@
+/* ==========================================================================
+   ULTRON HUD CORE - STYLESHEET
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;600;700&display=swap');
+
+:root {
+  /* Ultron Palette */
+  --bg-deep: #08080a;
+  --panel-bg: rgba(18, 18, 24, 0.85);
+  --panel-border: rgba(255, 0, 0, 0.35);
+  --ultron-red: #ff003c;
+  --ultron-glow: #ff0000;
+  --ultron-bright: #ff3344;
+  --text-main: #e2e8f0;
+  --text-dim: #8a99ad;
+  --font-head: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --tech-corner: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  --tech-corner-sm: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-deep);
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.12), transparent 60%),
+    linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+/* ==========================================================================
+   FORM CONTAINER
+   ========================================================================== */
+
+form, .form-container {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  clip-path: var(--tech-corner);
+  width: 100%;
+  max-width: 680px;
+  padding: 2.5rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.15), inset 0 0 15px rgba(255, 0, 0, 0.05);
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+form::before {
+  content: 'SYSTEM // ULTRON.V2';
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-family: var(--font-head);
+  font-size: 0.65rem;
+  color: var(--ultron-red);
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+h1 {
+  font-family: var(--font-head);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 0 10px var(--ultron-glow);
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--ultron-red);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   FIELDS & INPUTS
+   ========================================================================== */
+
+.field-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-family: var(--font-head);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-main);
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  background: rgba(8, 8, 10, 0.8);
+  border: 1px solid var(--panel-border);
+  clip-path: var(--tech-corner-sm);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  padding: 0.8rem 1rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: var(--ultron-bright);
+  box-shadow: 0 0 12px rgba(255, 0, 60, 0.4);
+  background: rgba(20, 5, 10, 0.9);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Radio Buttons */
+.query-type-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.3rem;
+}
+
+.radio-option {
+  background: rgba(8, 8, 10, 0.6);
+  border: 1px solid var(--panel-border);
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  clip-path: var(--tech-corner-sm);
+  transition: all 0.25s ease;
+}
+
+.radio-option:hover {
+  border-color: var(--ultron-red);
+  background: rgba(255, 0, 60, 0.08);
+}
+
+/* Submit Button */
+button[type="submit"], input[type="submit"] {
+  width: 100%;
+  background: var(--ultron-red);
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 1rem;
+  border: none;
+  clip-path: var(--tech-corner-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
+  margin-top: 1rem;
+}
+
+button[type="submit"]:hover, input[type="submit"]:hover {
+  background: var(--ultron-bright);
+  box-shadow: 0 0 25px rgba(255, 0, 60, 0.8);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   FEEDBACK & MESSAGES
+   ========================================================================== */
+
+/* Validation Errors */
+.error-message, .error {
+  color: var(--ultron-bright);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+/* Success Toast / Alert */
+.success-message, .alert-success {
+  background: rgba(20, 0, 5, 0.95);
+  border: 1px solid var(--ultron-bright);
+  clip-path: var(--tech-corner-sm);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;/* ==========================================================================
+ULTRON CYBERNETIC HUD INTERFACE - STYLESHEET WITH ANIMATIONS
+========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap');
+
+:root {
+/* Color Palette */
+--bg-dark: #050508;
+--bg-card: rgba(14, 14, 20, 0.88);
+--red-core: #ff003c;
+--red-glow: #ff001e;
+--red-bright: #ff3355;
+--red-dim: rgba(255, 0, 60, 0.15);
+--red-border: rgba(255, 0, 60, 0.4);
+--text-primary: #f0f4f8;
+--text-muted: #8392a5;
+--text-dark: #0a0a0e;
+
+/* Fonts */
+--font-hud: 'Orbitron', sans-serif;
+--font-body: 'Rajdhani', sans-serif;
+
+/* Shapes */
+--clip-corner: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+--clip-corner-sm: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+body {
+background-color: var(--bg-dark);
+background-image:
+radial-gradient(circle at 50% 20%, rgba(255, 0, 60, 0.18), transparent 70%),
+linear-gradient(rgba(255, 0, 0, 0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255, 0, 0, 0.04) 1px, transparent 1px);
+background-size: 100% 100%, 40px 40px, 40px 40px;
+color: var(--text-primary);
+font-family: var(--font-body);
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 2.5rem 1rem;
+position: relative;
+overflow-x: hidden;
+}
+
+/* ==========================================================================
+EFFECTS & HUD OVERLAYS
+========================================================================== */
+
+/* Animated Scanline */
+.scanline {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 4px;
+background: rgba(255, 0, 60, 0.4);
+box-shadow: 0 0 15px var(--red-glow);
+opacity: 0.6;
+animation: scanline 8s linear infinite;
+pointer-events: none;
+z-index: 100;
+}
+
+@keyframes scanline {
+0% { transform: translateY(-100%); }
+100% { transform: translateY(100vh); }
+}
+
+/* Ambient Pulse Background Overlay */
+.hud-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(circle at 50% 50%, rgba(255, 0, 60, 0.03), transparent 80%);
+pointer-events: none;
+animation: pulse-bg 4s ease-in-out infinite alternate;
+z-index: 0;
+}
+
+@keyframes pulse-bg {
+0% { opacity: 0.3; }
+100% { opacity: 0.8; }
+}
+
+/* ==========================================================================
+CONTAINER & HEADER
+========================================================================== */
+
+.hud-container {
+position: relative;
+z-index: 10;
+width: 100%;
+max-width: 720px;
+background: var(--bg-card);
+border: 1px solid var(--red-border);
+clip-path: var(--clip-corner);
+padding: 3rem 2.5rem;
+backdrop-filter: blur(16px);
+box-shadow: 0 0 35px rgba(255, 0, 60, 0.2), inset 0 0 20px rgba(255, 0, 60, 0.08);
+animation: hud-appear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes hud-appear {
+0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header Elements */
+.hud-header {
+margin-bottom: 2.5rem;
+border-bottom: 1px solid var(--red-border);
+padding-bottom: 1.2rem;
+position: relative;
+}
+
+.status-indicator {
+display: flex;
+align-items: center;
+gap: 0.6rem;
+margin-bottom: 0.8rem;
+}
+
+.pulse-node {
+width: 8px;
+height: 8px;
+background-color: var(--red-core);
+border-radius: 50%;
+box-shadow: 0 0 10px var(--red-bright);
+animation: node-blink 1.2s infinite alternate;
+}
+
+@keyframes node-blink {
+0% { opacity: 0.3; transform: scale(0.8); }
+100% { opacity: 1; transform: scale(1.3); }
+}
+
+.status-text {
+font-family: var(--font-hud);
+font-size: 0.7rem;
+letter-spacing: 2px;
+color: var(--red-bright);
+font-weight: 600;
+}
+
+/* Glitch Effect Title */
+.glitch-title {
+font-family: var(--font-hud);
+font-size: 2rem;
+font-weight: 900;
+letter-spacing: 3px;
+color: #fff;
+text-shadow: 0 0 12px var(--red-glow);
+position: relative;
+}
+
+.subtitle {
+font-family: var(--font-hud);
+font-size: 0.75rem;
+color: var(--text-muted);
+letter-spacing: 1.5px;
+margin-top: 0.4rem;
+}
+
+/* Grid Layout */
+.grid-2col {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+.grid-2col {
+grid-template-columns: 1fr;
+}
+}
+
+/* ==========================================================================
+FORM CONTROLS & INPUTS
+========================================================================== */
+
+.field-group {
+margin-bottom: 1.8rem;
+display: flex;
+flex-direction: column;
+position: relative;
+}
+
+label {
+font-family: var(--font-hud);
+font-size: 0.75rem;
+letter-spacing: 1.5px;
+color: var(--text-primary);
+margin-bottom: 0.5rem;
+font-weight: 600;
+}
+
+.input-wrapper {
+position: relative;
+width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+width: 100%;
+background: rgba(5, 5, 8, 0.85);
+border: 1px solid var(--red-border);
+clip-path: var(--clip-corner-sm);
+color: #fff;
+font-family: var(--font-body);
+font-size: 1.15rem;
+padding: 0.85rem 1.2rem;
+outline: none;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+border-color: var(--red-bright);
+background: rgba(20, 0, 8, 0.95);
+box-shadow: 0 0 15px rgba(255, 0, 60, 0.35);
+}
+
+/* Animated Corner Accent */
+.corner-border {
+position: absolute;
+bottom: 0;
+right: 0;
+width: 8px;
+height: 8px;
+border-right: 2px solid var(--red-bright);
+border-bottom: 2px solid var(--red-bright);
+pointer-events: none;
+transition: all 0.3s ease;
+}
+
+input:focus ~ .corner-border,
+textarea:focus ~ .corner-border {
+width: 15px;
+height: 15px;
+box-shadow: 0 0 8px var(--red-bright);
+}
+
+/* ==========================================================================
+RADIO & CHECKBOX INTERACTIVE CARDS
+========================================================================== */
+
+.query-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+
+@media (max-width: 500px) {
+.query-grid {
+grid-template-columns: 1fr;
+}
+}
+
+.radio-card {
+background: rgba(5, 5, 8, 0.7);
+border: 1px solid var(--red-border);
+clip-path: var(--clip-corner-sm);
+padding: 0.9rem 1.2rem;
+display: flex;
+align-items: center;
+gap: 0.8rem;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.radio-card:hover {
+background: var(--red-dim);
+border-color: var(--red-bright);
+box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+}
+
+.radio-card input {
+display: none;
+}
+
+.radio-custom {
+width: 16px;
+height: 16px;
+border: 2px solid var(--red-bright);
+transform: rotate(45deg);
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.2s ease;
+}
+
+.radio-card input:checked + .radio-custom {
+background: var(--red-bright);
+box-shadow: 0 0 10px var(--red-bright);
+}
+
+.radio-label {
+font-size: 1.05rem;
+font-weight: 600;
+}
+
+/* Checkbox */
+.checkbox-group {
+margin-top: 0.5rem;
+}
+
+.checkbox-container {
+display: flex;
+align-items: center;
+gap: 1rem;
+cursor: pointer;
+}
+
+.checkbox-container input {
+display: none;
+}
+
+.checkbox-custom {
+width: 18px;
+height: 18px;
+border: 2px solid var(--red-bright);
+clip-path: var(--clip-corner-sm);
+background: rgba(5, 5, 8, 0.7);
+transition: all 0.25s ease;
+flex-shrink: 0;
+}
+
+.checkbox-container input:checked + .checkbox-custom {
+background: var(--red-bright);
+box-shadow: 0 0 12px var(--red-glow);
+}
+
+.checkbox-text {
+font-size: 1rem;
+color: var(--text-primary);
+}
+
+/* ==========================================================================
+BUTTON & ANIMATIONS
+========================================================================== */
+
+.submit-btn {
+width: 100%;
+position: relative;
+background: var(--red-core);
+border: none;
+clip-path: var(--clip-corner-sm);
+padding: 1.1rem;
+color: #fff;
+font-family: var(--font-hud);
+font-weight: 800;
+font-size: 1rem;
+letter-spacing: 2px;
+cursor: pointer;
+overflow: hidden;
+transition: all 0.3s ease;
+box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+margin-top: 1rem;
+}
+
+.submit-btn:hover {
+background: var(--red-bright);
+box-shadow: 0 0 35px rgba(255, 0, 60, 0.8);
+transform: translateY(-2px);
+}
+
+.submit-btn:active {
+transform: translateY(1px);
+}
+
+/* Glare animation on button hover */
+.btn-glare {
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+transition: left 0.6s ease;
+}
+
+.submit-btn:hover .btn-glare {
+left: 100%;
+}
+
+/* ==========================================================================
+VALIDATION & SUCCESS STATES
+========================================================================== */
+
+.error-msg {
+font-family: var(--font-hud);
+font-size: 0.68rem;
+color: var(--red-bright);
+letter-spacing: 1px;
+margin-top: 0.4rem;
+display: none;
+animation: shake 0.3s ease-in-out;
+}
+
+.field-group.has-error .error-msg {
+display: block;
+}
+
+.field-group.has-error input,
+.field-group.has-error textarea {
+border-color: #ff0000;
+background: rgba(40, 0, 10, 0.85);
+box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+}
+
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-4px); }
+75% { transform: translateX(4px); }
+}
+
+/* Success Card */
+.success-card {
+background: rgba(20, 0, 8, 0.95);
+border: 1px solid var(--red-bright);
+clip-path: var(--clip-corner-sm);
+padding: 1.2rem 1.5rem;
+margin-bottom: 2rem;
+display: flex;
+align-items: center;
+gap: 1.2rem;
+box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+animation: slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.success-card.hidden {
+display: none;
+}
+
+.success-icon svg {
+width: 32px;
+height: 32px;
+stroke: var(--red-bright);
+}
+
+.success-content h2 {
+font-family: var(--font-hud);
+font-size: 1rem;
+color: #fff;
+letter-spacing: 1.5px;
+}
+
+.success-content p {
+font-size: 0.95rem;
+color: var(--text-muted);
+}
+
+@keyframes slide-down {
+from { opacity: 0; transform: translateY(-15px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+FOOTER
+========================================================================== */
+
+.attribution {
+margin-top: 2.5rem;
+text-align: center;
+font-family: var(--font-hud);
+font-size: 0.7rem;
+letter-spacing: 1px;
+color: var(--text-muted);
+}
+
+.attribution a {
+color: var(--red-bright);
+text-decoration: none;
+transition: all 0.2s ease;
+}
+
+.attribution a:hover {
+text-shadow: 0 0 8px var(--red-glow);
+color: #fff;
+box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+.success-message h2 {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  color: var(--ultron-bright);
+  margin-bottom: 0.3rem;
+}
+
+/* Footer Attribution */
+.attribution {
+  font-family: var(--font-head);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+.attribution a {
+  color: var(--ultron-bright);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.attribution a:hover {
+  text-shadow: 0 0 8px var(--ultron-glow);
+}}
+/* ==========================================================================
+   PERFIL Y AVATAR HUD
+   ========================================================================== */
+
+.user-profile-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+  background: rgba(255, 0, 60, 0.05);
+  border: 1px solid rgba(255, 0, 60, 0.25);
+  padding: 0.6rem 1rem;
+  clip-path: var(--tech-corner-sm);
+}
+
+.avatar-frame {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border: 2px solid var(--ultron-bright);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(255, 0, 60, 0.5);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.user-id {
+  font-family: var(--font-head);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.user-id .highlight {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 0 6px var(--ultron-glow);
+}

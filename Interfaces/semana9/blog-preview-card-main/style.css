@@ -1,0 +1,182 @@
+/* ==========================================================================
+   1. VARIABLES & RESET
+   ========================================================================== */
+:root {
+  /* Paleta de Colores (Frontend Mentor) */
+  --clr-primary: hsl(47, 88%, 63%);      /* Amarillo */
+  --clr-neutral-100: hsl(0, 0%, 100%);  /* Blanco */
+  --clr-neutral-500: hsl(0, 0%, 50%);   /* Gris medio */
+  --clr-neutral-900: hsl(0, 0%, 7%);    /* Negro oscuro */
+
+  /* Tipografía */
+  --ff-base: 'Figtree', sans-serif;
+  --fw-extrabold: 800;
+  --fw-medium: 500;
+
+  /* Espaciados y Radios */
+  --radius-card: 20px;
+  --radius-sm: 10px;
+  --radius-badge: 4px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   2. ESTILOS GENERALES Y LAYOUT
+   ========================================================================== */
+body {
+  font-family: var(--ff-base);
+  font-size: 1rem;
+  background-color: var(--clr-primary);
+  color: var(--clr-neutral-900);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+/* ==========================================================================
+   3. TARJETA (CARD)
+   ========================================================================== */
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.card {
+  background-color: var(--clr-neutral-100);
+  border: 1px solid var(--clr-neutral-900);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  max-width: 384px;
+  width: 100%;
+  
+  /* Sombra rígida tipo Neobrutalismo */
+  box-shadow: 8px 8px 0px var(--clr-neutral-900);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Efecto hover suave en toda la tarjeta */
+.card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0px var(--clr-neutral-900);
+}
+
+/* Imagen Principal */
+.card__banner {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   4. CONTENIDO INTERNO
+   ========================================================================== */
+.card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Etiqueta (Badge) */
+.card__badge {
+  align-self: flex-start;
+  background-color: var(--clr-primary);
+  color: var(--clr-neutral-900);
+  font-weight: var(--fw-extrabold);
+  font-size: 0.875rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-badge);
+}
+
+/* Fecha */
+.card__date {
+  font-size: 0.875rem;
+  color: var(--clr-neutral-900);
+  font-weight: var(--fw-medium);
+}
+
+/* Título */
+.card__title {
+  font-size: 1.5rem;
+  font-weight: var(--fw-extrabold);
+  line-height: 1.3;
+}
+
+.card__title a {
+  color: var(--clr-neutral-900);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.card__title a:hover,
+.card__title a:focus {
+  color: var(--clr-primary);
+}
+
+/* Descripción */
+.card__description {
+  font-size: 1rem;
+  color: var(--clr-neutral-500);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   5. AUTOR
+   ========================================================================== */
+.card__author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.card__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.card__author-name {
+  font-size: 0.875rem;
+  font-weight: var(--fw-extrabold);
+}
+
+/* ==========================================================================
+   6. ATTRIBUTION
+   ========================================================================== */
+.attribution {
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--clr-neutral-900);
+}
+
+.attribution a {
+  color: var(--clr-neutral-900);
+  font-weight: var(--fw-extrabold);
+  text-decoration: underline;
+}
+
+.attribution a:hover {
+  color: var(--clr-neutral-100);
+}

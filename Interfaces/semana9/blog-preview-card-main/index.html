@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <!-- Tipografía oficial Google Font: Figtree -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <title>Frontend Mentor | Blog preview card</title>
+</head>
+<body>
+
+  <main class="card-container">
+    <article class="card">
+      
+      <!-- Imagen principal del post -->
+      <div class="card__banner">
+        <img src="./assets/images/illustration-article.svg" alt="Ilustración sobre fundamentos de HTML y CSS" class="card__image">
+      </div>
+
+      <!-- Contenido de la tarjeta -->
+      <div class="card__content">
+        <span class="card__badge">Learning</span>
+        <time datetime="2023-12-21" class="card__date">Published 21 Dec 2023</time>
+        
+        <h1 class="card__title">
+          <a href="#">HTML &amp; CSS foundations</a>
+        </h1>
+
+        <p class="card__description">
+          These languages are the backbone of every website, defining structure, content, and presentation.
+        </p>
+      </div>
+
+      <!-- Información del Autor -->
+      <footer class="card__author">
+        <img src="./assets/images/image-avatar.webp" alt="Avatar de Greg Hooper" class="card__avatar">
+        <span class="card__author-name">Greg Hooper</span>
+      </footer>
+
+    </article>
+  </main>
+
+  <!-- Pie de página informativo -->
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank" rel="noopener">Frontend Mentor</a>. 
+    Coded by <a href="#">Aharon Lovón</a>.
+  </footer>
+
+</body>
+</html>

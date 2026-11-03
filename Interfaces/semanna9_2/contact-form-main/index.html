@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Interfaz Ultron | Formulario de Contacto</title>
+  
+  <!-- Fuentes Futuristas / Cyberpunk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Capa de líneas de escaneo cibernéticas -->
+  <div class="scanlines"></div>
+
+  <!-- Contenedor Principal del Panel Ultron -->
+  <main class="hud-wrapper">
+    <div class="hud-card">
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+
+      <!-- Cabecera con estado de sistema y Avatar -->
+      <header class="hud-header">
+        <div class="user-profile-bar">
+          <div class="avatar-frame">
+            <!-- Coloca aquí la imagen del avatar -->
+            <img src="./assets/images/oneworks-avatar-cat-256.png" alt="Avatar Usuario Ultron" class="avatar-img">
+            <span class="avatar-glow"></span>
+          </div>
+          <div class="profile-info">
+            <div class="hud-status">
+              <span class="status-node"></span>
+              <span class="status-text">SISTEMA CIBERNÉTICO ULTRON v8.0 // ACTIVO</span>
+            </div>
+            <p class="user-id">OPERADOR: <span class="highlight">Aharon Lovón</span></p>
+          </div>
+        </div>
+
+        <h1>TRANSMISIÓN DE CONTACTO</h1>
+        <p class="hud-subtitle">Inicie el protocolo de comunicación para enlace directo con la red.</p>
+      </header>
+
+      <!-- Alerta de Confirmación de Envío -->
+      <div id="success-alert" class="hud-alert hidden" role="alert">
+        <div class="alert-icon-wrapper">
+          <svg class="alert-svg" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="alert-content">
+          <h3>¡TRANSMISIÓN COMPLETADA!</h3>
+          <p>Los datos han sido cifrados e ingresados en el núcleo. Nos pondremos en contacto a la brevedad.</p>
+        </div>
+      </div>
+
+      <!-- Formulario de Contacto -->
+      <form id="contact-form" class="hud-form" novalidate>
+        
+        <!-- Fila Nombre y Apellido -->
+        <div class="form-row">
+          <div class="field-group" id="group-first-name">
+            <label for="first-name">Nombre <span class="required-mark">*</span></label>
+            <div class="input-wrapper">
+              <input type="text" id="first-name" name="first-name" placeholder="Ej. Aharon" required autocomplete="off">
+              <span class="glow-border"></span>
+            </div>
+            <span class="error-text" id="error-first-name">Este campo es obligatorio</span>
+          </div>
+
+          <div class="field-group" id="group-last-name">
+            <label for="last-name">Apellido <span class="required-mark">*</span></label>
+            <div class="input-wrapper">
+              <input type="text" id="last-name" name="last-name" placeholder="Ej. Lovón" required autocomplete="off">
+              <span class="glow-border"></span>
+            </div>
+            <span class="error-text" id="error-last-name">Este campo es obligatorio</span>
+          </div>
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="field-group" id="group-email">
+          <label for="email">Dirección de Correo <span class="required-mark">*</span></label>
+          <div class="input-wrapper">
+            <input type="email" id="email" name="email" placeholder="usuario@red-ultron.com" required autocomplete="off">
+            <span class="glow-border"></span>
+          </div>
+          <span class="error-text" id="error-email">Ingrese una dirección de correo válida</span>
+        </div>
+
+        <!-- Tipo de Consulta -->
+        <div class="field-group" id="group-query">
+          <label>Tipo de Consulta <span class="required-mark">*</span></label>
+          <div class="query-options">
+            <label class="radio-card" for="query-general">
+              <input type="radio" id="query-general" name="query-type" value="general">
+              <span class="radio-custom"></span>
+              <span class="radio-label">Consulta General</span>
+            </label>
+
+            <label class="radio-card" for="query-support">
+              <input type="radio" id="query-support" name="query-type" value="support">
+              <span class="radio-custom"></span>
+              <span class="radio-label">Solicitud de Soporte</span>
+            </label>
+          </div>
+          <span class="error-text" id="error-query">Por favor, seleccione un tipo de consulta</span>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="field-group" id="group-message">
+          <label for="message">Mensaje <span class="required-mark">*</span></label>
+          <div class="input-wrapper">
+            <textarea id="message" name="message" rows="4" placeholder="Ingrese los detalles del paquete de datos..." required></textarea>
+            <span class="glow-border"></span>
+          </div>
+          <span class="error-text" id="error-message">Este campo es obligatorio</span>
+        </div>
+
+        <!-- Consentimiento -->
+        <div class="field-group checkbox-group" id="group-consent">
+          <label class="checkbox-container" for="consent">
+            <input type="checkbox" id="consent" name="consent" required>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Consiento ser contactado por el equipo de inteligencia de Ultron</span>
+          </label>
+          <span class="error-text" id="error-consent">Debe autorizar el contacto para enviar el formulario</span>
+        </div>
+
+        <!-- Botón Enviar -->
+        <button type="submit" class="hud-button" id="btn-submit">
+          <span class="btn-text">INICIAR TRANSMISIÓN</span>
+          <span class="btn-glitch"></span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Pie de página de atribución -->
+    <footer class="attribution">
+      Desafío por <a href="https://www.frontendmentor.io?ref=challenge" target="_blank" rel="noopener">Frontend Mentor</a>. 
+      Desarrollado con temática Ultron.
+    </footer>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('contact-form');
+      const successAlert = document.getElementById('success-alert');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let isValid = true;
+
+        document.querySelectorAll('.field-group').forEach(group => group.classList.remove('has-error'));
+
+        const firstName = document.getElementById('first-name');
+        if (!firstName.value.trim()) { showError('group-first-name'); isValid = false; }
+
+        const lastName = document.getElementById('last-name');
+        if (!lastName.value.trim()) { showError('group-last-name'); isValid = false; }
+
+        const email = document.getElementById('email');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.value.trim() || !emailRegex.test(email.value.trim())) { showError('group-email'); isValid = false; }
+
+        const queryType = document.querySelector('input[name="query-type"]:checked');
+        if (!queryType) { showError('group-query'); isValid = false; }
+
+        const message = document.getElementById('message');
+        if (!message.value.trim()) { showError('group-message'); isValid = false; }
+
+        const consent = document.getElementById('consent');
+        if (!consent.checked) { showError('group-consent'); isValid = false; }
+
+        if (isValid) {
+          successAlert.classList.remove('hidden');
+          form.reset();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      function showError(groupId) {
+        const group = document.getElementById(groupId);
+        if (group) { group.classList.add('has-error'); }
+      }
+    });
+  </script>
+</body>
+</html>
