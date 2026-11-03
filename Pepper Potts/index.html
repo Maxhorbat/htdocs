@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UNIVERSO DE AMOR</title>
+    <meta name="description" content="Un universo hecho de amor por ti. Galaxia carmesí, rosas a la deriva y una carta de amor eterna.">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+</head>
+<body>
+    <!-- Pantalla de Carga -->
+    <div id="loading-screen">
+        <div class="galaxy-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-core"></div>
+        </div>
+        <div class="loading-text">Despertando tu Universo de Amor...</div>
+    </div>
+
+    <!-- Canvas 3D -->
+    <div id="canvas-container"></div>
+
+    <!-- Reproductor YouTube oculto (solo audio) -->
+    <div id="yt-player-wrap" aria-hidden="true">
+        <div id="yt-player"></div>
+    </div>
+
+    <!-- Interfaz -->
+    <div id="ui-container">
+        <header class="header-banner">
+            <div class="title-group">
+                <h1>UNIVERSO DE AMOR</h1>
+                <p>Hecho solo para ti</p>
+            </div>
+
+            <div id="info-overlay" class="poetic-card">
+                <div class="card-header">
+                    <h2>Carta de Amor</h2>
+                    <button id="btn-toggle-info" class="btn-icon-sm" title="Minimizar / Expandir">✕</button>
+                </div>
+                <div class="card-content">
+                    <p class="poetic-quote">
+                        En todos los universos hay esta galaxia que está toda hecha de mi amor por ti, mi niña hermosa. Eres todo lo que amo y quiero.
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <nav class="bottom-controls-bar">
+            <button id="btn-audio" class="control-btn" title="Activar / Pausar música">
+                <div class="audio-wave">
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                </div>
+                <span class="btn-label">Música</span>
+            </button>
+
+            <button id="btn-reset" class="control-btn" title="Centrar en la galaxia">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+                <span>Vista Galaxia</span>
+            </button>
+
+            <button id="btn-fullscreen" class="control-btn" title="Pantalla completa">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                </svg>
+                <span>Expandir</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="roseGenerator.js"></script>
+    <script src="galaxy.js"></script>
+    <script src="soundscape.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

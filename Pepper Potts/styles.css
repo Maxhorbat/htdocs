@@ -1,0 +1,434 @@
+/* ==========================================================================
+   Estilos: Rosas Rojas a la Deriva en la Galaxia Carmesí
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+    --color-bg: #050103;
+    --color-crimson: #e60026;
+    --color-ruby: #ff2a55;
+    --color-accent-glow: rgba(255, 42, 85, 0.4);
+    --glass-bg: rgba(18, 5, 10, 0.55);
+    --glass-border: rgba(255, 60, 95, 0.22);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 230, 235, 0.78);
+    --font-serif: 'Cinzel', Georgia, serif;
+    --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--color-bg);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   Pantalla de Carga
+   ========================================================================== */
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #26020c 0%, #080003 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.galaxy-spinner {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    margin-bottom: 28px;
+}
+
+.spinner-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--color-ruby);
+    animation: spinSpiral 2s linear infinite;
+    box-shadow: 0 0 20px var(--color-accent-glow);
+}
+
+.spinner-ring:nth-child(2) {
+    width: 65%;
+    height: 65%;
+    top: 17.5%;
+    left: 17.5%;
+    border-top-color: #ff859d;
+    animation: spinSpiral 1.3s linear infinite reverse;
+}
+
+.spinner-core {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: calc(50% - 7px);
+    left: calc(50% - 7px);
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 16px #ff4d6d, 0 0 30px #e60026;
+    animation: pulseCore 1.6s ease-in-out infinite alternate;
+}
+
+.loading-text {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+@keyframes spinSpiral {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseCore {
+    0% { transform: scale(0.85); opacity: 0.7; }
+    100% { transform: scale(1.3); opacity: 1; }
+}
+
+/* ==========================================================================
+   Encabezado y Tarjeta Poética
+   ========================================================================== */
+
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px 40px;
+}
+
+.header-banner {
+    pointer-events: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.title-group h1 {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 20%, #ff94a8 65%, #ff2a55 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 35px rgba(255, 42, 85, 0.45);
+}
+
+.title-group p {
+    font-size: 0.88rem;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: 6px;
+}
+
+.poetic-card {
+    pointer-events: auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    max-width: 380px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 42, 85, 0.1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.poetic-card.minimized {
+    max-width: 50px;
+    padding: 10px;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.poetic-card.minimized .card-content {
+    display: none;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    color: #ff6e8a;
+    font-weight: 600;
+}
+
+.btn-icon-sm {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.2s;
+}
+
+.btn-icon-sm:hover {
+    color: #ffffff;
+}
+
+.poetic-quote {
+    font-family: 'Cinzel', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.92);
+    border-left: 2px solid var(--color-ruby);
+    padding-left: 12px;
+    margin-bottom: 12px;
+}
+
+.interaction-hint {
+    font-size: 0.78rem;
+    color: rgba(255, 215, 225, 0.65);
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   Barra de Controles Flotante
+   ========================================================================== */
+
+.bottom-controls-bar {
+    pointer-events: auto;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 40px;
+    padding: 8px 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 42, 85, 0.15);
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 10px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.control-btn:hover {
+    background: rgba(255, 42, 85, 0.2);
+    border-color: rgba(255, 77, 109, 0.5);
+    box-shadow: 0 0 16px rgba(255, 42, 85, 0.35);
+    transform: translateY(-2px);
+}
+
+.control-btn.active {
+    background: linear-gradient(135deg, rgba(230, 0, 38, 0.65), rgba(255, 42, 85, 0.75));
+    border-color: #ff6e8a;
+    box-shadow: 0 0 20px rgba(255, 42, 85, 0.55);
+}
+
+/* Indicador de Onda de Audio */
+.audio-wave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 14px;
+}
+
+.wave-bar {
+    width: 3px;
+    height: 4px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    transition: height 0.2s;
+}
+
+.control-btn.active .wave-bar:nth-child(1) {
+    animation: wave 0.8s ease-in-out infinite alternate;
+}
+
+.control-btn.active .wave-bar:nth-child(2) {
+    animation: wave 0.6s ease-in-out infinite alternate 0.2s;
+}
+
+.control-btn.active .wave-bar:nth-child(3) {
+    animation: wave 0.9s ease-in-out infinite alternate 0.4s;
+}
+
+@keyframes wave {
+    0% { height: 4px; }
+    100% { height: 16px; }
+}
+
+/* ==========================================================================
+   Notificación Flotante (Toast)
+   ========================================================================== */
+
+#rose-toast {
+    position: fixed;
+    bottom: 95px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(45, 8, 18, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 42, 85, 0.5);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 30px;
+    box-shadow: 0 0 25px rgba(255, 42, 85, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    pointer-events: none;
+}
+
+#rose-toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Diseño Responsivo para Móviles
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    #ui-container {
+        padding: 16px 14px 20px;
+    }
+
+    .title-group h1 {
+        font-size: 1.35rem;
+        letter-spacing: 0.12em;
+    }
+
+    .title-group p {
+        font-size: 0.68rem;
+    }
+
+    .header-banner {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .poetic-card {
+        max-width: 100%;
+        padding: 12px 14px;
+        /* Menos blur en móvil = menos coste GPU */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .bottom-controls-bar {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        border-radius: 20px;
+        gap: 6px;
+        padding: 6px 10px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .control-btn {
+        padding: 8px 11px;
+        font-size: 0.7rem;
+        gap: 6px;
+    }
+
+    #rose-toast {
+        bottom: 80px;
+        font-size: 0.75rem;
+        padding: 8px 16px;
+        letter-spacing: 0.1em;
+    }
+}
+
+@media (max-width: 420px) {
+    .title-group h1 {
+        font-size: 1.15rem;
+    }
+    .control-btn {
+        padding: 8px 10px;
+    }
+}
+
+/* Preferencia de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .spinner-ring,
+    .spinner-core,
+    .wave-bar {
+        animation: none !important;
+    }
+}
